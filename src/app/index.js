@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('icons', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ui.router', 'mm.foundation'])
+angular.module('icons', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ui.router', 'mm.foundation', 'react'])
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('home', {
