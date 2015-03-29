@@ -1,5 +1,9 @@
 <div class="graphics-widget-items">
 	<ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-2">
-		<li ng-repeat="graphic in graphics"><div class="graphic-item"></div></li>
+		<li ng-repeat="graphic in graphics" ng-click="gotoGraphic(graphic.location)">
+			<div class="graphic-item">
+				<!-- <img src="{{graphic.src}}" title="{{graphic.title}}" /> -->
+			</div>
+		</li>
 	</ul>
 </div>

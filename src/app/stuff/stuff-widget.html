@@ -1,5 +1,9 @@
 <div class="stuff-widget-items">
 	<ul class="small-block-grid-1">
-		<li ng-repeat="thing in stuff"><div class="stuff-item"></div></li>
+		<li ng-repeat="thing in stuff" ng-click="gotoStuff(thing.location)">
+			<div class="stuff-item">
+				<!-- <img src="{{thing.src}}" title="{{thing.title}}" /> -->
+			</div>
+		</li>
 	</ul>
 </div>

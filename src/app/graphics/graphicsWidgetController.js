@@ -5,12 +5,16 @@ angular.module('icons')
 		$scope.graphics = [];
 
 		for(var i=1; i <= 12; i++) {
-			$scope.graphics.push({});
+			$scope.graphics.push({
+				src: 'placeholder://',
+				title: 'Placeholder image',
+				location: 'path/to/graphic'
+			});
 		}
 
-		$scope.explore = function(tagName) {
-			console.log('let\'s see ', tagName);
-		}
+		$scope.gotoGraphic = function(location) {
+			console.log('let\'s see ', location);
+		};
 
 	}).directive('iconsGraphicsWidget', function() {
 		return {
