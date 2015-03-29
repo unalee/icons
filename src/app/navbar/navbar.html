@@ -1,0 +1,28 @@
+<div class="contain-to-grid sticky">
+  <nav class="top-bar row"  data-topbar role="navigation" ng-controller="NavbarCtrl">
+
+    <section class="top-bar-section">
+
+      <ul class="right">
+        <li ng-if="validUser()" class="has-dropdown">
+          <a href="#">My Account</a>
+          <ul class="dropdown">
+            <li><a href="#">First link in dropdown</a></li>
+            <li class="active"><a href="#">Active link in dropdown</a></li>
+            <li><a href="#" ng-click="logout()">logout</a></li>
+          </ul>
+        </li>
+        <li ng-if="!validUser()"><a ng-href="#">Sign-up</a></li>
+        <li ng-if="!validUser()"><a ng-href="#" ng-click="login()">Login</a></li>
+      </ul>
+      <ul class="left">
+        <li class="active"><a ng-href="#">Home</a></li>
+        <li ng-if="validUser()"><a ng-href="#">Upload</a></li>
+        <li><a ng-href="#">Explore</a></li>
+        <li><a ng-href="#">Community</a></li>
+        <li><a ng-href="#">About</a></li>
+        <li><a ng-href="#">Search</a></li>
+      </ul>
+    </section>
+  </nav>
+</div>
