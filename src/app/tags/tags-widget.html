@@ -1,0 +1,6 @@
+<div class="tags-widget">
+	<h3>Popular Tags</h3>
+	<div class="tags-list">
+		<a class="tag" ng-repeat="tag in tags" ng-click="explore(tag.value)">{{tag.text}}{{$last ? '' : ', '}}</a>
+	</div>
+</div>
