@@ -1,0 +1,15 @@
+// supersamples.opts
+// how to display API from tests
+
+{
+  "baseUrl"   : "http://squadfusion.com",
+  "reporter"  : "Spec",
+  "renderers" : {
+    "html": {
+      "outputFolder": "./public/apidocs",
+      "title": "SquadFusion API Docs"
+    }
+ 
+  }
+ 
+}
