@@ -193,22 +193,6 @@ describe("User Tests", function() {
         })
     });
 
-    it.skip('should let users find each other by email', function(done) {
-      api.post('/api/user/')
-        .set('x-access-token', apiToken2)
-        .send({
-          'find': 'becky@made.com'
-        })
-        .expect(200)
-        .then(function(data) {
-          expect(data.body).to.be.an(array)
-          expect(data.body).to.deep.include({
-            'email': 'becky@made.com'
-          })
-          done();
-        })
-    })
-
     it('should not return all users to a basic user', function(done) {
       api.get('/api/user')
         .set('x-access-token', apiToken2)
@@ -221,7 +205,7 @@ describe("User Tests", function() {
 
 
     it('should let a basic user edit their own account', function(done) {
-      api.put('/api/user/' + User2._id)
+      api.put('/api/user/')
         .set('x-access-token', apiToken2)
         .send({
           'name': 'Monica',
@@ -232,7 +216,7 @@ describe("User Tests", function() {
           expect(data.body.name).to.equal('Monica')
           expect(data.body.email).to.equal('monica@made.com')
 
-          return api.put('/api/user/' + User2._id).set(
+          return api.put('/api/user/').set(
             'x-access-token', apiToken2).send({
             'name': 'robin',
             'email': 'robin@made.com'
@@ -240,22 +224,6 @@ describe("User Tests", function() {
         }).then(function(data) {
           expect(data.body.name).to.equal('robin')
           expect(data.body.email).to.equal('robin@made.com')
-          done();
-        })
-    })
-
-    it('should let a basic user edit only their own account', function(
-      done) {
-      // console.log('checking the ID are proper: User1', User1.name, 'User2: ',User2.name)
-      api.put('/api/user/' + User1._id)
-        .set('x-access-token', apiToken2)
-        .send({
-          'testdata': User1.name,
-          'name': 'Monica',
-          'email': 'monica@made.com'
-        })
-        .expect(401)
-        .then(function(data) {
           done();
         })
     })

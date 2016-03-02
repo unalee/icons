@@ -16,12 +16,13 @@ var emailValidator = [
   })
 ]
 
-var user = 'create_user get_user update_user delete_user'.split(' '),
+var self = 'create_self get_self update_self delete_self'.split(' '),
+  user = 'create_user get_user update_user delete_user'.split(' '),
   icons = 'create_icon get_icon update_icon delete_icon'.split(' '),
   admin_roles = 'get_all_user'.split(' '),
-  admin = user.concat(icons).concat(admin_roles),
-  basic = user.concat(icons),
-  roles = user.concat(icons).concat(admin_roles);
+  admin = self.concat(user).concat(icons).concat(admin_roles),
+  basic = self.concat(icons),
+  roles = self.concat(user).concat(icons).concat(admin_roles);
 
 var userSchema = new Schema({
   _invite: {
@@ -84,14 +85,42 @@ userSchema.statics.comparePassword = function(password, done) {
 userSchema.pre('save', function(next) {
   var user = this;
   // only hash the password if it has been modified (or is new)
-  if (!user.isModified('password')) { return next(); }
+  if (!user.isModified('password')) {
+    return next();
+  }
 
   bcrypt.hash(user.password, rounds, function(err, hash) {
-    if (err) { return next('password' + err); }
+    if (err) {
+      return next('password' + err);
+    }
     user.password = hash;
     next();
   });
 })
+
+userSchema.pre('save', function(next) {
+  if (!this.roles || this.roles.length === 0) {
+    this.roles = [];
+    this.roles = basic;
+  }
+
+  if (this.roles.indexOf('admin') !== -1) {
+    this.roles = [];
+    this.roles = admin;
+  }
+
+  // if( this.roles.indexOf('superadmin') !== -1 ){
+  //     this.roles.splice(this.roles.indexOf('superadmin'), 1);
+  //     this.roles = superadmin;
+  // }
+
+  if (!this._admin || this._admin.length === 0) {
+    this._admin = [this._id];
+  }
+
+  next();
+});
+
 
 userSchema.pre('save', function(next) {
   var now = new Date();

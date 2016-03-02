@@ -51,8 +51,6 @@ module.exports = function(app, passport) {
       email = email.toLowerCase();
     } // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
-    console.log('inside passport login', email, password);
-
     // asynchronous
     process.nextTick(function() {
 
@@ -67,7 +65,7 @@ module.exports = function(app, passport) {
             error: 'User not found.'
           });
         }
-        console.log('password check', user.comparePassword(password));
+
         if (!user.comparePassword(password)) {
           return done(null, {
             error: 'Oops! Wrong password.'
@@ -103,7 +101,6 @@ module.exports = function(app, passport) {
       User.create(req.body, function(err, user) {
         if (err) {
           if (11000 === err.code || 11001 === err.code) {
-            console.error('Duplicate email registration');
             done(null, 'That user already exists.');
           }
         } else {

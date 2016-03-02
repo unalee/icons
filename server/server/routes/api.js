@@ -3,25 +3,37 @@
 var express = require('express');
 var router = express.Router();
 
+var checkRole = require('../functions/helperFunctions/checkRole');
+var models = require('../models'),
+  User = models.User;
 
-// ROUTES =========================================
-    // require('./routes/invite-routes')(app);
-    // require('./user-routes')(app);
-    
+router.get('/user', checkRole('get_all_user'), function(req, res) {
+  console.log('touched get all users');
 
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
-  console.log('Time: ', Date.now());
-  next();
+  User.find().exec((err, next) => {
+    if (err) { console.error(err); }
+    res.json(next);
+  });
 });
 
-// define the home page route
-router.get('/', function(req, res) {
-  res.send('Icons.get');
-});
-// define the about route
-router.get('/about', function(req, res) {
-  res.send('About icons');
+
+router.put('/user/', checkRole('update_self'), function(req, res) {
+  User.findById(req.user._doc._id).exec((err, user) => {
+    if (err) { console.error(err); }
+    if (!user ){ console.log('No user found.') }
+
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.password = req.body.password;
+
+    user.save((err, data) => {
+      if (err) {
+        console.error(err);
+        res.json({error: err})
+      }
+      res.json(data);
+    })
+  });
 });
 
 module.exports = router;
