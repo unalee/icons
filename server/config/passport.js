@@ -55,15 +55,11 @@ module.exports = function(app, passport) {
 
     // asynchronous
     process.nextTick(function() {
+
       User.findOne({
         'email': email
       }).select('+password').exec(function(err, user) {
-        // if there are any errors, return the error
-        if (err) {
-          return done(err);
-        }
-
-        // console.log('did we find a user?', user);
+        if (err) { return done(err); }
 
         // if no user is found, return the message
         if (!user) {
@@ -71,8 +67,8 @@ module.exports = function(app, passport) {
             error: 'User not found.'
           });
         }
-
-        if (!user.validPassword(password)) {
+        console.log('password check', user.comparePassword(password));
+        if (!user.comparePassword(password)) {
           return done(null, {
             error: 'Oops! Wrong password.'
           });
@@ -104,12 +100,18 @@ module.exports = function(app, passport) {
         return done(null, 'Please log out before creating a new user.');
       }
 
-      User.create(req.body).then(user => {
-        user.save(function(err, data) {
-          console.log('user saved', err, data);
-          done(err, data);
-        });
-      })
+      User.create(req.body, function(err, user) {
+        if (err) {
+          if (11000 === err.code || 11001 === err.code) {
+            console.error('Duplicate email registration');
+            done(null, 'That user already exists.');
+          }
+        } else {
+          user.save(function(err, data) {
+            done(err, data);
+          });
+        }
+      });
 
     }));
 };

@@ -26,7 +26,6 @@ auth.post('/signup', function(req, res) {
       if (err) { console.error(err); }
       var expiresInMinutes = 1440 * 60;
 
-      console.log('signup id', reply._id, reply.name);
       if (reply._id) { // if the reply has an _id, it is a user.
         var token = jwt.sign(reply, config.secret, {
           expiresIn: expiresInMinutes

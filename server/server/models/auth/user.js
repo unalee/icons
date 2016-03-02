@@ -4,7 +4,6 @@
 
 var mongoose = require('mongoose'),
   validate = require('mongoose-validator'),
-  uniqueValidator = require('mongoose-unique-validator'),
   bcrypt = require('bcrypt'),
   connect = global.rootRequire('./config/db').db,
   promisify = require('bluebird').promisify,
@@ -66,11 +65,7 @@ var userSchema = new Schema({
   }
 });
 
-userSchema.plugin(uniqueValidator);
-
-const User = mongoose.model('User', userSchema),
-  rounds = 10;
-
+const rounds = 10;
 
 // generating a hash
 userSchema.statics.genHash = function(password) {
@@ -78,12 +73,19 @@ userSchema.statics.genHash = function(password) {
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function(password) {
+userSchema.methods.comparePassword = function(password, done) {
+  return bcrypt.compareSync(password, this.password);
+};
+
+userSchema.statics.comparePassword = function(password, done) {
   return bcrypt.compareSync(password, this.password);
 };
 
 userSchema.pre('save', function(next) {
   var user = this;
+  // only hash the password if it has been modified (or is new)
+  if (!user.isModified('password')) { return next(); }
+
   bcrypt.hash(user.password, rounds, function(err, hash) {
     if (err) { return next('password' + err); }
     user.password = hash;
@@ -100,4 +102,4 @@ userSchema.pre('save', function(next) {
 });
 
 // create the model for users and expose it to our app
-module.exports = connect.model('User');
+module.exports = connect.model('User', userSchema);

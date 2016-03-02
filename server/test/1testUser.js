@@ -65,7 +65,6 @@ describe("Registration Tests", function() {
         password: 'becky',
         roles: ['admin']
       }).then(function(data) {
-        console.log(data.body);
         expect(data.body).to.have.property('token')
         expect(data.body.token).to.not.be.null
         done();
@@ -89,8 +88,7 @@ describe("Registration Tests", function() {
 
   //forgot-password routes =======
   describe('/auth/forgot', function() {
-    it('should set a new token on request by existing user', function(
-      done) {
+    it('should set a new token on request by existing user', function(done) {
       api.post('/auth/forgot')
         .send({
           email: 'becky@made.com'
