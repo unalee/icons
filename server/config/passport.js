@@ -51,11 +51,10 @@ module.exports = function(app, passport) {
       email = email.toLowerCase();
     } // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
-    console.log('inside passport', email, password);
+    console.log('inside passport login', email, password);
+
     // asynchronous
     process.nextTick(function() {
-      // console.log('log me in for real', email, password)
-
       User.findOne({
         'email': email
       }).select('+password').exec(function(err, user) {
@@ -107,6 +106,7 @@ module.exports = function(app, passport) {
 
       User.create(req.body).then(user => {
         user.save(function(err, data) {
+          console.log('user saved', err, data);
           done(err, data);
         });
       })

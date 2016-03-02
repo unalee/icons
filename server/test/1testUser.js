@@ -65,6 +65,7 @@ describe("Registration Tests", function() {
         password: 'becky',
         roles: ['admin']
       }).then(function(data) {
+        console.log(data.body);
         expect(data.body).to.have.property('token')
         expect(data.body.token).to.not.be.null
         done();
@@ -78,7 +79,7 @@ describe("Registration Tests", function() {
         api.post('/auth/signup').send({
           email: 'becky@made.com',
           name: 'becky',
-          password: 'becky',
+          password: 'becky'
         }).then(function(data) {
           expect(data.body).to.equal('That user already exists.');
           done();
