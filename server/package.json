@@ -44,7 +44,7 @@
     "mongodb": "^2.0.36",
     "mongodb-uri": "^0.9.7",
     "mongoose": "latest",
-    "mongoose-validator": "^1.2.0",
+    "mongoose-validator": "^1.2.4",
     "morgan": "latest",
     "passport": "^0.2.1",
     "passport-http-bearer": "^1.0.1",

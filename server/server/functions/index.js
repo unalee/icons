@@ -4,7 +4,6 @@
 
 module.exports = {
 	inviteCreate        : require('./accountFunctions/create-invite'),
-	userCreate          : require('./accountFunctions/user-create'),
 	forgotPasswordToken : require('./accountFunctions/forgot-password-token'),
 	resendInvite        : require('./accountFunctions/resend-invite'),
 	resetPassword       : require('./accountFunctions/reset-password'),
@@ -14,5 +13,5 @@ module.exports = {
   modelDelete         : require('./helperFunctions/modelDelete'),
 	toTitleCase		      : require('./helperFunctions/toTitleCase'),
   updateDoc           : require('./helperFunctions/updateDoc'),
-  checkRole           : require('./helperFunctions/checkRole'),
+  checkRole           : require('./helperFunctions/checkRole')
 }

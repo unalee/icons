@@ -33,62 +33,69 @@ var basic = user.concat(icons);
 var roles = user.concat(icons).concat(admin_roles);
 
 var userSchema = new Schema({
-    _invite  : { type: Schema.Types.ObjectId, ref: 'Invite' },
-    _admin   : { type: Schema.Types.ObjectId, ref: 'User' },
-    
-    created  : Date,
-    name     : { type:String, trim:true },
-    email    : { type: String, trim: true, validate: emailValidator, required: true },
-    password : { type: String, select: false },
-    roles    : [{ type: String }],
-    
-    resetPasswordToken   : String,
-    resetPasswordExpires : Date,
-    
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
-    }
+  _invite  : { type: Schema.Types.ObjectId, ref: 'Invite' },
+  _admin   : { type: Schema.Types.ObjectId, ref: 'User' },
+
+  created  : Date,
+  name     : { type:String, trim:true },
+  email    : { type: String, trim: true, validate: emailValidator, required: true },
+  password : { type: String, select: false },
+  roles    : [{ type: String }],
+
+  resetPasswordToken   : String,
+  resetPasswordExpires : Date,
+
+  google           : {
+    id           : String,
+    token        : String,
+    email        : String,
+    name         : String
+  }
 });
 
 // generating a hash
 userSchema.methods.genHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
+  return bcrypt.compareSync(password, this.password);
 };
 
-userSchema.pre('save', function(next){
-    if ( !this.roles || this.roles.length === 0 ) {
-        this.roles = [];
-        this.roles = basic;
-    } 
+userSchema.path('email')
 
-    if( this.roles.indexOf('admin') !== -1 ){
-        this.roles = [];
-        this.roles = admin;
-    }
+userSchema.pre('save', (next) => {
+  this.password = this.genHash(this.password);
+  next();
+})
 
-    // if( this.roles.indexOf('superadmin') !== -1 ){
-    //     this.roles.splice(this.roles.indexOf('superadmin'), 1);
-    //     this.roles = superadmin;
-    // }
+userSchema.pre('save', (next) => {
+  if (!this.roles || this.roles.length === 0) {
+    this.roles = [];
+    this.roles = basic;
+  }
 
-    if(!this._admin || this._admin.length === 0 ){
-        this._admin = [this._id];
-    }
+  if (this.roles.indexOf('admin') !== -1) {
+    this.roles = [];
+    this.roles = admin;
+  }
 
-    var now = new Date();
-    if ( !this.created ) {
-        this.created = now;
-    }
+  // if( this.roles.indexOf('superadmin') !== -1 ){
+  //     this.roles.splice(this.roles.indexOf('superadmin'), 1);
+  //     this.roles = superadmin;
+  // }
 
-    next();
+  if (!this._admin || this._admin.length === 0) {
+    this._admin = [this._id];
+  }
+
+  var now = new Date();
+  if (!this.created) {
+    this.created = now;
+  }
+
+  next();
 });
 
 // create the model for users and expose it to our app

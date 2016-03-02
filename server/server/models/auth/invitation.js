@@ -15,20 +15,33 @@ connect = connect.db;
 var Schema = mongoose.Schema;
 
 var inviteSchema = new Schema({
-    _account : { type: Schema.Types.ObjectId },
-    invite_email: { type: String, trim: true },
-    created : { type : Date },
-    created_by_user : { type: Schema.Types.ObjectId, ref: 'User' },
-    pending : {type: Boolean, default: true}
+  _account: {
+    type: Schema.Types.ObjectId
+  },
+  invite_email: {
+    type: String,
+    trim: true
+  },
+  created: {
+    type: Date
+  },
+  created_by_user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  pending: {
+    type: Boolean,
+    default: true
+  }
 });
 
-inviteSchema.pre('save', function(next){
-    // set up the date
-    var now = new Date();
-    if ( !this.created ) {
-        this.created = now;
-    }
-    next();
+inviteSchema.pre('save', function(next) {
+  // set up the date
+  var now = new Date();
+  if (!this.created) {
+    this.created = now;
+  }
+  next();
 });
 
 module.exports = connect.model('Invite', inviteSchema);

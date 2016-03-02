@@ -4,9 +4,9 @@
 
 // modules ==========================================================
 var express = require('express');
-var app 	= express();
-var http 	= require('http');
-var path 	= require('path');
+var app = express();
+var http = require('http');
+var path = require('path');
 var _ = require('lodash');
 
 // Turn the app on
@@ -15,9 +15,9 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 
 // EXPRESS MODULES ==================================================
-var morgan       = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
+var bodyParser = require('body-parser');
 
 // Detailed logging ================
 app.use(morgan('combined'));
@@ -25,23 +25,25 @@ app.use(morgan('combined'));
 // SESSION STORAGE ==================================================
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
-var sessionStore = new MongoStore({mongooseConnection: mongoose.connection });
+var sessionStore = new MongoStore({
+  mongooseConnection: mongoose.connection
+});
 
 // PROCESS PORTS =====================================================
-var port = Number( process.env.PORT || 8081);
+var port = Number(process.env.PORT || 8081);
 
 // GLOBAL VARIABLES =================================================
-if(!process.env.APP_SECRET_KEY){
-	var secrets = require(path.join(__dirname,'secrets'));
-	app.locals = _.merge(app.locals, secrets);
+if (!process.env.APP_SECRET_KEY) {
+  var secrets = require(path.join(__dirname, 'secrets'));
+  app.locals = _.merge(app.locals, secrets);
 } else {
-	app.locals.cookie_name = 'connect.sid'
-	app.locals.secret      = process.env.APP_SECRET_KEY
+  app.locals.cookie_name = 'connect.sid'
+  app.locals.secret = process.env.APP_SECRET_KEY
 }
 
 // CONFIGURATION ====================================================
 global.rootRequire = function(name) {
-    return require(__dirname + '/' + name);
+  return require(__dirname + '/' + name);
 };
 
 // express 4.0 basic configuration ==================================
@@ -58,16 +60,16 @@ var db = database.db;
 
 // session start ====================================================
 app.use(session({
-	secret: process.env.APP_SECRET_KEY || app.locals.secret, 
-	cookie: {
-		path: '/',
-		expires: false, // Alive Until Browser Exits
-		// secure: true, // TODO: implement https
-		httpOnly: true
-	},
-	store: sessionStore,
-	saveUninitialized: true, // (default: true)
-	resave: true // (default: true)
+  secret: process.env.APP_SECRET_KEY || app.locals.secret,
+  cookie: {
+    path: '/',
+    expires: false, // Alive Until Browser Exits
+    // secure: true, // TODO: implement https
+    httpOnly: true
+  },
+  store: sessionStore,
+  saveUninitialized: true, // (default: true)
+  resave: true // (default: true)
 }));
 
 app.use(passport.initialize());
@@ -86,13 +88,11 @@ app.use('/', router);
 // });
 
 // Turn it on
-server.listen(port, function(){ 
-	console.log('listening on', port);
+server.listen(port, function() {
+  console.log('listening on', port);
 
-	// rough listing of available endpoints on console.
-	console.log('do we even have a router stack', app._router.stack);
-	console.log('do we even have a router stack', router);
-	require('./endpoint')(app._router.stack, 'express');
+  // rough listing of available endpoints on console.
+  require('./endpoint')(app._router.stack, 'express');
 });
 
 // EXPOSE APP AS OBJECT =============================================
