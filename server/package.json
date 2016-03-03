@@ -1,0 +1,57 @@
+{
+  "name": "icons_project",
+  "version": "1.0.0",
+  "description": "An API to share icon history for the Icons Project from And Also Too",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pretentiousgit/icons-project.git"
+  },
+  "keywords": [
+    "icons",
+    "sharing",
+    "activism"
+  ],
+  "author": "Alex Leitch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pretentiousgit/icons-project/issues"
+  },
+  "homepage": "https://github.com/pretentiousgit/icons-project#readme",
+  "dependencies": {
+    "async": "latest",
+    "bcrypt": "^0.8.5",
+    "bluebird": "latest",
+    "body-parser": "~1.0.1",
+    "chai": "^3.5.0",
+    "cli-table": "^0.3.1",
+    "connect-history-api-fallback": "^1.1.0",
+    "connect-logger": "0.0.1",
+    "connect-mongo": "latest",
+    "cookie": "latest",
+    "cookie-parser": "latest",
+    "express": "^4.0.0",
+    "express-session": "latest",
+    "jsonwebtoken": "^5.0.4",
+    "jwt-simple": "^0.4.1",
+    "lodash": "latest",
+    "method-override": "latest",
+    "mocha": "^2.1.0",
+    "moment": "^2.10.3",
+    "mongodb": "^2.0.36",
+    "mongodb-uri": "^0.9.7",
+    "mongoose": "latest",
+    "mongoose-unique-validator": "^1.0.2",
+    "mongoose-validator": "^1.2.4",
+    "morgan": "latest",
+    "passport": "^0.2.1",
+    "passport-http-bearer": "^1.0.1",
+    "passport-local": "~0.1.6",
+    "supersamples": "^0.4",
+    "supertest": "^0.15.0",
+    "supertest-as-promised": "^1.0.0"
+  }
+}
