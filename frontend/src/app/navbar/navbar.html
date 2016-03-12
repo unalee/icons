@@ -9,15 +9,15 @@
           <ul class="dropdown">
             <li><a href="#">First link in dropdown</a></li>
             <li class="active"><a href="#">Active link in dropdown</a></li>
-            <li><a href="#" ng-click="logout()">logout</a></li>
+            <li><a href="#" ng-click="logOut()">logout</a></li>
           </ul>
         </li>
-        <li ng-if="!validUser()"><a ng-href="#">Sign-up</a></li>
-        <li ng-if="!validUser()"><a ng-href="#" ng-click="login()">Login</a></li>
+        <li ng-if="!validUser()"><a ui-sref="register">Sign-up</a></li>
+        <li ng-if="!validUser()"><a ui-sref="login">Login</a></li>
       </ul>
       <ul class="left">
         <li class="active"><a ng-href="#">Home</a></li>
-        <li ng-if="validUser()"><a ng-href="#">Upload</a></li>
+        <li><a ng-click="goUpload()">Upload</a></li>
         <li><a ng-href="#">Explore</a></li>
         <li><a ng-href="#">Community</a></li>
         <li><a ng-href="#">About</a></li>
