@@ -76,13 +76,13 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 // server /api/ routes ==============================================
-// var auth = require('./server/routes/auth');
-// app.use('/auth', auth);
+var auth = require('./server/routes/auth');
+app.use('/auth', auth);
 
-// var api = require('./server/routes/router');
-// app.use('/api', api);
+var api = require('./server/routes/router');
+app.use('/api', api);
 
-app.get('/', function(req, res) {
+app.get('*', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
