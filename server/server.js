@@ -48,7 +48,7 @@ global.rootRequire = function(name) {
 
 // express 4.0 basic configuration ==================================
 app.use(cookieParser());
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/frontend/dist'));
 app.use(bodyParser());
 
 // passport configuration ===========================================
@@ -79,8 +79,12 @@ app.use(passport.session()); // persistent login sessions
 // var auth = require('./server/routes/auth');
 // app.use('/auth', auth);
 
-var router = require('./server/routes/router');
-app.use('/', router);
+// var api = require('./server/routes/router');
+// app.use('/api', api);
+
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
 
 // DEFAULT ROUTE ====================================================
 // app.get('*', function(req, res) {
