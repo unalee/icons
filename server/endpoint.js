@@ -1,14 +1,16 @@
 // endpoint.js
 'use strict';
 
+const _ = require('lodash');
 // API Endpoint List - shows available endpoints on console on login
 
 module.exports = function(routes, src) {
 
-  var Table = require('cli-table');
-  var table = new Table({
-    head: ["", "Name", "Path"]
-  });
+  const Table = require('cli-table');
+  let table = new Table({
+      head: ["", "Name", "Path"]
+    }),
+    container = [];
 
   console.log('\nAPI for this service \n');
   if (src === 'restify') {
@@ -30,30 +32,28 @@ module.exports = function(routes, src) {
     console.log('********************************************\n');
     for (var key in routes) {
       if (routes.hasOwnProperty(key)) {
-        var val = routes[key];
+        let val = routes[key];
 
         if (val.name == 'router') {
           val.handle.stack.forEach(val => {
-            const route = val.route,
-                  regexp = val.regexp.toString();
+            let route = val.route,
+              regexp = val.regexp.toString();
 
             let row = {},
-                matchPath,
-                reply;
+              matchPath,
+              reply;
 
             if (val.regexp && val.handle.stack) {
               matchPath = regexp.match(/\w+/)[0];
 
               val.handle.stack.forEach(thing => {
                 reply = matchPath + thing.route.path;
-                console.log('thing', reply, thing.route.stack[0].method);
-                if (reply && thing.route.stack[0].method) {
-                  row[thing.route.stack[0].method] = [reply, reply];
-                  table.push(row);
-                }
+                container.push({
+                  prefix: matchPath,
+                  method: thing.route.stack[0].method,
+                  path: reply
+                });
               })
-
-
             }
           })
         }
@@ -66,6 +66,14 @@ module.exports = function(routes, src) {
       }
     }
   }
+
+  container = _.compact(container);
+  container.forEach(item => {
+    let row = {};
+    row[item.method] = [item.prefix, item.path];
+    table.push(row);
+  })
+
   console.log(table.toString());
 
   return table;
