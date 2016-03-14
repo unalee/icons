@@ -17,20 +17,20 @@ module.exports = function(routes, src) {
     console.log('\n********************************************');
     console.log('\t\tRESTIFY');
     console.log('********************************************\n');
-    for (var key in routes) {
+    for (let key in routes) {
       if (routes.hasOwnProperty(key)) {
-        var val = routes[key];
-        var _o = {};
+        let val = routes[key],
+            _o = {};
+            
         _o[val.method] = [val.name, val.spec.path];
         table.push(_o);
-
       }
     }
   } else {
     console.log('\n********************************************');
     console.log('\t\tEXPRESS');
     console.log('********************************************\n');
-    for (var key in routes) {
+    for (let key in routes) {
       if (routes.hasOwnProperty(key)) {
         let val = routes[key];
 
@@ -59,7 +59,7 @@ module.exports = function(routes, src) {
         }
         if (val.route) {
           val = val.route;
-          var _o = {};
+          let _o = {};
           _o[val.stack[0].method] = [val.path, val.path];
           table.push(_o);
         }
