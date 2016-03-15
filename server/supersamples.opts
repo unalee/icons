@@ -2,12 +2,12 @@
 // how to display API from tests
 
 {
-  "baseUrl"   : "http://squadfusion.com",
+  "baseUrl"   : "http://visionarchive.ca",
   "reporter"  : "Spec",
   "renderers" : {
     "html": {
-      "outputFolder": "./public/apidocs",
-      "title": "SquadFusion API Docs"
+      "outputFolder": "./frontend/docs",
+      "title": "Vision Archive API Docs"
     }
  
   }

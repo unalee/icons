@@ -4,7 +4,7 @@
   "description": "An API to share icon history for the Icons Project from And Also Too",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --reporter supersamples"
   },
   "repository": {
     "type": "git",

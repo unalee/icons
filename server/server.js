@@ -48,7 +48,7 @@ global.rootRequire = function(name) {
 
 // express 4.0 basic configuration ==================================
 app.use(cookieParser());
-app.use(express.static(__dirname + '/frontend/dist'));
+app.use(express.static(__dirname + '/frontend'));
 app.use(bodyParser());
 
 // passport configuration ===========================================
@@ -82,8 +82,12 @@ app.use('/auth', auth);
 var api = require('./server/routes/router');
 app.use('/api', api);
 
-app.get('*', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
+app.use('/docs', function(req, res) {
+  res.sendFile(__dirname + '/frontend/docs/index.html');
+});
+
+app.use('*', function(req, res) {
+  res.sendFile(__dirname + '/frontend/index.html');
 });
 
 // DEFAULT ROUTE ====================================================

@@ -181,7 +181,7 @@ describe("User Tests", function() {
 
   describe('/api/user', function() {
     // TODO - additional tests ==========
-    it('should return all users on the db to an admin', function(done) {
+    it.skip('should return all users on the db to an admin', function(done) {
       api.get('/api/user')
         .set('x-access-token', apiToken1)
         .then(function(data) {
@@ -193,7 +193,7 @@ describe("User Tests", function() {
         })
     });
 
-    it('should not return all users to a basic user', function(done) {
+    it.skip('should not return all users to a basic user', function(done) {
       api.get('/api/user')
         .set('x-access-token', apiToken2)
         .expect(401)
@@ -204,7 +204,7 @@ describe("User Tests", function() {
     })
 
 
-    it('should let a basic user edit their own account', function(done) {
+    it.skip('should let a basic user edit their own account', function(done) {
       api.put('/api/user/')
         .set('x-access-token', apiToken2)
         .send({
