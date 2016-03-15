@@ -1,9 +1,12 @@
-<form name="uploadForm" ng-submit="submit()" ng-controller="uploadController">
-	<div class="button" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+<div class="row medium-6 medium-centered large-4 large-centered columns">
+	<form name="uploadForm" ng-submit="submit()" ng-controller="uploadController">
+		<label>Choose a file to upload:
+			<div class="button expand" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
     ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" 
     ngf-resize="{width: 100, height: 100}">Select</div>
+   		</label>
 
-    <div class="submit-button">
-    	<button type="submit">Submit</button>
-    </div>
+    	<div class="submit-button">
+    		<button type="submit" class="button success expand">Submit</button>
+   		</div>
 </form>

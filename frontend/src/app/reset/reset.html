@@ -1,0 +1,12 @@
+<div class="row medium-6 medium-centered large-4 large-centered columns">
+    <form ng-controller="passwordResetCtrl" ng-submit="resetPassword()" data-abide>
+      <div class="log-in-form">
+        <h4 class="text-center">Reset your password</h4>
+        <p>Enter your email address below if you've lost or forgotten your password. We will send you an email with further instructions</p>
+        <label>Email
+          <input type="email" placeholder="you@example.com" ng-model="user.username" required>
+        </label>
+        <button type="submit" class="button expand">Reset</button>
+      </div>
+    </form>
+</div>
