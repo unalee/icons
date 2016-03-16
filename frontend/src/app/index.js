@@ -19,8 +19,7 @@ angular.module('icons', [
     $stateProvider
       .state('home', {
         url: '/',
-        templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'app/main/main.html'
       })
       .state('login', {
         url: '/login',
