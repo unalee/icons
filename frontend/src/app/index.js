@@ -6,15 +6,14 @@ angular.module('icons', [
   'ngTouch', 
   'ngSanitize', 
   'ngResource', 
-  'ui.router', 
-  'mm.foundation', 
+  'ui.router',
   'react', 
   'ngFileUpload',
   'LocalStorageModule'
-]).config(function ($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
+]).config(function ($stateProvider, $urlRouterProvider, $httpProvider, localStorageServiceProvider) {
 
     localStorageServiceProvider.setPrefix('iconsApp');
-
+    $httpProvider.defaults.headers.common = { 'Content-Type' : 'application/json' };
 
     $stateProvider
       .state('home', {
@@ -39,11 +38,12 @@ angular.module('icons', [
       });
 
     $urlRouterProvider.otherwise('/');
-}).run(function ($rootScope, $state, userService) {
+}).run(function ($rootScope, $state, $document, userService) {
   var restrictedStates = [
     'upload'
   ];
 
+  $($document).foundation();
 
   $rootScope.$on('$stateChangeStart', function(e, toState, fromState, toParams, fromParams) {
     if(restrictedStates.indexOf(toState.name) >= 0) {

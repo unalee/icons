@@ -6,6 +6,9 @@ angular.module('icons')
     $scope.user = {};
     $scope.loggedIn = false; //#security
 
-    
+    $scope.register = function() {
+    	console.log($scope.user);
+    	userService.register($scope.user);
+    };
 
   });

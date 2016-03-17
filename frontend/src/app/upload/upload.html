@@ -1,4 +1,5 @@
 <div class="row medium-6 medium-centered large-4 large-centered columns">
+	<icons-messages></icons-messages>
 	<form name="uploadForm" ng-submit="submit()" ng-controller="uploadController">
 		<label>Choose a file to upload:
 			<div class="button expand" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
@@ -9,4 +10,8 @@
     	<div class="submit-button">
     		<button type="submit" class="button success expand">Submit</button>
    		</div>
-</form>
+	</form>
+	<div ng-if="uploadData.inProgress" class="progress round" ng-class="{error: uploadData.error, success:uploadData.success}">
+	  <span class="meter" style="width: {{upload.complete}}%"></span>
+	</div>
+</div>

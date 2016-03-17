@@ -6,9 +6,7 @@ angular.module('icons')
     $scope.loggedIn = false; //#security
 
     $scope.logIn = function() {
-    	userService.logIn($scope.user).then(function(user) {
-
-        });
+    	userService.logIn($scope.user);
     }
 
     $scope.logOut = function() {
