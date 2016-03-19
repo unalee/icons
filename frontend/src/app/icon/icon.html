@@ -1,0 +1,37 @@
+<div class="icon" ng-controller="iconDetailCtrl">
+	<icons-messages></icons-messages>
+	<div class="row">
+		<div class="large-8 small-12 columns">
+			<h2>{{icon.title}}</h2>
+			<img class="graphic-item" src="/assets/images/{{icon.filename}}" title="{{icon.title}}" />
+		</div>
+		<div class="large-4 small-12 columns">
+			<button class="button expand">Download Source</button>
+			<div class="detail authors">
+				<h4>Authors:</h4>
+				<p>{{icon.author1}} <span ng-if="icon.author2">, {{icon.author2}}</span><span ng-if="icon.author3">, {{icon.author3}}</span></p>
+			</div>
+			<div class="detail added">
+				<h4>Added:</h4>
+				<p>{{icon.date}}</p>
+			</div>
+			<div class="detail location">
+				<h4>Location:</h4>
+				<p>{{icon.location}}</p>
+			</div>
+			<div class="detail tags">
+				<h4>Tags:</h4>
+				<p><a class="tag" ng-repeat="tag in icon.tags" ng-click="explore(tag.value)">{{tag}}{{$last ? '' : ', '}}</a></p>
+			</div>
+			<div ng-if="icon.related" class="detail related">
+				<h4>Related To:</h4>
+				<div class="related-icon" ng-repeat="relatedId in icon.related">
+					<h5>{{icons[relatedId].title}}</h5>
+					<a href="/#/icon?iconId={{relatedId}}"><img class="graphic-item" src="/assets/images/{{icons[relatedId].filename}}" title="{{icons[relatedId].title}}" /></a>
+				</div>
+		</div>
+	</div>
+	<div ng-if="loading" class="loading-indicator">
+
+	</div>
+</div>
