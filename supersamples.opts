@@ -1,0 +1,15 @@
+// supersamples.opts
+// how to display API from tests
+
+{
+  "baseUrl"   : "http://visionarchive.io",
+  "reporter"  : "Spec",
+  "renderers" : {
+    "html": {
+      "outputFolder": "./frontend/docs",
+      "title": "Vision Archive API Docs"
+    }
+ 
+  }
+ 
+}
