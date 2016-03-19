@@ -1,3 +1,0 @@
-0000000000000000000000000000000000000000 9f1efb74fb9254d0025a6156c32427720217b7ee Alex Leitch <alex.leitch@gmail.com> 1458100606 -0600	fetch -v --progress --prune origin: storing head
-9f1efb74fb9254d0025a6156c32427720217b7ee b092fe5ed131cd81ad9814c6af46ac5c8c1b38c7 Alex Leitch <alex.leitch@gmail.com> 1458176960 -0600	fetch -v --progress --prune origin: fast-forward
-b092fe5ed131cd81ad9814c6af46ac5c8c1b38c7 1191f203c421f4179e75aa373648fb5ab3700b8d Alex Leitch <alex.leitch@gmail.com> 1458329068 -0600	fetch -v --progress --prune origin: fast-forward
