@@ -22,14 +22,14 @@ angular.module('icons')
 	            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
 	        }, function (resp) {
 	            console.log('Error status: ' + resp.status);
-	            $rootScope.$broadcast('iconsDisplayMessage' {
+	            $rootScope.$broadcast('iconsDisplayMessage', {
 	            	type: 'error',
 	            	message: 'Upload error: ' + resp.status
 	            });
-	            $scope.uploadData.error = true,
+	            $scope.uploadData.error = true;
 	        }, function (evt) {
 	            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-	            $scope.
+	            $scope.upload.complete = progressPercentage;
 	            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
 	        });
 	    };
