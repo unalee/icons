@@ -35,6 +35,14 @@ angular.module('icons', [
       .state('upload', {
       	url: '/upload',
       	templateUrl: 'app/upload/upload.html',
+      })
+      .state('iconDetail', {
+        url: '/icon?iconId',
+        templateUrl: 'app/icon/icon.html'
+      })
+      .state('iconList', {
+        url: '/icons',
+        templateUrl: 'app/icon/icon-list.html'
       });
 
     $urlRouterProvider.otherwise('/');
