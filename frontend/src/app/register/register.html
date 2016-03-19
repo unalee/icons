@@ -1,0 +1,28 @@
+<div class="row medium-8 medium-centered large-6 large-centered columns">
+  <icons-messages></icons-messages>
+  <form ng-controller="registerCtrl" ng-submit="register()" data-abide>
+    <div class="register-form">
+      <h4 class="text-center">Create an account</h4>
+      <label>Email
+        <input type="email" placeholder="" ng-model="user.email" required>
+      </label>
+      <label>Full Name
+        <input type="text" placeholder="" ng-model="user.name" required>
+      </label>
+      <fieldset>
+        <legend>Password</legend>
+        <label>Choose a Password
+          <input type="password" placeholder="Password" name="password" id="password" ng-model="user.password" required>
+        </label>
+        <div class="input-element">
+          <label>Confirm Password
+            <input type="password" placeholder="Confirm Password" data-equalto="password" required>
+          </label>
+          <small class="error">The passwords do not match</small>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="button expand success">Create Account</button>
+    </div>
+  </form>
+</div>
