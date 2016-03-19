@@ -2,7 +2,7 @@
 // how to display API from tests
 
 {
-  "baseUrl"   : "http://visionarchive.ca",
+  "baseUrl"   : "http://visionarchive.io",
   "reporter"  : "Spec",
   "renderers" : {
     "html": {

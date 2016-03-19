@@ -4,8 +4,8 @@
 var mongoose = require('mongoose');
 var uriUtil = require('mongodb-uri');
 
-// var mongoUrl = 'mongodb://archiveAccess:FICO*V*^Soansc98sachbapisx*^GASC.mongolab.com:13738/vision_archive';
-var mongoUrl = 'mongodb://127.0.0.1/vision_archive'
+var mongoUrl = 'mongodb://archive_admin:basca81240yh1ec@ds013738.mlab.com:13738/vision_archive';
+// var mongoUrl = 'mongodb://127.0.0.1/vision_archive'
 
 var mongooseUri = uriUtil.formatMongoose(mongoUrl);
 

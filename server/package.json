@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "An API to share icon history for the Icons Project from And Also Too",
   "main": "server.js",
+  "engines" : {
+    "node" : "5.4.0"
+  },
   "scripts": {
     "test": "mocha --reporter supersamples"
   },
