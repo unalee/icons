@@ -17,7 +17,7 @@ angular.module('icons')
 		var currentUser = getCurrentSessionToken();
 
 		userAPI.logIn = function(creds) {
-			$http.post('https://localhost:8081/auth/login', creds, config).success(function(res, status, headers, config) {
+			$http.post('/auth/login', creds, config).success(function(res, status, headers, config) {
 				console.log(res);
 				if(angular.isDefined(res.data.token)) {
 					console.log("user logged in successfully");
@@ -38,7 +38,7 @@ angular.module('icons')
 		};
 
 		userAPI.logOut = function() {
-			$http.post('https://localhost:8081/auth/logout', {}, config).success(function(res){
+			$http.post('/auth/logout', {}, config).success(function(res){
 				localStorageService.remove("userToken");
 			}).error(function(data, status, headers, config) {
 				$rootScope.$broadcast('iconsDisplayMessage', {
@@ -54,7 +54,7 @@ angular.module('icons')
 
 		userAPI.register = function(newUser) {
 			 
-			$http.post('https://localhost:8081/auth/signup', newUser, config).success(function(res) {
+			$http.post('/auth/signup', newUser, config).success(function(res) {
 				console.log(res);
 				if(angular.isDefined(res.data.token)) {
 					localStorageService.set("userToken", res.data.token);
