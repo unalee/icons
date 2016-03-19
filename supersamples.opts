@@ -6,7 +6,7 @@
   "reporter"  : "Spec",
   "renderers" : {
     "html": {
-      "outputFolder": "./frontend/docs",
+      "outputFolder": "./dist/docs",
       "title": "Vision Archive API Docs"
     }
  
