@@ -1,9 +1,10 @@
-<div class="icons-list row" ng-controller="iconDetailCtrl">
-	<div class="graphics-widget-items">
+<div class="icons-list " ng-controller="iconDetailCtrl">
+	<icons-messages></icons-messages>
+	<div class="graphics-widget-items row">
 		<ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
 			<li ng-repeat="icon in icons">
 				<h4>{{icon.title}}</h4>
-				<a href="/#/icon&iconId={{$index}}"><img class="graphic-item" src="/assets/images/{{icon.filename}}" title="{{icon.title}}" /></a>
+				<a href="/#/icon?iconId={{$index}}"><img class="graphic-item" src="/assets/images/{{icon.filename}}" title="{{icon.title}}" /></a>
 				<p>{{icon.location}}, {{icon.date}}
 			</li>
 		</ul>
