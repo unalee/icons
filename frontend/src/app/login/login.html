@@ -1,0 +1,16 @@
+<div class="row medium-6 medium-centered large-4 large-centered columns">
+    <icons-messages></icons-messages>
+    <form ng-controller="loginCtrl" ng-submit="logIn()">
+      <div class="log-in-form">
+        <h4 class="text-center">Log in</h4>
+        <label>Username
+          <input type="text" placeholder="Username" ng-model="user.email" required>
+        </label>
+        <label>Password
+          <input type="password" placeholder="Password" ng-model="user.password" required>
+        </label>
+        <button type="submit" class="button expand">Log In</button>
+        <p class="text-center"><a ui-sref="password">Forgot your password?</a></p>   
+      </div>
+    </form>
+</div>
