@@ -173,7 +173,8 @@
     "author1": "Heather McGaw",
     "author2": "Hélen Marton",
     "author3": 0,
-    "tags": ["Workshop 1"]
+    "tags": ["Workshop 1"],
+    "related": [36]
   },
   {
     "filename": "Reclaiming.jpg",
