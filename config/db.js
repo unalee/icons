@@ -20,6 +20,7 @@ const mongoose = require('mongoose'),
       }
     }
   };
+
 mongoose.connect(mongoUrl, options);
 
 let db = mongoose.connection;
