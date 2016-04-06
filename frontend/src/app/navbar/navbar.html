@@ -7,18 +7,16 @@
         <li ng-if="validUser()" class="has-dropdown">
           <a href="#">My Account</a>
           <ul class="dropdown">
-            <li><a href="#">First link in dropdown</a></li>
-            <li class="active"><a href="#">Active link in dropdown</a></li>
             <li><a href="#" ng-click="logOut()">logout</a></li>
           </ul>
         </li>
-        <li ng-if="!validUser()"><a ui-sref="register">Sign-up</a></li>
-        <li ng-if="!validUser()"><a ui-sref="login">Login</a></li>
+        <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="register">Sign-up</a></li>
+        <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="login">Login</a></li>
       </ul>
       <ul class="left">
         <li ui-sref-active="active"><a ui-sref="home">Home</a></li>
         <li ui-sref-active="active"><a ui-sref="iconList">Icons</a></li>
-        <li><a ng-click="goUpload()">Upload</a></li>
+        <li ui-sref-active="active"><a ng-click="goUpload()">Upload</a></li>
 <!--         <li><a ng-href="#">Explore</a></li>
         <li><a ng-href="#">Community</a></li>
         <li><a ng-href="#">About</a></li>
