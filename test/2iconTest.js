@@ -17,13 +17,15 @@ const should = require('chai').should,
       mongoose = require('mongoose'),
       models = require('../server/models'),
 
-      app = require('../server.js'),
-      api = request(app);
+      Icon = models.Icon,
+      app = require('../server.js');
 
 
 // todo this should be replaced with sinon stubbing
 let tagName = "assured",
-    tagNames = ["handbills", "Black Lives Matter"];
+    tagNames = ["handbills", "Black Lives Matter"],
+    api = request(app),
+    apiToken1;
 
 
 // =============================================================
@@ -31,37 +33,27 @@ let tagName = "assured",
 // =============================================================
 
 before(function(done) {
-  models.Icon.remove({}, function(err, doc) {});
+  Icon.remove({}, function(err, doc) {});
   done();
 });
-
-
-// log a user in so that we can get icons via token auth
-before(function(done) {
-  api.post('/auth/login')
-    .send({
-      email: 'becky@made.com',
-      password: 'becky'
-    })
-    .then(function(data) {
-      apiToken1 = data.body.token;
-      api.get('/api/user')
-        .set('x-access-token', data.body.token)
-        .then(function(data) {
-          User1 = data.body[0];
-          done();
-        })
-    });
-});
-
 
 // =============================================================
 // START TESTS
 // =============================================================
 
 describe("Icon Interaction Tests", function() {
+  before(function(done) {
+    api.post('/auth/login')
+      .send({
+        email: 'becky@made.com',
+        password: 'becky'
+      })
+      .then(function(data) {
+        apiToken1 = data.body.token;
+        done();
+      });
+  })
 
-  var agent = request.agent(app); // this is to check logins, not account creation.
 
   // Signup routes =====
   describe('/api/icon', function() {
@@ -71,6 +63,8 @@ describe("Icon Interaction Tests", function() {
       api.get(path)
         .end(function(err, data) {
           // in here we should expect the same shape of reply as a success, but no data
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('1');
           done();
         });
     })
@@ -80,6 +74,8 @@ describe("Icon Interaction Tests", function() {
         .set('x-access-token', 'abvy8abcinasocniaca8912inac')
         .end(function(err, data) {
           // in here we should expect an array of images with one entry
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('1');
           done();
         });
     })
@@ -89,6 +85,8 @@ describe("Icon Interaction Tests", function() {
         .set('x-access-token', apiToken1)
         .end(function(err, data) {
           // in here we should expect an array of images with one entry
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('1');
           done();
         });
     })
@@ -98,6 +96,8 @@ describe("Icon Interaction Tests", function() {
         .set('x-access-token', apiToken1)
         .end(function(err, data) {
           // in here we should expect an array of images
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('14');
           done();
         });
     })
@@ -107,6 +107,8 @@ describe("Icon Interaction Tests", function() {
         .set('x-access-token', apiToken1)
         .end(function(err, data) {
           // in here we should expect a single image
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('1');
           done();
         });
     })
@@ -118,6 +120,8 @@ describe("Icon Interaction Tests", function() {
       api.get(path)
         .end(function(err, data) {
           // in here we should expect the same shape of reply as a success, but no data
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('1');
           done();
         });
     })
@@ -127,6 +131,8 @@ describe("Icon Interaction Tests", function() {
         .set('x-access-token', 'abvy8abcinasocniaca8912inac')
         .end(function(err, data) {
           // in here we should expect an array of images with one entry
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('1');
           done();
         });
     })
@@ -135,7 +141,9 @@ describe("Icon Interaction Tests", function() {
       api.get(path)
         .set('x-access-token', apiToken1)
         .end(function(err, data) {
-          // in here we should expect an array of images
+          // in here we should expect an array of tags
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('14');
           done();
         });
     })
@@ -145,6 +153,8 @@ describe("Icon Interaction Tests", function() {
         .set('x-access-token', apiToken1)
         .end(function(err, data) {
           // in here we should expect an array of images
+          expect(data.body).to.be.an('array');
+          expect(data.body).to.have.length('14');
           done();
         });
     })

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "An API to share icon history for the Icons Project from And Also Too",
   "main": "server.js",
-  "engines" : {
-    "node" : "5.4.0"
+  "engines": {
+    "node": "5.4.0"
   },
   "scripts": {
     "test": "mocha --reporter supersamples"
@@ -56,5 +56,9 @@
     "supersamples": "^0.4",
     "supertest": "^0.15.0",
     "supertest-as-promised": "^1.0.0"
+  },
+  "devDependencies": {
+    "mockgoose": "^5.3.3",
+    "sinon": "^1.17.3"
   }
 }

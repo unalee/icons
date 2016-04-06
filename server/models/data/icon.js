@@ -3,16 +3,17 @@
 'use strict';
 
 const mongoose = require('mongoose'),
-  validator = require('mongoose-validator'),
+  validate = require('mongoose-validator'),
   Schema = mongoose.Schema,
   connect = rootRequire('./config/db'),
   db = connect.db;
 
-let urlValidator =
+let urlValidator = [
   validate({
     validator: 'isURL',
-    message: 'Please supply a valid URL'
-  });
+    message: "Please supply a valid URL"
+  })
+]
 
 let Icon = new Schema({
   created: Date,
