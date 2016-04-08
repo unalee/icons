@@ -51,7 +51,7 @@ angular.module('icons', [
     'upload'
   ];
 
-  $($document).foundation();
+  $(document).foundation();
 
   $rootScope.$on('$stateChangeStart', function(e, toState, fromState, toParams, fromParams) {
     if(restrictedStates.indexOf(toState.name) >= 0) {

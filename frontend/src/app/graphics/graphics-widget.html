@@ -1,7 +1,7 @@
 <div class="graphics-widget-items">
-	<ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
-		<li ng-repeat="icon in icons">
+	<div class="row small-up-1 medium-up-2 large-up-4">
+		<div class="column" ng-repeat="icon in icons">
 			<a href="/#/icon?iconId={{$index}}"><img class="graphic-item" src="/assets/images/{{icon.filename}}" title="{{icon.title}}" /></a>
-		</li>
-	</ul>
+		</div>
+	</div>
 </div>

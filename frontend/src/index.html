@@ -24,13 +24,43 @@
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="container">
+    <!-- <div class="container"> -->
 
-      <div ng-include="'app/navbar/navbar.html'"></div>
-      <div ui-view></div>
+      <div data-sticky-container>
+        <div class="top-bar sticky" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="content" data-btm-anchor="content:bottom">
+          <div class="top-bar-title">
+            <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
+              <span class="menu-icon dark" data-toggle></span>
+            </span>
+            <strong>Site Title</strong>
+          </div>
+          <div id="responsive-menu">
+            <div class="top-bar-left">
+              <ul class="menu">
+                <li ui-sref-active="active"><a ui-sref="home">Home</a></li>
+                <li ui-sref-active="active"><a ui-sref="iconList">Icons</a></li>
+                <li ui-sref-active="active"><a ng-click="goUpload()">Upload</a></li>
+              </ul>
+            </div>
+            <div class="top-bar-right">
+              <ul class="menu dropdown" data-dropdown-menu>
+                <li ng-if="validUser()" class="has-dropdown">
+                  <a href="#">My Account</a>
+                  <ul class="dropdown">
+                    <li><a href="#" ng-click="logOut()">logout</a></li>
+                  </ul>
+                </li>
+                <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="register">Sign-up</a></li>
+                <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="login">Login</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="content" ui-view></div>
 
-    </div>
-
+    <!-- </div>
+ -->
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
