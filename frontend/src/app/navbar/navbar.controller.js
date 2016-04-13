@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('icons')
-  .controller('NavbarCtrl', function ($scope, userService) {
+  .controller('navbarCtrl', function ($scope, userService) {
     $scope.date = new Date();
     $scope.loggedIn = false; //#security
 
@@ -14,6 +14,7 @@ angular.module('icons')
     };
 
     $scope.validUser = function() {
+        //return true;
         return userService.isAuthenticated();
     };
 

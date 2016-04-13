@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="app/index.css">
     <!-- endinject -->
     <!-- endbuild -->
+
+    <script src="https://use.typekit.net/fji5upx.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -26,38 +29,30 @@
     <!-- <div class="container"> -->
 
       <div data-sticky-container>
-        <div class="top-bar sticky" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="content" data-btm-anchor="content:bottom">
-          <div class="top-bar-title">
-            <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
-              <span class="menu-icon dark" data-toggle></span>
+        <div id="top-bar" class="top-bar sticky" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="content">
+          <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
+              <button class="menu-icon" type="button" data-toggle></button>
             </span>
-            <strong>Site Title</strong>
+          <div class="top-bar-title">
+            <a ui-sref="home"><img src="/assets/images/logo.png" alt="Vision Archive" title="Vision Archive" /></a>
           </div>
           <div id="responsive-menu">
-            <div class="top-bar-left">
-              <ul class="menu">
-                <li ui-sref-active="active"><a ui-sref="home">Home</a></li>
-                <li ui-sref-active="active"><a ui-sref="iconList">Icons</a></li>
-                <li ui-sref-active="active"><a ng-click="goUpload()">Upload</a></li>
-              </ul>
-            </div>
-            <div class="top-bar-right">
-              <ul class="menu dropdown" data-dropdown-menu>
-                <li ng-if="validUser()" class="has-dropdown">
-                  <a href="#">My Account</a>
-                  <ul class="dropdown">
-                    <li><a href="#" ng-click="logOut()">logout</a></li>
-                  </ul>
-                </li>
-                <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="register">Sign-up</a></li>
-                <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="login">Login</a></li>
-              </ul>
-            </div>
+            <navbar></navbar>
           </div>
         </div>
       </div>
       <div id="content" ui-view></div>
-
+      <div class="footer row">
+        <div class="small-12 medium-4 columns">
+          <img src="/assets/images/logo.png" alt="Vision Archive" title="Vision Archive" />
+        </div>
+        <div class="small-12 medium-4 columns">
+          UL menu here
+        </div>
+        <div class="small-12 medium-4 columns">
+          UL Menu here
+        </div>
+      </div>
     <!-- </div>
  -->
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -98,9 +93,12 @@
     <script src="app/stuff/stuffWidgetController.js"></script>
     <script src="app/search/searchController.js"></script>
     <script src="app/reset/reset.js"></script>
+    <script src="app/removeSelf/removeSelf.js"></script>
     <script src="app/register/register.js"></script>
     <script src="app/news/newsControllers.js"></script>
+    <script src="app/navbar/navbar.directive.js"></script>
     <script src="app/navbar/navbar.controller.js"></script>
+    <script src="app/misc/misc.js"></script>
     <script src="app/messages/messages.directive.js"></script>
     <script src="app/main/main.controller.js"></script>
     <script src="app/login/login.js"></script>

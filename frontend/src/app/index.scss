@@ -1,3 +1,8 @@
+$dark: #231f20;
+$teal: #60ebd1;
+$magenta: #bf28f6;
+$grey: #6C6365;
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -16,6 +21,108 @@
   img.right {
     width: 50px;
   }
+}
+
+h1, h2, h3, h4, h5, h6, a {
+  text-transform: uppercase;
+  font-family: "futura-pt", sans-serif;
+  font-weight: 800;
+}
+
+body, input {
+  font-family: "futura-pt", sans-serif;
+}
+
+.top-bar, 
+.footer {
+  background-color: $dark;
+}
+
+.top-bar {
+  background-color: $dark;
+  font-size: 75%;
+
+  img {
+    width: 50px;
+  }
+
+  ul {
+
+    background-color: $dark;
+    border-color: $dark;
+
+    &.menu:not(.vertical) {
+      background: transparent;
+    }
+
+    &.menu.vertical {
+      background-color: $dark;
+      border-color: $dark;
+    }
+  }
+
+  a {
+    color: #fff;
+    background-color: transparent;
+  }
+
+  .register {
+    background-color: $teal;
+
+    a {
+      color: $dark;
+    }
+  }
+}
+
+.sticky {
+  height: 70px;
+}
+
+::-webkit-input-placeholder,
+:-moz-placeholder,
+::-moz-placeholder,
+:-ms-input-placeholder {  
+   color: $grey;  
+}
+
+.home-banner {
+  position: relative;
+
+  .pull-up {
+    position: absolute;
+    bottom: 10%;
+  }
+
+  .button {
+    background-color: #000;
+  }
+}
+
+.home-banner, 
+.home-animation {
+  border-bottom: 3px solid $dark;
+}
+
+.search {
+  label {
+    display: none;
+  }
+
+  input {
+    font-weight: 800;
+  }
+
+  
+}
+
+.footer {
+  padding: 2em 0;
+  margin-top: 4em;
+  img {
+    width: 100px;
+  }
+
 }
 // injector
 // endinjector

@@ -1,15 +1,14 @@
 'use strict';
 
 angular.module('icons')
-.directive('iconsMessages', function() {
+.directive('iconsMessages', function($timeout) {
 	return {
       template: '<div class="messages"></div>',
       restrict: 'E',
       controller: 'messagesCtrl',
       link: function postLink(scope, element, attrs) {
       	scope.$on('iconsDisplayMessage', function(e,data) {
-      		element.append('<div data-alert class="alert-box ' + data.type + ' radius">'+data.message+'<a class="close" ng-click="close($event">&times;</a></div>');
-      		scope.restartFoundation();
+      		element.append('<div class="hi" icons-remove-self>'+data.message+'</div>');
       	});
 
       	scope.clear = function() {
