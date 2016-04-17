@@ -18,7 +18,7 @@ angular.module('icons')
 
 		userAPI.logIn = function(creds) {
 			$http.post('/auth/login', creds, config).success(function(res, status, headers, config) {
-				console.log(res);
+				console.log("res:",res);
 				if(angular.isDefined(res.data.token)) {
 					console.log("user logged in successfully");
 					localStorageService.set("userToken", res.data.token);
