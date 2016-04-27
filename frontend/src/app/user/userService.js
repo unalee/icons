@@ -24,12 +24,14 @@ angular.module('icons')
 					localStorageService.set("userToken", res.data.token);
 					$state.go('upload');
 				} else {
+					console.log('shit');
 					$rootScope.$broadcast('iconsDisplayMessage', {
 						type: "alert",
 						message: "Incorrect email or password. Please try again."
 					});
 				}
 			}).error(function(data, status, headers, config) {
+				console.error(data, status, headers)
 				$rootScope.$broadcast('iconsDisplayMessage', {
 					type: "alert",
 					message: "Oops, something went wrong. Please try again."
