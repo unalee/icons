@@ -1,6 +1,6 @@
-$dark: #231f20;
+$dark: #000;
 $teal: #60ebd1;
-$magenta: #bf28f6;
+$purple: #bf28f6;
 $grey: #6C6365;
 
 .browsehappy {
@@ -8,6 +8,15 @@ $grey: #6C6365;
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
+}
+
+.row {
+  max-width: 960px;
+}
+
+.navbar-row {
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .panel {
@@ -27,6 +36,82 @@ h1, h2, h3, h4, h5, h6, a {
   text-transform: uppercase;
   font-family: "futura-pt", sans-serif;
   font-weight: 800;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $purple;
+}
+
+h1, h2, h3 {
+  letter-spacing: 3px;
+}
+
+@media screen and (min-width: 40em) {
+  h2 {
+    font-size: 2em;
+  }
+
+  h3 {
+    font-size: 1.5em;
+  }
+}
+
+h3 {
+  margin: 2em 0;
+}
+
+.mission-statement-container {
+  position: relative;
+
+  .overlay {
+    position: absolute;
+    width: 100%;
+    bottom: 5%;
+    text-align: center;
+  }
+
+  .circle {
+    display: inline-table;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: $teal;
+    padding: 1em;
+
+    .button {
+      display: table-cell;
+      vertical-align: middle;
+      background-color: transparent;
+    }
+  }
+
+  .left,
+  .right {
+    position: absolute;
+    bottom: 25%;
+  }
+
+  .left {
+    left: 13%;
+  }
+
+  .right {
+    right: 13%;
+    
+  }
+
+  .button {
+    background-color: $teal;
+    color: $dark;
+  }
+}
+
+.center-title {
+  text-align: center;
+  letter-spacing: 3px;
+  line-height: 1.3;
+  margin-top: 1em;
+  margin-bottom: 0;
 }
 
 body, input {
@@ -87,11 +172,16 @@ body, input {
 }
 
 .home-banner {
-  position: relative;
+  
+  .banner-container {
+    position: relative;
+  }
 
   .pull-up {
     position: absolute;
-    bottom: 10%;
+    bottom: 12%;
+    width: 100%;
+    text-align: center;
   }
 
   .button {

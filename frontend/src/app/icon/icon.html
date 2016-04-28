@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="large-8 small-12 columns">
 			<h2>{{icon.title}}</h2>
-			<img class="graphic-item" src="/assets/images/{{icon.filename}}" title="{{icon.title}}" />
+			<img class="graphic-item" ng-src="/assets/images/{{icon.filename}}" title="{{icon.title}}" />
 		</div>
 		<div class="large-4 small-12 columns">
 			<button class="button expand">Download Source</button>
@@ -23,12 +23,20 @@
 				<h4>Tags:</h4>
 				<p><a class="tag" ng-repeat="tag in icon.tags" ng-click="explore(tag.value)">{{tag}}{{$last ? '' : ', '}}</a></p>
 			</div>
-			<div ng-if="icon.related" class="detail related">
-				<h4>Related To:</h4>
-				<div class="related-icon" ng-repeat="relatedId in icon.related">
-					<h5>{{icons[relatedId].title}}</h5>
-					<a href="/#/icon?iconId={{relatedId}}"><img class="graphic-item" src="/assets/images/{{icons[relatedId].filename}}" title="{{icons[relatedId].title}}" /></a>
+			<div ng-if="icon.remixes" class="detail related">
+				<h4>Remixes:</h4>
+				<div class="related-icon" ng-repeat="id in icon.remixes">
+					<h5>{{icons[id].title}}</h5>
+					<a href="/#/icon?iconId={{id}}"><img class="graphic-item" ng-src="/assets/images/{{icons[id].filename}}" title="{{icons[id].title}}" /></a>
 				</div>
+			</div>
+			<div ng-if="icon.parent" class="detail related">
+				<h4>Created With:</h4>
+				<div class="related-icon" ng-repeat="id in icon.parent">
+					<h5>{{icons[id].title}}</h5>
+					<a href="/#/icon?iconId={{id}}"><img class="graphic-item" ng-src="/assets/images/{{icons[id].filename}}" title="{{icons[id].title}}" /></a>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div ng-if="loading" class="loading-indicator">
