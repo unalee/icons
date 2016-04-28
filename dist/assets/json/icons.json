@@ -174,7 +174,7 @@
     "author2": "Hélen Marton",
     "author3": 0,
     "tags": ["Workshop 1"],
-    "related": [36]
+    "remixes": [36]
   },
   {
     "filename": "Reclaiming.jpg",
@@ -406,6 +406,6 @@
     "author2": "Melissa Moore",
     "author3": 0,
     "tags": ["handbill", "Black Lives Matter"],
-    "related": [15]
+    "parent": [15]
   }
 ]

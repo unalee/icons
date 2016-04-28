@@ -89,12 +89,14 @@ angular.module('icons')
 					localStorageService.set("userToken", res.data.token);
 					$state.go('upload');
 				} else {
+					console.log('shit');
 					$rootScope.$broadcast('iconsDisplayMessage', {
 						type: "alert",
 						message: "Incorrect email or password. Please try again."
 					});
 				}
 			}).error(function(data, status, headers, config) {
+				console.error(data, status, headers)
 				$rootScope.$broadcast('iconsDisplayMessage', {
 					type: "alert",
 					message: "Oops, something went wrong. Please try again."
@@ -145,32 +147,6 @@ angular.module('icons')
 		return userAPI;
 }]);
 angular.module('icons')
-	.controller('stuffWidgetController', ["$scope", function($scope) {
-		console.log('stuffWidgetController loaded');
-
-		$scope.stuff = [];
-
-		for(var i=1; i <= 6; i++) {
-			$scope.stuff.push({
-				src: 'placeholder://',
-				title: 'Placeholder image',
-				location: 'path/to/stuff'
-			});
-		}
-
-		$scope.gotoStuff = function(location) {
-			console.log('let\'s see ', location);
-		};
-
-	}]).directive('iconsStuffWidget', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			templateUrl: 'app/stuff/stuff-widget.html',
-			controller: 'stuffWidgetController'
-		};
-	});
-angular.module('icons')
 	.controller('tagsWidgetController', ["$scope", function($scope) {
 		console.log('tagsWidgetController loaded');
 
@@ -206,6 +182,32 @@ angular.module('icons')
 			replace: true,
 			templateUrl: 'app/tags/tags-widget.html',
 			controller: 'tagsWidgetController'
+		};
+	});
+angular.module('icons')
+	.controller('stuffWidgetController', ["$scope", function($scope) {
+		console.log('stuffWidgetController loaded');
+
+		$scope.stuff = [];
+
+		for(var i=1; i <= 6; i++) {
+			$scope.stuff.push({
+				src: 'placeholder://',
+				title: 'Placeholder image',
+				location: 'path/to/stuff'
+			});
+		}
+
+		$scope.gotoStuff = function(location) {
+			console.log('let\'s see ', location);
+		};
+
+	}]).directive('iconsStuffWidget', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/stuff/stuff-widget.html',
+			controller: 'stuffWidgetController'
 		};
 	});
 angular.module('icons')
@@ -245,6 +247,35 @@ angular.module('icons')
     }
   };
 }]);
+angular.module('icons')
+	.controller('latestRemixCtrl', ["$scope", "$http", function($scope, $http) {
+
+		$scope.icons = [];
+		$http.get('/assets/json/icons.json').success(function(data) {
+    	
+    		for(var i = 0; i < data.length; i++) {
+    			if(angular.isDefined(data[i].parent)) {
+    				$scope.icon = data[i];
+    				$scope.icon.id = i;
+    			}
+    		}
+
+	    }).error(function() {
+	    	$rootScope.$broadcast('iconsDisplayMessage', {
+	    		type: "alert",
+	    		message: "Oops, something went wrong loading icons."
+	    	});
+	    });
+
+
+	}]).directive('iconsLatestRemix', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/remix/latest-remix.html',
+			controller: 'latestRemixCtrl'
+		};
+	});
 'use strict';
 
 angular.module('icons')
@@ -446,6 +477,36 @@ angular.module('icons')
 
   }]);
 
+angular.module('icons')
+	.controller('latestImagesCtrl', ["$scope", "$http", function($scope, $http) {
+		console.log('graphicsWidgetController loaded');
+
+		$scope.icons = [];
+		$http.get('/assets/json/icons.json').success(function(data) {
+    	
+    		for(var i = 0; i < $scope.limit; i++) {
+    			$scope.icons.push(data[i]);
+    		}
+
+	    }).error(function() {
+	    	$rootScope.$broadcast('iconsDisplayMessage', {
+	    		type: "alert",
+	    		message: "Oops, something went wrong loading icons."
+	    	});
+	    });
+
+
+	}]).directive('iconsLatestImagesWidget', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			scope: {
+				limit: '@'
+			},
+			templateUrl: 'app/images/latest-images-widget.html',
+			controller: 'latestImagesCtrl'
+		};
+	});
 'use strict';
 
 angular.module('icons')
@@ -471,14 +532,13 @@ angular.module('icons')
   }]);
 
 angular.module('icons')
-	.controller('graphicsWidgetController', ["$scope", "$http", function($scope, $http) {
-		console.log('graphicsWidgetController loaded');
+	.controller('upcomingEventsCtrl', ["$scope", "$http", function($scope, $http) {
 
-		$scope.icons = [];
-		$http.get('/assets/json/icons.json').success(function(data) {
+		$scope.events = [];
+		$http.get('/assets/json/events.json').success(function(data) {
     	
-    		for(var i = 0; i < 4; i++) {
-    			$scope.icons.push(data[i]);
+    		for(var i = 0; i < $scope.limit; i++) {
+    			$scope.events.push(data[i]);
     		}
 
 	    }).error(function() {
@@ -489,12 +549,31 @@ angular.module('icons')
 	    });
 
 
-	}]).directive('iconsGraphicsWidget', function() {
+	}]).directive('iconsUpcomingEvents', function() {
 		return {
 			restrict: 'E',
 			replace: true,
-			templateUrl: 'app/graphics/graphics-widget.html',
-			controller: 'graphicsWidgetController'
+			scope: {
+				limit: '@'
+			},
+			templateUrl: 'app/events/upcoming-events.html',
+			controller: 'upcomingEventsCtrl'
+		};
+	});
+angular.module('icons')
+	.controller('latestEventCtrl', ["$scope", "$http", function($scope, $http) {
+
+		$scope.event = {
+			image: 'Latest-Event.jpg',
+			link: 'hahaha'
+		};
+
+	}]).directive('iconsLatestEvent', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/events/latest-event.html',
+			controller: 'latestEventCtrl'
 		};
 	});
 angular.module("icons").run(["$templateCache", function($templateCache) {$templateCache.put("app/graphics/graphics-widget.html","<div class=\"graphics-widget-items\"><div class=\"row small-up-1 medium-up-2 large-up-4\"><div class=\"column\" ng-repeat=\"icon in icons\"><a href=\"/#/icon?iconId={{$index}}\"><img class=\"graphic-item\" src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"></a></div></div></div>");
