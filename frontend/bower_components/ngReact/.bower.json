@@ -27,7 +27,7 @@
     "tag": "0.1.7",
     "commit": "b754bf60157ff9cf0dfc6e0a80ff098b278b5431"
   },
-  "_source": "git://github.com/davidchang/ngReact.git",
+  "_source": "https://github.com/davidchang/ngReact.git",
   "_target": "~0.1.4",
   "_originalSource": "ngReact"
 }

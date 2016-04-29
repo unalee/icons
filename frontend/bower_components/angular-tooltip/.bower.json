@@ -29,7 +29,7 @@
     "branch": "master",
     "commit": "3ea3cc224b0a0fc63936490040a4217dcf08037e"
   },
-  "_source": "git://github.com/remind101/angular-tooltip.git",
+  "_source": "https://github.com/remind101/angular-tooltip.git",
   "_target": "*",
   "_originalSource": "ng-modal"
 }

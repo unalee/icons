@@ -39,11 +39,12 @@ gulp.task('styles', function () {
     .pipe($.inject(injectFiles, injectOptions))
     .pipe(indexFilter.restore())
     .pipe($.sass(sassOptions))
+    // .pipe(gulp.dest(paths.tmp + '/serve/app/'));
 
-  .pipe($.autoprefixer())
-    .on('error', function handleError(err) {
-      console.error(err.toString());
-      this.emit('end');
-    })
-    .pipe(gulp.dest(paths.tmp + '/serve/app/'));
+  // .pipe($.autoprefixer())
+  //   .on('error', function handleError(err) {
+  //     console.error(err.toString());
+  //     this.emit('end');
+  //   })
+    
 });
