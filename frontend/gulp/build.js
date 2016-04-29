@@ -91,6 +91,6 @@ gulp.task('clean', function (done) {
 gulp.task('deploy', function() {
   return gulp.src(paths.dist + '/**/*')
     .pipe(gulp.dest(paths.deploy + '/'));
-})
+});
 
-gulp.task('build', ['clean', 'html', 'images', 'fonts', 'misc', 'data']);
+gulp.task('build', ['html', 'images', 'fonts', 'misc', 'data']);
