@@ -43,7 +43,7 @@ gulp.task('html', ['inject', 'partials'], function () {
     .pipe($.rev())
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
-    .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
+    //.pipe($.uglify({preserveComments: $.uglifySaveLicense}))
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe($.csso())
@@ -85,7 +85,12 @@ gulp.task('misc', function () {
 });
 
 gulp.task('clean', function (done) {
-  $.del([paths.dist + '/', paths.tmp + '/'], done);
+  $.del([paths.dist + '/', paths.deploy + '/'], {force:true});
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc', 'data']);
+gulp.task('deploy', function() {
+  return gulp.src(paths.dist + '/**/*')
+    .pipe(gulp.dest(paths.deploy + '/'));
+})
+
+gulp.task('build', ['clean', 'html', 'images', 'fonts', 'misc', 'data']);

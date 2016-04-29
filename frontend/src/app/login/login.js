@@ -9,7 +9,7 @@ angular.module('icons')
     $scope.logIn = function() {
         console.log($scope.user);
     	userService.logIn($scope.user).then(function(user) {
-
+            console.log(user);
         });
     };
 

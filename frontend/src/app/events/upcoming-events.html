@@ -1,0 +1,14 @@
+<div class="upcoming-events">
+	<h3>Upcoming Events</h3>
+	<div ng-repeat="event in events">
+
+		<h4>{{event.city}}</h4>
+		<p class="date">{{event.date}}</p>
+		<p class="title">{{event.title}}</p>
+		<p class="presenters">{{event.presenters}}</p>
+		<p class="location" ng-if="event.location">{{event.location}}</p>
+		<p class="time" ng-if="event.time">{{event.time}}</p>
+		<a class="more" ng-if="event.description">More</a>
+
+	</div>
+</div>

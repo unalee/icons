@@ -18,18 +18,20 @@ angular.module('icons')
 
 		userAPI.logIn = function(creds) {
 			$http.post('/auth/login', creds, config).success(function(res, status, headers, config) {
-				console.log(res);
+				console.log("res:",res);
 				if(angular.isDefined(res.data.token)) {
 					console.log("user logged in successfully");
 					localStorageService.set("userToken", res.data.token);
 					$state.go('upload');
 				} else {
+					console.log('shit');
 					$rootScope.$broadcast('iconsDisplayMessage', {
 						type: "alert",
 						message: "Incorrect email or password. Please try again."
 					});
 				}
 			}).error(function(data, status, headers, config) {
+				console.error(data, status, headers)
 				$rootScope.$broadcast('iconsDisplayMessage', {
 					type: "alert",
 					message: "Oops, something went wrong. Please try again."

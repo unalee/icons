@@ -4,9 +4,10 @@ var gulp = require('gulp');
 
 gulp.paths = {
   src: 'src',
-  dist: '../server/frontend',
-  tmp: '.tmp',
-  e2e: 'e2e'
+  dist: '../dist',
+  tmp: '../.tmp',
+  e2e: 'e2e',
+  deploy: '../server/frontend'
 };
 
 require('require-dir')('./gulp');
