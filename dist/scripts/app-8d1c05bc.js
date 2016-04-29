@@ -89,12 +89,14 @@ angular.module('icons')
 					localStorageService.set("userToken", res.data.token);
 					$state.go('upload');
 				} else {
+					console.log('shit');
 					$rootScope.$broadcast('iconsDisplayMessage', {
 						type: "alert",
 						message: "Incorrect email or password. Please try again."
 					});
 				}
 			}).error(function(data, status, headers, config) {
+				console.error(data, status, headers)
 				$rootScope.$broadcast('iconsDisplayMessage', {
 					type: "alert",
 					message: "Oops, something went wrong. Please try again."
@@ -145,32 +147,6 @@ angular.module('icons')
 		return userAPI;
 }]);
 angular.module('icons')
-	.controller('stuffWidgetController', ["$scope", function($scope) {
-		console.log('stuffWidgetController loaded');
-
-		$scope.stuff = [];
-
-		for(var i=1; i <= 6; i++) {
-			$scope.stuff.push({
-				src: 'placeholder://',
-				title: 'Placeholder image',
-				location: 'path/to/stuff'
-			});
-		}
-
-		$scope.gotoStuff = function(location) {
-			console.log('let\'s see ', location);
-		};
-
-	}]).directive('iconsStuffWidget', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			templateUrl: 'app/stuff/stuff-widget.html',
-			controller: 'stuffWidgetController'
-		};
-	});
-angular.module('icons')
 	.controller('tagsWidgetController', ["$scope", function($scope) {
 		console.log('tagsWidgetController loaded');
 
@@ -206,6 +182,32 @@ angular.module('icons')
 			replace: true,
 			templateUrl: 'app/tags/tags-widget.html',
 			controller: 'tagsWidgetController'
+		};
+	});
+angular.module('icons')
+	.controller('stuffWidgetController', ["$scope", function($scope) {
+		console.log('stuffWidgetController loaded');
+
+		$scope.stuff = [];
+
+		for(var i=1; i <= 6; i++) {
+			$scope.stuff.push({
+				src: 'placeholder://',
+				title: 'Placeholder image',
+				location: 'path/to/stuff'
+			});
+		}
+
+		$scope.gotoStuff = function(location) {
+			console.log('let\'s see ', location);
+		};
+
+	}]).directive('iconsStuffWidget', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/stuff/stuff-widget.html',
+			controller: 'stuffWidgetController'
 		};
 	});
 angular.module('icons')
