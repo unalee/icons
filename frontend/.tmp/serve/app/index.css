@@ -25,33 +25,85 @@ h1, h2, h3, h4, h5, h6, a {
   font-family: "futura-pt", sans-serif;
   font-weight: 800; }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #bf28f6; }
+
+h1, h2, h3 {
+  letter-spacing: 3px; }
+
+@media screen and (min-width: 40em) {
+  h2 {
+    font-size: 2em; }
+  h3 {
+    font-size: 1.5em; } }
+
+h3 {
+  margin: 2em 0; }
+
+.mission-statement-container {
+  position: relative; }
+  .mission-statement-container .overlay {
+    position: absolute;
+    width: 100%;
+    bottom: 5%;
+    text-align: center; }
+  .mission-statement-container .circle {
+    display: inline-table;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: #60ebd1;
+    padding: 1em; }
+    .mission-statement-container .circle .button {
+      display: table-cell;
+      vertical-align: middle;
+      background-color: transparent; }
+  .mission-statement-container .left,
+  .mission-statement-container .right {
+    position: absolute;
+    bottom: 25%; }
+  .mission-statement-container .left {
+    left: 13%; }
+  .mission-statement-container .right {
+    right: 13%; }
+  .mission-statement-container .button {
+    background-color: #60ebd1;
+    color: #000; }
+
+.center-title {
+  text-align: center;
+  letter-spacing: 3px;
+  line-height: 1.3;
+  margin-top: 1em;
+  margin-bottom: 0; }
+
 body, input {
   font-family: "futura-pt", sans-serif; }
 
 .top-bar,
 .footer {
-  background-color: #231f20; }
+  background-color: #000; }
 
 .top-bar {
-  background-color: #231f20;
+  background-color: #000;
   font-size: 75%; }
   .top-bar img {
     width: 50px; }
   .top-bar ul {
-    background-color: #231f20;
-    border-color: #231f20; }
+    background-color: #000;
+    border-color: #000; }
     .top-bar ul.menu:not(.vertical) {
       background: transparent; }
     .top-bar ul.menu.vertical {
-      background-color: #231f20;
-      border-color: #231f20; }
+      background-color: #000;
+      border-color: #000; }
   .top-bar a {
     color: #fff;
     background-color: transparent; }
   .top-bar .register {
     background-color: #60ebd1; }
     .top-bar .register a {
-      color: #231f20; }
+      color: #000; }
 
 .sticky {
   height: 70px; }
@@ -62,17 +114,21 @@ body, input {
 :-ms-input-placeholder {
   color: #6C6365; }
 
-.home-banner {
+.home-banner .banner-container {
   position: relative; }
-  .home-banner .pull-up {
-    position: absolute;
-    bottom: 10%; }
-  .home-banner .button {
-    background-color: #000; }
+
+.home-banner .pull-up {
+  position: absolute;
+  bottom: 12%;
+  width: 100%;
+  text-align: center; }
+
+.home-banner .button {
+  background-color: #000; }
 
 .home-banner,
 .home-animation {
-  border-bottom: 3px solid #231f20; }
+  border-bottom: 3px solid #000; }
 
 .search label {
   display: none; }

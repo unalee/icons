@@ -224,18 +224,6 @@ angular.module('icons')
 'use strict';
 
 angular.module('icons')
-  .controller('passwordResetCtrl', ["$scope", "userService", function ($scope, userService) {
-    $scope.date = new Date();
-    $scope.user = {};
-    $scope.loggedIn = false; //#security
-
-    
-
-  }]);
-
-'use strict';
-
-angular.module('icons')
 .directive('iconsRemoveSelf', ["$timeout", function($timeout) {
 	return {
     restrict: 'A',
@@ -247,6 +235,18 @@ angular.module('icons')
     }
   };
 }]);
+'use strict';
+
+angular.module('icons')
+  .controller('passwordResetCtrl', ["$scope", "userService", function ($scope, userService) {
+    $scope.date = new Date();
+    $scope.user = {};
+    $scope.loggedIn = false; //#security
+
+    
+
+  }]);
+
 angular.module('icons')
 	.controller('latestRemixCtrl', ["$scope", "$http", function($scope, $http) {
 

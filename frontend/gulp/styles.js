@@ -35,16 +35,16 @@ gulp.task('styles', function () {
     paths.src + '/app/index.scss',
     paths.src + '/app/vendor.scss'
   ])
-    .pipe(indexFilter)
-    .pipe($.inject(injectFiles, injectOptions))
-    .pipe(indexFilter.restore())
-    .pipe($.sass(sassOptions))
-    // .pipe(gulp.dest(paths.tmp + '/serve/app/'));
+  .pipe(indexFilter)
+  .pipe($.inject(injectFiles, injectOptions))
+  .pipe(indexFilter.restore())
+  .pipe($.sass(sassOptions))
+  .pipe(gulp.dest(paths.tmp + '/serve/app/'))
+  .pipe($.autoprefixer())
+    .on('error', function handleError(err) {
+      console.error(err.toString());
+      this.emit('end');
+    });
 
-  // .pipe($.autoprefixer())
-  //   .on('error', function handleError(err) {
-  //     console.error(err.toString());
-  //     this.emit('end');
-  //   })
     
 });
