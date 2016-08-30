@@ -7,7 +7,7 @@ gulp.paths = {
   dist: '../dist',
   tmp: '../.tmp',
   e2e: 'e2e',
-  deploy: '../server/frontend'
+  deploy: '../deploy/dist'
 };
 
 require('require-dir')('./gulp');

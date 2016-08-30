@@ -7,7 +7,8 @@
     "node": "5.4.0"
   },
   "scripts": {
-    "test": "mocha --reporter supersamples"
+    "test": "mocha --reporter supersamples",
+    "gulp": "cd frontend && gulp default"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/pretentiousgit/icons-project#readme",
   "dependencies": {
     "async": "latest",
+    "aws-sdk": "^2.3.15",
     "bcrypt": "^0.8.5",
     "bluebird": "latest",
     "body-parser": "~1.0.1",
@@ -36,10 +38,14 @@
     "connect-mongo": "latest",
     "cookie": "latest",
     "cookie-parser": "latest",
+    "dotenv": "^2.0.0",
     "express": "^4.0.0",
     "express-session": "latest",
+    "ftp": "^0.3.10",
+    "jsftp": "^1.5.3",
     "jsonwebtoken": "^5.0.4",
     "jwt-simple": "^0.4.1",
+    "knox": "^0.9.2",
     "lodash": "latest",
     "method-override": "latest",
     "mocha": "^2.1.0",
@@ -50,6 +56,7 @@
     "mongoose-unique-validator": "^1.0.2",
     "mongoose-validator": "^1.2.4",
     "morgan": "latest",
+    "multer": "^1.1.0",
     "passport": "^0.2.1",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "~0.1.6",
@@ -58,6 +65,7 @@
     "supertest-as-promised": "^1.0.0"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
     "mockgoose": "^5.3.3",
     "sinon": "^1.17.3"
   }
