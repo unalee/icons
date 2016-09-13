@@ -8,7 +8,6 @@ angular.module('icons')
 		controller: 'navbarCtrl',
 		link: function(scope, element, attrs) {
 			$timeout(function() {
-				console.log('hi', element);
 				$(element).foundation();
 			},20);	
 		}
