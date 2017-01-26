@@ -42,6 +42,19 @@ h1, h2, h3, h4, h5, h6 {
   color: $purple;
 }
 
+h2.section-heading {
+  color: $teal
+}
+
+h1.about {
+  font-size: 2em;
+}
+
+h4.about {
+  font-weight: normal;
+  color: $dark;
+}
+
 h1, h2, h3 {
   letter-spacing: 3px;
 }
@@ -160,8 +173,17 @@ body, input {
   }
 }
 
+.top-bar-left,
+.top-bar-right {
+  margin: 10px 0;
+}
+
 .sticky {
   height: 70px;
+}
+
+#content {
+  padding-top: 2rem;
 }
 
 ::-webkit-input-placeholder,
@@ -213,6 +235,19 @@ body, input {
     width: 100px;
   }
 
+}
+
+p.image-caption {
+  font-weight: 600;
+  font-style: italic;
+  text-align: left;
+  margin-bottom: 2em;
+}
+
+.supported-by {
+  margin-top: 4em;
+  padding-top: 2em;
+  border-top: 4px solid;
 }
 // injector
 // endinjector

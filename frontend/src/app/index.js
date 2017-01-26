@@ -7,7 +7,6 @@ angular.module('icons', [
   'ngSanitize', 
   'ngResource', 
   'ui.router',
-  'react', 
   'ngFileUpload',
   'LocalStorageModule'
 ]).config(function ($stateProvider, $urlRouterProvider, $httpProvider, localStorageServiceProvider) {
@@ -19,6 +18,10 @@ angular.module('icons', [
       .state('home', {
         url: '/',
         templateUrl: 'app/main/main.html'
+      })
+      .state('about', {
+        url: '/about',
+        templateUrl: 'app/about/about.html'
       })
       .state('login', {
         url: '/login',

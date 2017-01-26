@@ -10,7 +10,6 @@
     "angular-resource": "~1.5.3",
     "angular-ui-router": "~0.2.13",
     "angular": "~1.5.3",
-    "ngReact": "~0.1.4",
     "ng-file-upload": "~12.0.1",
     "angular-tooltip": "ng-modal#*",
     "angular-local-storage": "~0.2.7",
