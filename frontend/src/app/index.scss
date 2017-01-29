@@ -38,6 +38,10 @@ h1, h2, h3, h4, h5, h6, a {
   font-weight: 800;
 }
 
+p {
+  line-height: 1.4;
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: $purple;
 }
@@ -48,6 +52,7 @@ h2.section-heading {
 
 h1.about {
   font-size: 2em;
+  margin-bottom: 1em;
 }
 
 h4.about {
@@ -248,6 +253,10 @@ p.image-caption {
   margin-top: 4em;
   padding-top: 2em;
   border-top: 4px solid;
+
+  img {
+    margin: 1em 0
+  }
 }
 // injector
 // endinjector
