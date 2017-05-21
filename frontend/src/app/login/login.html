@@ -4,13 +4,15 @@
       <div class="log-in-form">
         <h4 class="text-center">Log in</h4>
         <label>Username
-          <input type="text" placeholder="Username" ng-model="user.email" required>
+          <input type="email" placeholder="Username" ng-model="user.email" required>
         </label>
         <label>Password
           <input type="password" placeholder="Password" ng-model="user.password" required>
         </label>
         <button type="submit" class="button expand">Log In</button>
-        <p class="text-center"><a ui-sref="password">Forgot your password?</a></p>   
+        <p class="text-center"><a ui-sref="password">Forgot your password?</a></p>
+        <a ng-click="addMessage()">Hi</a>
       </div>
     </form>
+
 </div>

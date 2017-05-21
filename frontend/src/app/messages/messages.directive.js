@@ -1,21 +1,23 @@
 'use strict';
 
 angular.module('icons')
-.directive('iconsMessages', function($timeout) {
+.directive('iconsMessages', function($timeout, $compile) {
+  console.log('aehm');
 	return {
-      template: '<div class="messages"></div>',
-      restrict: 'E',
-      controller: 'messagesCtrl',
-      link: function postLink(scope, element, attrs) {
-      	scope.$on('iconsDisplayMessage', function(e,data) {
-      		element.append('<div class="hi" icons-remove-self>'+data.message+'</div>');
-      	});
+    template: '<div class="messages"></div>',
+    restrict: 'E',
+    controller: 'messagesCtrl',
+    link: function postLink(scope, element, attrs) {
+    	scope.$on('iconsDisplayMessage', function(e,data) {
+    		element.append('<div class="'+data.type+'" icons-message>'+data.message+'</div>');
+        $compile(element.contents())(scope);
+    	});
 
-      	scope.clear = function() {
-      		element.find('.alert-box').remove();
-      	}
-      }
-    };
+    	scope.clear = function() {
+    		element.find('.alert-box').remove();
+    	}
+    }
+  };
 }).controller('messagesCtrl', function($scope,$document) {
 	
 	$scope.close = function(event) {

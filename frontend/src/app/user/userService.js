@@ -19,9 +19,9 @@ angular.module('icons')
 		userAPI.logIn = function(creds) {
 			$http.post('/auth/login', creds, config).success(function(res, status, headers, config) {
 				console.log("res:",res);
-				if(angular.isDefined(res.data.token)) {
+				if(angular.isDefined(res.token)) {
 					console.log("user logged in successfully");
-					localStorageService.set("userToken", res.data.token);
+					localStorageService.set("userToken", res.token);
 					$state.go('upload');
 				} else {
 					console.log('shit');
@@ -58,8 +58,8 @@ angular.module('icons')
 			 
 			$http.post('/auth/signup', newUser, config).success(function(res) {
 				console.log(res);
-				if(angular.isDefined(res.data.token)) {
-					localStorageService.set("userToken", res.data.token);
+				if(angular.isDefined(res.token)) {
+					localStorageService.set("userToken", res.token);
 					$state.go('upload');
 					$rootScope.$broadcast('iconsDisplayMessage', {
 						type: "success",
