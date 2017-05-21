@@ -20,7 +20,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // Detailed logging ================
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
 // SESSION STORAGE ==================================================
 var session = require('express-session');
@@ -48,7 +48,7 @@ global.rootRequire = function(name) {
 
 // express 4.0 basic configuration ==================================
 app.use(cookieParser());
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + '/dist2'));
 app.use(bodyParser());
 
 // passport configuration ===========================================
@@ -79,7 +79,9 @@ app.use(passport.session()); // persistent login sessions
 var auth = require('./server/routes/auth');
 app.use('/auth', auth);
 
-var api = require('./server/routes/router');
+var api = require('./server/routes/api');
+var validToken = require('./server/routes/api');
+
 app.use('/api', api);
 
 app.use('/docs', function(req, res) {
@@ -92,7 +94,7 @@ app.use('*', function(req, res) {
 
 // DEFAULT ROUTE ====================================================
 // app.get('*', function(req, res) {
-// 	res.sendFile(__dirname + '/dist/src/index.html');
+// 	res.sendFile(__dirname + '/dist2/src/index.html');
 // });
 
 // Turn it on
