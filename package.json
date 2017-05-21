@@ -26,6 +26,7 @@
   "homepage": "https://github.com/pretentiousgit/icons-project#readme",
   "dependencies": {
     "async": "latest",
+    "aws-sdk": "^2.54.0",
     "bcrypt": "^0.8.5",
     "bluebird": "latest",
     "body-parser": "~1.0.1",
