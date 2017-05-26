@@ -4,6 +4,7 @@
 
 const mongoose = require('mongoose'),
   validate = require('mongoose-validator'),
+  uniqid = require('uniqid'),
   Schema = mongoose.Schema,
   connect = rootRequire('./config/db'),
   db = connect.db;
@@ -17,6 +18,10 @@ let urlValidator = [
 
 let Icon = new Schema({
   created: Date,
+  icon_id: {
+    type: String,
+    trim: true,
+  },
   url: {
     type: String,
     trim: true,
@@ -32,6 +37,9 @@ let Icon = new Schema({
   }],
   story: {
     type: String
+  },
+  title: {
+    type: String
   }
 });
 
@@ -39,6 +47,9 @@ Icon.pre('save', function(next) {
   var now = new Date();
   if (!this.created) {
     this.created = now;
+  }
+  if (!this.icon_id) {
+    this.icon_id = uniqid();
   }
   next();
 });

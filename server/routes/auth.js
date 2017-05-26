@@ -68,7 +68,8 @@ auth.post('/login', function(req, res, next) {
     });
 
     res.json({
-      token: token
+      token: token,
+      user: user
     });
 
   })(req, res, next);

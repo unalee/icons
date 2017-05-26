@@ -1,14 +1,24 @@
 // api.js - api routes
 const express = require('express'),
   router = express.Router(),
+  multiparty = require('connect-multiparty'),
+  multipartyMiddleware = multiparty(),
   ftp = require('ftp'),
   checkRole = require('../functions/helperFunctions/checkRole'),
   tokenExists = require('../functions/accountFunctions/token-exists-check'),
   models = require('../models'),
   aws = require('aws-sdk'),
-  S3_BUCKET = process.env.S3_BUCKET || 'visionarchive',
+  S3_BUCKET = process.env.S3_BUCKET || 'visionarchiveicons',
+  ACCESS_KEY_ID = 'AKIAJ4BJYRIKBHHSCEBQ',
+  SECRET_ACCESS_KEY = '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'
   User = models.User,
   Icon = models.Icon;
+
+aws.config.update({
+  accessKeyId: ACCESS_KEY_ID,
+  secretAccessKey: SECRET_ACCESS_KEY,
+  region: 'ca-central-1'
+});
 
 // set up storage for images ==========
 
@@ -21,67 +31,78 @@ router.get('/', (req, res) => {
   res.json('touched api');
 })
 
-router.get('/icon', (req, res) => {
-  // console.log('get icon path');
-  res.json('hello world');
-})
+// router.get('/icon', (req, res) => {
+//   // console.log('get icon path');
+//   res.json('hello world');
+// })
 
-router.post('/icon', (req, res) => {
-  const s3 = new aws.S3(),
-    fileTypes = ['image/jpeg', 'image/png', 'image/svg+xml'],
-    fileName = `${req.user._id.substring(0, 8)+ '_' + req.body.fileName }`,
-    fileType = req.body.fileType,
-    s3Params = {
-      Bucket: S3_BUCKET,
-      Key: fileName,
-      Expires: 60,
-      ContentType: fileType,
-      ACL: 'public-read'
-    };
+router.post('/sign', (req, res) => {
 
-    if (fileTypes.indexOf(fileType) == -1) {
-      console.error('Invalid file format');
-      return res.end('Please upload a JPG, SVG, or PNG.');
-    }
+  const s3 = new aws.S3();
+  fileTypes = ['image/jpeg', 'image/png', 'image/svg+xml'],
+  fileReqName = req.query['file-name'],
+  fileType = req.query['file-type'],
+  fileName = `${req.user._id.substring(0, 8)}_${fileReqName}`,
+  s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
 
-    else {
-      s3.getSignedUrl('putObject', s3Params, (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.end();
-        }
+  if (fileTypes.indexOf(fileType) === -1) {
+    console.error('Invalid file format');
+    return res.end('Please upload a JPG, SVG, or PNG.');
+  }
 
-        //todo: what are we actually passing for this user to be found
+  else {
 
-        models.User.findById(req.user._id)
-          .exec(function(err, user){
-              if (!user) {
-                console.log('No user in DB');
-                res.status(401).send('Sorry, we cannot find that user!'); 
-              }
-              else {
-                // we have a user. Save the icon with their name on it, 
-                // the URL is the S3 url
-                // send back the URL and user ID for display.
-                // console.log('Found user ', user)
-                const icon = new Icon({
-                  url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
-                  admin: [user._id],
-                  story: req.body.story
-                });
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.end();
+      }
 
-                icon.save((err, savedIcon) => {
-                  const returnData = {
-                    signedRequest: data,
-                    url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-                  };
+      const returnData = {
+        signedRequest: data,
+        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+      };
 
-                  res.json(returnData);
-                });
-              }
+      res.write(JSON.stringify(returnData));
+      res.end();
+
+    });
+
+  }
+});
+
+router.put('/icon', (req, res) => {
+  models.User.findById(req.user._id)
+    .exec(function(err, user){
+      if (!user) {
+        console.log('No user in DB');
+        res.status(401).send('Sorry, we cannot find that user!');
+      } else {
+        const url = req.query['url'];
+          title = req.query['title'],
+          tags = req.query['tags'] || [],
+          icon = new Icon({
+            url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+            admin: [user._id],
+            story: req.body.story
           });
-      });
-    }
+
+        icon.save((err, savedIcon) => {
+          if (err) {
+
+          } else {
+
+          }
+
+        });
+      }
+    });
 });
 
 // routes for user  =============================

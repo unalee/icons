@@ -2,7 +2,6 @@
 
 angular.module('icons')
 .directive('iconsMessages', function($timeout, $compile) {
-  console.log('aehm');
 	return {
     template: '<div class="messages"></div>',
     restrict: 'E',
@@ -19,7 +18,7 @@ angular.module('icons')
     }
   };
 }).controller('messagesCtrl', function($scope,$document) {
-	
+
 	$scope.close = function(event) {
 		console.log(event);
 		$scope.clear();

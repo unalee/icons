@@ -1,0 +1,31 @@
+<div class="row medium-6 medium-centered large-4 large-centered columns">
+  <icons-messages></icons-messages>
+  <form name="uploadForm" ng-submit="submit()" ng-controller="uploadController">
+    <div class="form-itme">
+      <label for="title">Title</label>
+      <input type="text" name="title" ng-model="icon.title" placeholder="Title" />
+    </div>
+
+    <div class="form-item">
+      <label for="file">File</label>
+      <img ng-if="image" src="icon.src" />
+  	  <div class="button" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" ngf-change="fileChange($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
+        Select
+      </div>
+    </div>
+
+    <div class="form-itme">
+      <label for="tags">Tags</label>
+      <input type="text" name="tags" ng-model="icon.tags" placeholder="Title" />
+    </div>
+
+    <div class="form-itme">
+      <label for="story">Story</label>
+      <textarea type="text" name="story" ng-model="icon.story" placeholder="Title"></textarea>
+    </div>
+
+    <div class="submit-button">
+    	<button type="submit">Submit</button>
+    </div>
+  </form>
+</div>

@@ -24,7 +24,6 @@ angular.module('icons')
 					localStorageService.set("userToken", res.token);
 					$state.go('upload');
 				} else {
-					console.log('shit');
 					$rootScope.$broadcast('iconsDisplayMessage', {
 						type: "alert",
 						message: "Incorrect email or password. Please try again."
@@ -50,12 +49,14 @@ angular.module('icons')
 			});
 		};
 
+    userAPI.getCurrentSessionToken = getCurrentSessionToken;
+
 		userAPI.isAuthenticated = function() {
 			return getCurrentSessionToken() !== null;
 		};
 
 		userAPI.register = function(newUser) {
-			 
+
 			$http.post('/auth/signup', newUser, config).success(function(res) {
 				console.log(res);
 				if(angular.isDefined(res.token)) {

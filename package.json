@@ -36,6 +36,7 @@
     "connect-history-api-fallback": "^1.1.0",
     "connect-logger": "0.0.1",
     "connect-mongo": "latest",
+    "connect-multiparty": "^2.0.0",
     "cookie": "latest",
     "cookie-parser": "latest",
     "dotenv": "^2.0.0",
@@ -62,7 +63,8 @@
     "passport-local": "~0.1.6",
     "supersamples": "^0.4",
     "supertest": "^0.15.0",
-    "supertest-as-promised": "^1.0.0"
+    "supertest-as-promised": "^1.0.0",
+    "uniqid": "^4.1.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

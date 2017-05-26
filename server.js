@@ -48,7 +48,7 @@ global.rootRequire = function(name) {
 
 // express 4.0 basic configuration ==================================
 app.use(cookieParser());
-app.use(express.static(__dirname + '/dist2'));
+app.use(express.static(__dirname + '/dist'));
 app.use(bodyParser());
 
 // passport configuration ===========================================
