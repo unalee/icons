@@ -14,8 +14,6 @@ angular.module('icons')
 			return localStorageService.get("userToken");
 		};
 
-		var currentUser = getCurrentSessionToken();
-
 		userAPI.logIn = function(creds) {
 			$http.post('/auth/login', creds, config).success(function(res, status, headers, config) {
 				console.log("res:",res);
@@ -79,6 +77,12 @@ angular.module('icons')
 				});
 			});
 		}
+
+    userAPI.getAccessHeaders = function() {
+      return {
+        'x-access-token': getCurrentSessionToken(),
+      };
+    }
 
 		return userAPI;
 });

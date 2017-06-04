@@ -4,6 +4,8 @@
 module.exports = function(mongooseModel){
     var Promise = require('bluebird');
     return new Promise(function (resolve, reject) {
+        console.log('modelSave');
+        console.log(mongooseModel);
         mongooseModel.save(function(err,done) {
           if (!done || done.error || err) {
             console.error(err);

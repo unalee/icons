@@ -169,3 +169,84 @@ p.image-caption {
   margin-top: 4em;
   padding-top: 2em;
   border-top: 4px solid; }
+
+.messages {
+  height: 40px;
+  position: relative; }
+
+.message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transition: 250ms all ease-in-out;
+  height: 0;
+  line-height: 40px;
+  overflow: hidden; }
+  .message.show {
+    height: 40px; }
+  .message.alert {
+    background-color: #ff5f72;
+    color: #fff; }
+
+.file-picker {
+  width: 100%;
+  min-height: 300px;
+  background-color: rgba(108, 99, 101, 0.25);
+  transition: all 200ms ease-in-out;
+  border-radius: 5px;
+  border: 1px dashed #6C6365;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center; }
+  .file-picker.file-over, .file-picker.ng-valid:not(.ng-empty) {
+    background-color: rgba(96, 235, 209, 0.5);
+    border-color: #60ebd1; }
+  .file-picker .preview {
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto; }
+    .file-picker .preview img {
+      width: 90%;
+      margin: 0.5em 0; }
+  .file-picker .instruction {
+    margin: 0.5em 0;
+    color: #6C6365;
+    font-family: "futura-pt", sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    text-align: center; }
+    .file-picker .instruction .allowed-types {
+      font-size: 0.75em;
+      text-transform: none; }

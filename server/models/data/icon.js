@@ -19,8 +19,8 @@ let urlValidator = [
 let Icon = new Schema({
   created: Date,
   icon_id: {
-    type: String,
-    trim: true,
+    type: Schema.Types.ObjectId,
+    index: true
   },
   url: {
     type: String,
@@ -33,23 +33,19 @@ let Icon = new Schema({
   }],
   tags: [{
     type: String,
-    trim: true
+    trim: true,
+    lowercase: true
   }],
-  story: {
-    type: String
-  },
-  title: {
-    type: String
-  }
+  story: String,
+  title: String,
+  location: String,
 });
 
 Icon.pre('save', function(next) {
+  console.log('Icon is saving!');
   var now = new Date();
   if (!this.created) {
     this.created = now;
-  }
-  if (!this.icon_id) {
-    this.icon_id = uniqid();
   }
   next();
 });

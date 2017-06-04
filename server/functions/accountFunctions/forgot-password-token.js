@@ -5,23 +5,23 @@
 module.exports = function(emailAddress, next){
 // Module dependencies ==========================
     var async   = require('async');
-    
+
     var Bluebird = require('bluebird');
     var generateToken = Bluebird.promisify(require("crypto").randomBytes);
-    
+
     var models = require('../../models');
 
     var User = Bluebird.promisifyAll(require('../../models/auth/user'));
 
 // SEND A LOST PASSWORD TOKEN =============================
-    
+
 
     generateToken(20).then(function(token){
         token = token.toString('hex');
         return User.findOneAsync({ 'email': emailAddress })
         .then(function(user){
             // console.log(user);
-            if(user !== 'undefined' && user !== null){
+            if(typeof user !== 'undefined' && user !== undefined && user !== null){
                 user.resetPasswordToken = token;
                 var tomorrow = new Date();
                 user.resetPasswordExpires = tomorrow.setDate(tomorrow.getDate() + 1);

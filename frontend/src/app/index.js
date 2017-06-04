@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('icons', [
-  'ngAnimate', 
-  'ngCookies', 
-  'ngTouch', 
-  'ngSanitize', 
-  'ngResource', 
+  'ngAnimate',
+  'ngCookies',
+  'ngTouch',
+  'ngSanitize',
+  'ngResource',
   'ui.router',
   'ngFileUpload',
   'LocalStorageModule'

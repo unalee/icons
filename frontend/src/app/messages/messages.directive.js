@@ -5,10 +5,11 @@ angular.module('icons')
 	return {
     template: '<div class="messages"></div>',
     restrict: 'E',
+    replace: true,
     controller: 'messagesCtrl',
     link: function postLink(scope, element, attrs) {
     	scope.$on('iconsDisplayMessage', function(e,data) {
-    		element.append('<div class="'+data.type+'" icons-message>'+data.message+'</div>');
+    		element.append('<div class="'+data.type+' message" icons-message>'+data.message+'</div>');
         $compile(element.contents())(scope);
     	});
 

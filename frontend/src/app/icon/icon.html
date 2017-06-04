@@ -1,19 +1,18 @@
 <div class="icon" ng-controller="iconDetailCtrl">
-	<icons-messages></icons-messages>
 	<div class="row">
 		<div class="large-8 small-12 columns">
 			<h2>{{icon.title}}</h2>
-			<img class="graphic-item" ng-src="/assets/images/{{icon.filename}}" title="{{icon.title}}" />
+			<img class="graphic-item" ng-src="{{icon.url}}" title="{{icon.title}}" />
 		</div>
 		<div class="large-4 small-12 columns">
-			<button class="button expand">Download Source</button>
+			<!-- <button class="button expand">Download Source</button> -->
 			<div class="detail authors">
 				<h4>Authors:</h4>
-				<p>{{icon.author1}} <span ng-if="icon.author2">, {{icon.author2}}</span><span ng-if="icon.author3">, {{icon.author3}}</span></p>
+				<p><a ng-repeat="author in icon.admin" ng-href="/#/user/author._id">{{author.name}}</a></p>
 			</div>
 			<div class="detail added">
 				<h4>Added:</h4>
-				<p>{{icon.date}}</p>
+				<p>{{icon.created}}</p>
 			</div>
 			<div class="detail location">
 				<h4>Location:</h4>

@@ -18,14 +18,14 @@ module.exports = function(token, pass, app, next){
 
     var resetPasswordMail = function(user){
         var smtpTransport = nodemailer.createTransport({
-                        service: 'Mandrill',
-                        auth: {
-                            user: '', // ADD USER HERE
-                            pass: app.locals.mandrillSecret // add to secrets.js
-                        },
-                        host: "smtp.mandrillapp.com",
-                        port: 587
-                    });
+            service: 'Mandrill',
+            auth: {
+                user: '', // ADD USER HERE
+                pass: app.locals.mandrillSecret // add to secrets.js
+            },
+            host: "smtp.mandrillapp.com",
+            port: 587
+        });
 
         var mailOptions = {
             to: user.email,
@@ -40,11 +40,11 @@ module.exports = function(token, pass, app, next){
         });
     }
 
-    
+
     models.User.findOneAsync({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } })
         .then(function(user){
-            if (user === null ){ 
-                console.log('no user found'); 
+            if (user === null ){
+                console.log('no user found');
                 return next(null, 0);
             }
             // TODO: Abstract this onto the user model

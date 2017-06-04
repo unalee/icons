@@ -110,7 +110,7 @@ h3 {
 
   .right {
     right: 13%;
-    
+
   }
 
   .button {
@@ -131,7 +131,7 @@ body, input {
   font-family: "futura-pt", sans-serif;
 }
 
-.top-bar, 
+.top-bar,
 .footer {
   background-color: $dark;
 }
@@ -189,12 +189,12 @@ body, input {
 ::-webkit-input-placeholder,
 :-moz-placeholder,
 ::-moz-placeholder,
-:-ms-input-placeholder {  
-   color: $grey;  
+:-ms-input-placeholder {
+   color: $grey;
 }
 
 .home-banner {
-  
+
   .banner-container {
     position: relative;
   }
@@ -211,7 +211,7 @@ body, input {
   }
 }
 
-.home-banner, 
+.home-banner,
 .home-animation {
   border-bottom: 3px solid $dark;
 }
@@ -225,7 +225,7 @@ body, input {
     font-weight: 800;
   }
 
-  
+
 }
 
 .footer {
@@ -248,6 +248,107 @@ p.image-caption {
   margin-top: 4em;
   padding-top: 2em;
   border-top: 4px solid;
+}
+
+.messages {
+  height: 40px;
+  position: relative;
+}
+
+.message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transition: 250ms all ease-in-out;
+  height: 0;
+  line-height: 40px;
+  overflow: hidden;
+
+  &.show {
+    height: 40px;
+  }
+
+  &.alert {
+    background-color: rgb(255,95,114);
+    color: #fff;
+  }
+}
+
+.file-picker {
+  width: 100%;
+  min-height: 300px;
+  background-color: rgba($grey, 0.25);
+  transition: all 200ms ease-in-out;
+  border-radius: 5px;
+  border: 1px dashed $grey;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+  &.file-over,
+  &.ng-valid:not(.ng-empty) {
+    background-color: rgba($teal, 0.5);
+    border-color: $teal;
+  }
+
+  .preview {
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    img {
+      width: 90%;
+      margin: 0.5em 0;
+    }
+  }
+
+
+
+  .instruction {
+    margin: 0.5em 0;
+    color: $grey;
+    font-family: "futura-pt", sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    text-align: center;
+    .allowed-types {
+      font-size: 0.75em;
+      text-transform: none;
+    }
+
+  }
+
 }
 // injector
 // endinjector

@@ -6,10 +6,15 @@ angular.module('icons')
 	return {
     	restrict: 'A',
     	link: function postLink(scope, element, attrs) {
-      		console.log('rmself')
+        $timeout(function() {
+          element.addClass('show');
+        }, 50);
+        $timeout(function() {
+          element.removeClass('show');
+        }, 3000)
     		$timeout(function() {
-        		element.remove();
-      		},3000);
+        	element.remove();
+      	}, 3500);
     	}
   	};
 });

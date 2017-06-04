@@ -1,31 +1,36 @@
 <div class="row medium-6 medium-centered large-4 large-centered columns">
-  <icons-messages></icons-messages>
   <form name="uploadForm" ng-submit="submit()" ng-controller="uploadController">
-    <div class="form-itme">
+    <div class="form-item">
       <label for="title">Title</label>
-      <input type="text" name="title" ng-model="icon.title" placeholder="Title" />
+      <input type="text" name="title" ng-model="icon.title" placeholder="Title" required />
     </div>
 
     <div class="form-item">
-      <label for="file">File</label>
-      <img ng-if="image" src="icon.src" />
-  	  <div class="button" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" ngf-change="fileChange($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
-        Select
+  	  <div class="file-picker" ngf-select ngf-drop ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="400" ngf-min-width="400" ngf-change="fileChange($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" ngf-drag-over-class="'file-over'" ngf-multiple="false">
+        <img ng-if="icon.previewSrc" ng-src="{{icon.previewSrc}}" />
+        <div class="instruction">
+          Select or drop a file
+          <div class="allowed-types">(Allowed types: jpeg, gif, png, svg)</div>
+        </div>
+
       </div>
     </div>
 
-    <div class="form-itme">
+    <div class="form-item">
+      <label for="tags">Location</label>
+      <input type="text" name="location" ng-model="icon.location" placeholder="Location" required/>
+    </div>
+
+    <div class="form-item">
       <label for="tags">Tags</label>
-      <input type="text" name="tags" ng-model="icon.tags" placeholder="Title" />
+      <input type="text" name="tags" ng-model="icon.tags" placeholder="Tags (enter comma separated)" />
     </div>
 
-    <div class="form-itme">
+    <div class="form-item">
       <label for="story">Story</label>
-      <textarea type="text" name="story" ng-model="icon.story" placeholder="Title"></textarea>
+      <textarea type="text" name="story" ng-model="icon.story" placeholder="Story" required></textarea>
     </div>
 
-    <div class="submit-button">
-    	<button type="submit">Submit</button>
-    </div>
+    <button class="button success round" type="submit">Submit</button>
   </form>
 </div>

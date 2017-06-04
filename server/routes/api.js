@@ -38,11 +38,12 @@ router.get('/', (req, res) => {
 
 router.post('/sign', (req, res) => {
 
-  const s3 = new aws.S3();
-  fileTypes = ['image/jpeg', 'image/png', 'image/svg+xml'],
+  const s3 = new aws.S3(),
+  time = new Date().getTime(),
+  fileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'],
   fileReqName = req.query['file-name'],
   fileType = req.query['file-type'],
-  fileName = `${req.user._id.substring(0, 8)}_${fileReqName}`,
+  fileName = `${req.user._id.substring(0, 8)}_${time}_${fileReqName}`,
   s3Params = {
     Bucket: S3_BUCKET,
     Key: fileName,
@@ -53,7 +54,7 @@ router.post('/sign', (req, res) => {
 
   if (fileTypes.indexOf(fileType) === -1) {
     console.error('Invalid file format');
-    return res.end('Please upload a JPG, SVG, or PNG.');
+    return res.end('Please upload a JPG, SVG, PNG, or GIF');
   }
 
   else {
@@ -78,36 +79,85 @@ router.post('/sign', (req, res) => {
 });
 
 router.put('/icon', (req, res) => {
-  models.User.findById(req.user._id)
+  User.findById(req.user._id)
     .exec(function(err, user){
       if (!user) {
         console.log('No user in DB');
-        res.status(401).send('Sorry, we cannot find that user!');
+        res.status(401).send('Sorry, we cannot find that user.');
       } else {
-        const url = req.query['url'];
-          title = req.query['title'],
-          tags = req.query['tags'] || [],
-          icon = new Icon({
-            url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+        const data = req.body;
+        if (data) {
+          const icon = new Icon({
+            url: data.url,
             admin: [user._id],
-            story: req.body.story
+            title: data.title,
+            story: data.story,
+            tags: (data.tags || '').split(','),
+            location: data.location,
           });
-
-        icon.save((err, savedIcon) => {
-          if (err) {
-
-          } else {
-
-          }
-
-        });
+          icon.save((err, savedIcon) => {
+            if (err) {
+              return res.end('Error saving to database');
+            } else {
+              res.write(JSON.stringify(savedIcon));
+              res.end();
+            }
+          });
+        } else {
+          return res.end('No Icon data was received');
+        }
       }
     });
 });
 
+router.get('/icon/:iconId', (req, res) => {
+  const iconId = req.params.iconId;
+  if (iconId === 'all') {
+    Icon.find({}).exec((err, icons) => {
+      if (err) {
+        console.error(err);
+        res.status(401).send('Error finding icons');
+      }
+
+      res.write(JSON.stringify(icons));
+      res.end();
+    });
+  } else if (iconId) {
+    Icon.findById(iconId).exec((err, icon) => {
+
+      if (err) {
+        console.error(err);
+        res.status(401).send('Icon not found');
+      }
+
+      const params = {
+        _id: { $in: icon.admin }
+      };
+
+      User.find(params)
+        .select({ name: 1, _id: 1})
+        .exec((err, users) => {
+          console.log(users);
+          if (err) {
+            console.error(err);
+            res.status(401).send('Icon author not found');
+          }
+
+          icon.admin = users;
+          res.write(JSON.stringify(icon));
+          res.end();
+        });
+
+    });
+  } else {
+    res.status(401).send('Icon author not found');
+  }
+
+});
+
+
 // routes for user  =============================
 router.get('/user', checkRole('get_all_user'), (req, res) => {
-  console.log('touched get all users');
   User.find().exec((err, next) => {
     if (err) {
       console.error(err);
