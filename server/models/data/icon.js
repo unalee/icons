@@ -31,6 +31,10 @@ let Icon = new Schema({
     type: String,
     trim: true
   }],
+  authors: [{
+    type: Schema.Types.Mixed
+  }],
+  isOwnIcon: Boolean,
   tags: [{
     type: String,
     trim: true,

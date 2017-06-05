@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('icons')
-  .controller('iconDetailCtrl', function ($scope, $rootScope, $stateParams, userService, $http) {
+  .controller('iconDetailCtrl', function ($scope, $rootScope, $stateParams, dataService, $http) {
 
   	$scope.icons = [];
   	$scope.icon = {};
@@ -9,24 +9,14 @@ angular.module('icons')
     const iconId = $stateParams.iconId;
 
     if (angular.isDefined(iconId)) {
-      $http({
-        url: '/api/icon/' + iconId,
-        method: 'GET',
-        headers: userService.getAccessHeaders()
-      }).success(function(icon) {
-        $scope.icon = icon;
-        $scope.icon.authors = icon.admin.map(function(a) {
-          return JSON.parse(a);
-        });
-      }).error(function() {
-      	$rootScope.$broadcast('iconsDisplayMessage', {
+      dataService.getIcon(iconId).then(function(res) {
+        $scope.icon = res.data;
+      }, function(error) {
+        $rootScope.$broadcast('iconsDisplayMessage', {
       		type: "alert",
-      		message: "Oops, something went wrong loading this icon. Please try again."
+      		message: error.message
       	});
       });
-
     }
-
-
 
   });

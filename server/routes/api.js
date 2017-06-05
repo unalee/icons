@@ -3,6 +3,7 @@ const express = require('express'),
   router = express.Router(),
   multiparty = require('connect-multiparty'),
   multipartyMiddleware = multiparty(),
+  unless = require('express-unless'),
   ftp = require('ftp'),
   checkRole = require('../functions/helperFunctions/checkRole'),
   tokenExists = require('../functions/accountFunctions/token-exists-check'),
@@ -24,7 +25,8 @@ aws.config.update({
 
 // todo: attach the user's name to this
 // then send a link to the user's id that connects this file to their account
-router.use(tokenExists);
+tokenExists.unless = unless;
+router.use(tokenExists.unless({ method: 'GET'}));
 
 router.get('/', (req, res) => {
   // console.log('get icon path');
@@ -137,15 +139,23 @@ router.get('/icon/:iconId', (req, res) => {
       User.find(params)
         .select({ name: 1, _id: 1})
         .exec((err, users) => {
-          console.log(users);
           if (err) {
             console.error(err);
             res.status(401).send('Icon author not found');
           }
 
-          icon.admin = users;
-          res.write(JSON.stringify(icon));
-          res.end();
+          icon.authors = users;
+          if (req.user) {
+            const admin = icon.admin.find(function(u) {
+              return u === req.user._id;
+            });
+            console.log(admin, req.user._id);
+            if (admin) {
+              icon.isOwnIcon = true;
+            }
+          }
+
+          res.json(icon);
         });
 
     });

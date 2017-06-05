@@ -28,20 +28,20 @@ $progress-radius: $global-radius !default;
 
 @mixin foundation-progress-element {
   progress {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     display: block;
     width: 100%;
     height: $progress-height;
     margin-bottom: $progress-margin-bottom;
+
+    appearance: none;
 
     @if hasvalue($progress-radius) {
       border-radius: $progress-radius;
     }
 
     // For Firefox
-    background: $progress-background;
     border: 0;
+    background: $progress-background;
 
     &::-webkit-progress-bar {
       background: $progress-background;
@@ -80,6 +80,15 @@ $progress-radius: $global-radius !default;
           background: $color;
         }
       }
+    }
+
+    // For IE and Edge
+    &::-ms-fill {
+      @if hasvalue($progress-radius) {
+        border-radius: $progress-radius;
+      }
+
+      border: 0;
     }
   }
 }
