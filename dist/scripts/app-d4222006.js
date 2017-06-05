@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('icons', [
-  'ngAnimate', 
-  'ngCookies', 
-  'ngTouch', 
-  'ngSanitize', 
-  'ngResource', 
+  'ngAnimate',
+  'ngCookies',
+  'ngTouch',
+  'ngSanitize',
+  'ngResource',
   'ui.router',
   'ngFileUpload',
   'LocalStorageModule'
@@ -217,23 +217,51 @@ angular.module('icons')
         story: $scope.icon.story,
         url: url
       };
-      const options = {
+
+      $http({
         url: '/api/icon',
         method: 'PUT',
         data: icon,
         headers: userService.getAccessHeaders()
-      };
+      }).then(function (resp) {
 
-      debugger;
-      $http(options).then(function (resp) {
-        debugger;
-        console.log('Yay resp!' + resp);
+        const savedIcon = resp.data;
+        if (savedIcon._id) {
+          console.log('Yay icon!' + savedIcon);
+        }
+
       }, function (err) {
         console.error('Error status ' + err.status);
       });
     };
   }]);
 
+angular.module('icons')
+	.controller('stuffWidgetController', ["$scope", function($scope) {
+		console.log('stuffWidgetController loaded');
+
+		$scope.stuff = [];
+
+		for(var i=1; i <= 6; i++) {
+			$scope.stuff.push({
+				src: 'placeholder://',
+				title: 'Placeholder image',
+				location: 'path/to/stuff'
+			});
+		}
+
+		$scope.gotoStuff = function(location) {
+			console.log('let\'s see ', location);
+		};
+
+	}]).directive('iconsStuffWidget', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/stuff/stuff-widget.html',
+			controller: 'stuffWidgetController'
+		};
+	});
 angular.module('icons')
 	.controller('tagsWidgetController', ["$scope", function($scope) {
 		console.log('tagsWidgetController loaded');
@@ -273,32 +301,6 @@ angular.module('icons')
 		};
 	});
 angular.module('icons')
-	.controller('stuffWidgetController', ["$scope", function($scope) {
-		console.log('stuffWidgetController loaded');
-
-		$scope.stuff = [];
-
-		for(var i=1; i <= 6; i++) {
-			$scope.stuff.push({
-				src: 'placeholder://',
-				title: 'Placeholder image',
-				location: 'path/to/stuff'
-			});
-		}
-
-		$scope.gotoStuff = function(location) {
-			console.log('let\'s see ', location);
-		};
-
-	}]).directive('iconsStuffWidget', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			templateUrl: 'app/stuff/stuff-widget.html',
-			controller: 'stuffWidgetController'
-		};
-	});
-angular.module('icons')
 	.controller('searchController', ["$scope", function($scope) {
 		console.log('searchController loaded');
 	}]).directive('iconsSearch', function() {
@@ -309,6 +311,18 @@ angular.module('icons')
 			controller: 'searchController'
 		};
 	});
+'use strict';
+
+angular.module('icons')
+  .controller('passwordResetCtrl', ["$scope", "userService", function ($scope, userService) {
+    $scope.date = new Date();
+    $scope.user = {};
+    $scope.loggedIn = false; //#security
+
+    
+
+  }]);
+
 angular.module('icons')
 	.controller('latestRemixCtrl', ["$scope", "$http", function($scope, $http) {
 
@@ -338,18 +352,6 @@ angular.module('icons')
 			controller: 'latestRemixCtrl'
 		};
 	});
-'use strict';
-
-angular.module('icons')
-  .controller('passwordResetCtrl', ["$scope", "userService", function ($scope, userService) {
-    $scope.date = new Date();
-    $scope.user = {};
-    $scope.loggedIn = false; //#security
-
-    
-
-  }]);
-
 'use strict';
 
 angular.module('icons')
@@ -413,11 +415,6 @@ angular.module('icons')
 
   }]);
 
-$(document).ready(function() {
-	$('#stickyTopBar').on('sticky.zf.stuckto:top', function() {
-		console.log('stuck!');
-	})
-});
 'use strict';
 
 angular.module('icons')
@@ -450,6 +447,11 @@ angular.module('icons')
 	}
 }]);
 
+$(document).ready(function() {
+	$('#stickyTopBar').on('sticky.zf.stuckto:top', function() {
+		console.log('stuck!');
+	})
+});
 'use strict';
 
 angular.module('icons')
@@ -571,36 +573,6 @@ angular.module('icons')
   }]);
 
 angular.module('icons')
-	.controller('latestImagesCtrl', ["$scope", "$http", function($scope, $http) {
-		console.log('graphicsWidgetController loaded');
-
-		$scope.icons = [];
-		$http.get('/assets/json/icons.json').success(function(data) {
-    	
-    		for(var i = 0; i < $scope.limit; i++) {
-    			$scope.icons.push(data[i]);
-    		}
-
-	    }).error(function() {
-	    	$rootScope.$broadcast('iconsDisplayMessage', {
-	    		type: "alert",
-	    		message: "Oops, something went wrong loading icons."
-	    	});
-	    });
-
-
-	}]).directive('iconsLatestImagesWidget', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			scope: {
-				limit: '@'
-			},
-			templateUrl: 'app/images/latest-images-widget.html',
-			controller: 'latestImagesCtrl'
-		};
-	});
-angular.module('icons')
 	.controller('upcomingEventsCtrl', ["$scope", "$http", function($scope, $http) {
 
 		$scope.events = [];
@@ -648,18 +620,18 @@ angular.module('icons')
 'use strict';
 
 angular.module('icons')
-  .controller('iconDetailCtrl', ["$scope", "$rootScope", "$state", "$http", function ($scope, $rootScope, $state, $http) {
+  .controller('iconsListCtrl', ["$scope", "$rootScope", "userService", "$state", "$http", function ($scope, $rootScope, userService, $state, $http) {
 
   	$scope.icons = [];
   	$scope.icon = {};
   	//$scope.loading = true;
-    $http.get('/assets/json/icons.json').success(function(data) {
-    	
-    	$scope.icons = data;
-    	if(angular.isDefined($state.params.iconId)) {
-    		$scope.icon = $scope.icons[parseInt($state.params.iconId)];
-    	}
 
+    $http({
+      url: '/api/icon/all',
+      method: 'GET',
+      headers: userService.getAccessHeaders()
+    }).success(function(icons) {
+      $scope.icons = icons;
     }).error(function() {
     	$rootScope.$broadcast('iconsDisplayMessage', {
     		type: "alert",
@@ -667,18 +639,82 @@ angular.module('icons')
     	});
     });
 
+
   }]);
 
+'use strict';
+
+angular.module('icons')
+  .controller('iconDetailCtrl', ["$scope", "$rootScope", "$stateParams", "userService", "$http", function ($scope, $rootScope, $stateParams, userService, $http) {
+
+  	$scope.icons = [];
+  	$scope.icon = {};
+  	//$scope.loading = true;
+    const iconId = $stateParams.iconId;
+
+    if (angular.isDefined(iconId)) {
+      $http({
+        url: '/api/icon/' + iconId,
+        method: 'GET',
+        headers: userService.getAccessHeaders()
+      }).success(function(icon) {
+        $scope.icon = icon;
+        $scope.icon.authors = icon.admin.map(function(a) {
+          return JSON.parse(a);
+        });
+      }).error(function() {
+      	$rootScope.$broadcast('iconsDisplayMessage', {
+      		type: "alert",
+      		message: "Oops, something went wrong loading this icon. Please try again."
+      	});
+      });
+
+    }
+
+
+
+  }]);
+
+angular.module('icons')
+	.controller('latestImagesCtrl', ["$scope", "$http", function($scope, $http) {
+		console.log('graphicsWidgetController loaded');
+
+		$scope.icons = [];
+		$http.get('/assets/json/icons.json').success(function(data) {
+    	
+    		for(var i = 0; i < $scope.limit; i++) {
+    			$scope.icons.push(data[i]);
+    		}
+
+	    }).error(function() {
+	    	$rootScope.$broadcast('iconsDisplayMessage', {
+	    		type: "alert",
+	    		message: "Oops, something went wrong loading icons."
+	    	});
+	    });
+
+
+	}]).directive('iconsLatestImagesWidget', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			scope: {
+				limit: '@'
+			},
+			templateUrl: 'app/images/latest-images-widget.html',
+			controller: 'latestImagesCtrl'
+		};
+	});
 angular.module("icons").run(["$templateCache", function($templateCache) {$templateCache.put("app/about/about.html","<div class=\"container\"><div class=\"row\"><div class=\"large-12 large-text-center columns\"><h2 class=\"section-heading\">About</h2><h1 class=\"about\">Visionary Images for Social Movements</h1><img class=\"full-width\" src=\"/assets/images/about/IMG_7720.jpg\"><p class=\"image-caption\">Icon Design Workshop, Toronto, 2015</p></div></div><div class=\"row\"><div class=\"large-8 small-12 columns\"><p>Our movements need more images! Social justice organizers have a wide visual vocabulary of protest — raised fists, barbed wire, marchers holding placards — but should we not also depict the world we are building in addition to the forces we’re resisting? How can we communicate concepts we hold dear; concepts like beloved community, allyship, and consent?</p><p>The Vision Archive brings together designers, artists, advocates, and community organizers to co-create images for the world we want to build. Visionarchive.io is like a “Github for visionary social justice images,” allowing users to upload images so other users can download and remix them and upload their new creations.</p><h4 class=\"about\">History</h4><p>The Vision Archive was conceived in 2014 by Una Lee. As a designer working within social movements, she was concerned by some of the trends she was noticing in movement imagery. On the one hand, clipart of raised fists and barbed wire had become visual shorthand for community organizing. On the other hand, some organizations were leaning towards more a more “professional” i.e. bland aesthetic in the hopes of seeming more credible to funders. She worried that these aesthetic directions did not do justice to the visionary work that organizers do.</p><p>Knowing that what we see shapes what we believe is possible, Una felt a need to shift the visual culture of social movements. What if social movement imagery were visionary in addition to being critical? And what if it were created by organizers and community members to reflect the world they are working towards?</p><p>In May 2014, Una led the first “design justice jam” and through a series of participatory activities facilitated 24 activists and artists in the creation of the first set of visionary icons. This was followed by a workshop a year later, for Mayworks 2015. Later that summer, Una teamed up with designer/scholar Gracen Brilmyer, front end developer Jeff Debutte, and backend developer Alex Leitch to build visionarchive.io to house the icons.</p><p>Workshops to date<br>Toronto, Bento Miso, May 2014<br>Toronto, Mayworks, May 2015<br>Brewster, NY, Creative Solutions Symposium, August 2015<br>Berkeley, School of Information, UC Berkeley, March 2016<br>Toronto, Centre for Social Innovation, Regent Park, June 2016</p></div><div class=\"large-4 small-12 columns\"><img src=\"assets/images/about/IMG_3509.jpg\"><p class=\"image-caption\">Building on the icons in the poster design workshop, Toronto, June 2016</p><img src=\"assets/images/about/IMG_0069.JPG\"><p class=\"image-caption\">Collaboration in the poster design workshop, Toronto, June 2016</p></div></div><div class=\"row supported-by\"><div class=\"small-12 columns\"><h4>Supported By</h4></div><div class=\"large-6 small-12 columns\"><img src=\"assets/images/about/CTSP_Logo_2x1.png\"></div><div class=\"large-6 small-12 columns\"><img src=\"assets/images/about/AAT-Logo.png\"></div></div></div>");
 $templateCache.put("app/events/latest-event.html","<div class=\"latest-event\"><h3>Latest Event</h3><img ng-src=\"/assets/images/{{event.image}}\" <=\"\" div=\"\"></div>");
 $templateCache.put("app/events/upcoming-events.html","<div class=\"upcoming-events\"><h3>Upcoming Events</h3><div ng-repeat=\"event in events\"><h4>{{event.city}}</h4><p class=\"date\">{{event.date}}</p><p class=\"title\">{{event.title}}</p><p class=\"presenters\">{{event.presenters}}</p><p class=\"location\" ng-if=\"event.location\">{{event.location}}</p><p class=\"time\" ng-if=\"event.time\">{{event.time}}</p><a class=\"more\" ng-if=\"event.description\">More</a></div></div>");
-$templateCache.put("app/icon/icon-list.html","<div class=\"icons-list\" ng-controller=\"iconDetailCtrl\"><icons-messages></icons-messages><div class=\"graphics-widget-items row small-up-1 medium-up-3 large-up-4\"><div class=\"column\" ng-repeat=\"icon in icons\"><h4>{{icon.title}}</h4><a href=\"/#/icon?iconId={{$index}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"></a><p>{{icon.location}}, {{icon.date}}</p></div></div></div>");
-$templateCache.put("app/icon/icon.html","<div class=\"icon\" ng-controller=\"iconDetailCtrl\"><div class=\"row\"><div class=\"large-8 small-12 columns\"><h2>{{icon.title}}</h2><img class=\"graphic-item\" ng-src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"></div><div class=\"large-4 small-12 columns\"><button class=\"button expand\">Download Source</button><div class=\"detail authors\"><h4>Authors:</h4><p>{{icon.author1}} <span ng-if=\"icon.author2\">, {{icon.author2}}</span><span ng-if=\"icon.author3\">, {{icon.author3}}</span></p></div><div class=\"detail added\"><h4>Added:</h4><p>{{icon.date}}</p></div><div class=\"detail location\"><h4>Location:</h4><p>{{icon.location}}</p></div><div class=\"detail tags\"><h4>Tags:</h4><p><a class=\"tag\" ng-repeat=\"tag in icon.tags\" ng-click=\"explore(tag.value)\">{{tag}}{{$last ? \'\' : \', \'}}</a></p></div><div ng-if=\"icon.remixes\" class=\"detail related\"><h4>Remixes:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.remixes\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div><div ng-if=\"icon.parent\" class=\"detail related\"><h4>Created With:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.parent\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div></div></div><div ng-if=\"loading\" class=\"loading-indicator\"></div></div>");
+$templateCache.put("app/icon/icon-list.html","<div class=\"icons-list\" ng-controller=\"iconsListCtrl\"><div class=\"graphics-widget-items row small-up-1 medium-up-3 large-up-4\"><div class=\"column\" ng-repeat=\"icon in icons\"><h4>{{icon.title}}</h4><a ui-sref=\"iconDetail({iconId:icon._id})\"><img class=\"graphic-item\" ng-src=\"{{icon.url}}\" title=\"{{icon.title}}\"></a><p>Tags: <a ng-repeat=\"tag in icon.tags\" href=\"/#/tag/{{tag}}\">{{tag}}</a></p><p>Location: {{icon.location}}</p><p>Uploaded: {{icon.created}}</p></div></div></div>");
+$templateCache.put("app/icon/icon.html","<div class=\"icon\" ng-controller=\"iconDetailCtrl\"><div class=\"row\"><div class=\"large-8 small-12 columns\"><h2>{{icon.title}}</h2><img class=\"graphic-item\" ng-src=\"{{icon.url}}\" title=\"{{icon.title}}\"></div><div class=\"large-4 small-12 columns\"><div class=\"detail authors\"><h4>Authors:</h4><p><a ng-repeat=\"author in icon.admin\" ng-href=\"/#/user/author._id\">{{author.name}}</a></p></div><div class=\"detail added\"><h4>Added:</h4><p>{{icon.created}}</p></div><div class=\"detail location\"><h4>Location:</h4><p>{{icon.location}}</p></div><div class=\"detail tags\"><h4>Tags:</h4><p><a class=\"tag\" ng-repeat=\"tag in icon.tags\" ng-click=\"explore(tag.value)\">{{tag}}{{$last ? \'\' : \', \'}}</a></p></div><div ng-if=\"icon.remixes\" class=\"detail related\"><h4>Remixes:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.remixes\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div><div ng-if=\"icon.parent\" class=\"detail related\"><h4>Created With:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.parent\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div></div></div><div ng-if=\"loading\" class=\"loading-indicator\"></div></div>");
 $templateCache.put("app/images/latest-images-widget.html","<div class=\"graphics-widget-items\"><div class=\"row small-up-3\"><div class=\"column\" ng-repeat=\"icon in icons\"><a href=\"/#/icon?iconId={{$index}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"><br>{{icon.title}}</a></div></div></div>");
-$templateCache.put("app/main/main.html","<div class=\"container\"><div class=\"row\"><div class=\"large-12 large-text-center columns\"><icons-search></icons-search></div></div><div class=\"home-banner row\"><div class=\"large-12 columns\"><div class=\"banner-container\"><img src=\"/assets/images/Banner.png\"><div class=\"pull-up\"><a ui-sref=\"upload\" class=\"button\">Upload An Image</a></div></div></div></div><div class=\"home-animation row\"><div class=\"large-12 columns\"><div class=\"mission-statement-container\"><h2 class=\"center-title\">Visionary Images<br>For Social Movements</h2><img src=\"/assets/images/Home-page-animation.gif\"><div class=\"overlay\"><a ui-sref=\"upload\" class=\"button left\">Upload An Image</a><div class=\"circle\"><a ui-sref=\"something\" class=\"button\">Learn<br>More</a></div><a ui-sref=\"upload\" class=\"button right\">Upload A Remix</a></div></div></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><h3>Latest Images To Remix</h3><icons-latest-images-widget limit=\"6\"></icons-latest-images-widget></div><div class=\"small-12 medium-6 columns\"><h3>Latest Remix</h3><icons-latest-remix></icons-latest-remix></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><icons-upcoming-events limit=\"3\"></icons-upcoming-events></div><div class=\"small-12 medium-6 columns\"><icons-latest-event></icons-latest-event></div></div></div>");
 $templateCache.put("app/login/login.html","<div class=\"row medium-6 medium-centered large-4 large-centered columns\"><form ng-controller=\"loginCtrl\" ng-submit=\"logIn()\"><div class=\"log-in-form\"><h4 class=\"text-center\">Log in</h4><label>Username <input type=\"email\" placeholder=\"Username\" ng-model=\"user.email\" required=\"\"></label> <label>Password <input type=\"password\" placeholder=\"Password\" ng-model=\"user.password\" required=\"\"></label> <button type=\"submit\" class=\"button expand\">Log In</button><p class=\"text-center\"><a ui-sref=\"password\">Forgot your password?</a></p></div></form></div>");
-$templateCache.put("app/navbar/navbar.html","<div class=\"navbar-row\"><div class=\"top-bar-left\"><ul class=\"menu\"><li ui-sref-active=\"active\"><a ui-sref=\"iconList\">Icons</a></li><li ui-sref-active=\"active\"><a ui-sref=\"about\">About</a></li></ul></div><div class=\"top-bar-right\"><ul class=\"menu dropdown\" data-dropdown-menu=\"\"><li ng-if=\"validUser()\"><a href=\"#\">My Account</a><ul class=\"menu vertical\"><li ui-sref-active=\"active\"><a ui-sref=\"upload\">Upload</a></li><li><a href=\"#\" ng-click=\"logOut()\">logout</a></li></ul></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\" class=\"register\"><a ui-sref=\"register\">Create an account</a></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\"><a ui-sref=\"login\">Login</a></li></ul></div></div>");
+$templateCache.put("app/main/main.html","<div class=\"container\"><div class=\"row\"><div class=\"large-12 large-text-center columns\"><icons-search></icons-search></div></div><div class=\"home-banner row\"><div class=\"large-12 columns\"><div class=\"banner-container\"><img src=\"/assets/images/Banner.png\"><div class=\"pull-up\"><a ui-sref=\"upload\" class=\"button\">Upload An Image</a></div></div></div></div><div class=\"home-animation row\"><div class=\"large-12 columns\"><div class=\"mission-statement-container\"><h2 class=\"center-title\">Visionary Images<br>For Social Movements</h2><img src=\"/assets/images/Home-page-animation.gif\"><div class=\"overlay\"><a ui-sref=\"upload\" class=\"button left\">Upload An Image</a><div class=\"circle\"><a ui-sref=\"something\" class=\"button\">Learn<br>More</a></div><a ui-sref=\"upload\" class=\"button right\">Upload A Remix</a></div></div></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><h3>Latest Images To Remix</h3><icons-latest-images-widget limit=\"6\"></icons-latest-images-widget></div><div class=\"small-12 medium-6 columns\"><h3>Latest Remix</h3><icons-latest-remix></icons-latest-remix></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><icons-upcoming-events limit=\"3\"></icons-upcoming-events></div><div class=\"small-12 medium-6 columns\"><icons-latest-event></icons-latest-event></div></div></div>");
 $templateCache.put("app/news/news.html","<div class=\"news\"><h3>Important new announcement goes here</h3></div>");
+$templateCache.put("app/navbar/navbar.html","<div class=\"navbar-row\"><div class=\"top-bar-left\"><ul class=\"menu\"><li ui-sref-active=\"active\"><a ui-sref=\"iconList\">Icons</a></li><li ui-sref-active=\"active\"><a ui-sref=\"about\">About</a></li></ul></div><div class=\"top-bar-right\"><ul class=\"menu dropdown\" data-dropdown-menu=\"\"><li ng-if=\"validUser()\"><a href=\"#\">My Account</a><ul class=\"menu vertical\"><li ui-sref-active=\"active\"><a ui-sref=\"upload\">Upload</a></li><li><a href=\"#\" ng-click=\"logOut()\">logout</a></li></ul></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\" class=\"register\"><a ui-sref=\"register\">Create an account</a></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\"><a ui-sref=\"login\">Login</a></li></ul></div></div>");
 $templateCache.put("app/register/register.html","<div class=\"row medium-8 medium-centered large-6 large-centered columns\"><form ng-controller=\"registerCtrl\" ng-submit=\"register()\" data-abide=\"\"><div class=\"register-form\"><h4 class=\"text-center\">Create an account</h4><label>Email <input type=\"email\" placeholder=\"\" ng-model=\"user.email\" required=\"\"></label> <label>Full Name <input type=\"text\" placeholder=\"\" ng-model=\"user.name\" required=\"\"></label><fieldset><legend>Password</legend><label>Choose a Password <input type=\"password\" placeholder=\"Password\" name=\"password\" id=\"password\" ng-model=\"user.password\" required=\"\"></label><div class=\"input-element\"><label>Confirm Password <input type=\"password\" placeholder=\"Confirm Password\" data-equalto=\"password\" required=\"\"></label> <small class=\"error\">The passwords do not match</small></div></fieldset><button type=\"submit\" class=\"button expand success\">Create Account</button></div></form></div>");
 $templateCache.put("app/remix/latest-remix.html","<div class=\"latest-remix\"><a href=\"/#/icon?iconId={{icon.id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"><br>{{icon.title}}</a></div>");
 $templateCache.put("app/reset/reset.html","<div class=\"row medium-6 medium-centered large-4 large-centered columns\"><form ng-controller=\"passwordResetCtrl\" ng-submit=\"resetPassword()\" data-abide=\"\"><div class=\"log-in-form\"><h4 class=\"text-center\">Reset your password</h4><p>Enter your email address below if you\'ve lost or forgotten your password. We will send you an email with further instructions</p><label>Email <input type=\"email\" placeholder=\"you@example.com\" ng-model=\"user.username\" required=\"\"></label> <button type=\"submit\" class=\"button expand\">Reset</button></div></form></div>");

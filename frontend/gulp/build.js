@@ -85,7 +85,7 @@ gulp.task('misc', function () {
 });
 
 gulp.task('clean', function (done) {
-  $.del([paths.dist + '/', paths.deploy + '/'], {force:true});
+  $.del([paths.dist + '/scripts', paths.deploy + '/'], {force:true});
 });
 
 gulp.task('deploy', function() {
