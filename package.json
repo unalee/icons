@@ -19,7 +19,13 @@
     "sharing",
     "activism"
   ],
-  "author": "Alex Leitch & Jeff DeButte",
+  "author": "Alex Leitch",
+  "contributors": [
+    {
+      "name": "Jeff DeButte",
+      "email": "jeff.debutte@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pretentiousgit/icons-project/issues"
@@ -54,11 +60,12 @@
     "moment": "^2.10.3",
     "mongodb": "^2.0.36",
     "mongodb-uri": "^0.9.7",
-    "mongoose": "latest",
-    "mongoose-unique-validator": "^1.0.2",
-    "mongoose-validator": "latest",
+    "mongoose": "^4.10.5",
+    "mongoose-unique-validator": "^1.0.5",
     "morgan": "latest",
     "multer": "^1.1.0",
+    "node-mongoose-validator": "^1.2.0",
+    "node-validator": "^0.1.27",
     "passport": "^0.2.1",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "~0.1.6",

@@ -3,18 +3,11 @@
 'use strict';
 
 const mongoose = require('mongoose'),
-  validate = require('mongoose-validator'),
+  validator = require('node-mongoose-validator'),
   uniqid = require('uniqid'),
   Schema = mongoose.Schema,
   connect = rootRequire('./config/db'),
   db = connect.db;
-
-let urlValidator = [
-  validate({
-    validator: 'isURL',
-    message: "Please supply a valid URL"
-  })
-]
 
 let Icon = new Schema({
   created: Date,
@@ -25,7 +18,6 @@ let Icon = new Schema({
   url: {
     type: String,
     trim: true,
-    validate: urlValidator
   },
   admin: [{
     type: String,

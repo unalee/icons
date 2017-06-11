@@ -3,18 +3,11 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  validate = require('mongoose-validator'),
+  validator = require('node-mongoose-validator'),
   bcrypt = require('bcrypt'),
   connect = global.rootRequire('./config/db').db,
   promisify = require('bluebird').promisify,
   Schema = mongoose.Schema;
-
-var emailValidator = [
-  validate({
-    validator: 'isEmail',
-    message: "Please enter a valid e-mail address"
-  })
-]
 
 var self = 'create_self get_self update_self delete_self'.split(' '),
   user = 'create_user get_user update_user delete_user'.split(' '),
@@ -42,7 +35,6 @@ var userSchema = new Schema({
   email: {
     type: String,
     trim: true,
-    validate: emailValidator,
     index: true,
     unique: true,
     required: true
