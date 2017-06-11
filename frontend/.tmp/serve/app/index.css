@@ -250,3 +250,51 @@ p.image-caption {
     .file-picker .instruction .allowed-types {
       font-size: 0.75em;
       text-transform: none; }
+
+.fade {
+  transition: 0.2s linear all; }
+
+.fade.ng-enter,
+.fade.ng-leave.ng-leave-active {
+  opacity: 0; }
+
+/* The finishing CSS styles for the enter animation */
+.fade.ng-enter.ng-enter-active,
+.fade.ng-leave {
+  opacity: 1; }
+
+.loader-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(191, 40, 246, 0.25);
+  z-index: 10000; }
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid white;
+  border-radius: 50%;
+  float: left;
+  margin: 0 5px;
+  transform: scale(0);
+  animation: fx 1000ms ease infinite 0ms; }
+  .dot:nth-child(2) {
+    animation: fx 1000ms ease infinite 300ms; }
+  .dot:nth-child(3) {
+    animation: fx 1000ms ease infinite 600ms; }
+
+@keyframes fx {
+  50% {
+    transform: scale(1);
+    opacity: 1; }
+  100% {
+    opacity: 0; } }

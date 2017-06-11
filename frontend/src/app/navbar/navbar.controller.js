@@ -15,7 +15,7 @@ angular.module('icons')
 
     $scope.validUser = function() {
         //return true;
-        return userService.isAuthenticated();
+      return userService.isAuthenticated();
     };
 
   });

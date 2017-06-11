@@ -5,7 +5,6 @@ angular.module('icons')
 
   	$scope.icons = [];
   	$scope.icon = {};
-  	//$scope.loading = true;
 
     dataService.getAllIcons().then(function(res) {
       $scope.icons = res.data;

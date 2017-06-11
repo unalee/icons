@@ -350,5 +350,70 @@ p.image-caption {
   }
 
 }
+
+.fade {
+  transition:0.2s linear all;
+}
+
+.fade.ng-enter,
+.fade.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+/* The finishing CSS styles for the enter animation */
+.fade.ng-enter.ng-enter-active,
+.fade.ng-leave {
+  opacity:1;
+}
+
+.loader-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($purple, 0.25);
+  z-index: 10000;
+}
+
+.loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin animation($delay: 0ms) {
+	animation: fx $animation-speed ease infinite $delay;
+}
+
+$animation-speed: 1000ms;
+$dot-size: 10px;
+.dot {
+	width: $dot-size;
+	height: $dot-size;
+	border: ($dot-size / 5) solid white;
+	border-radius: 50%;
+	float: left;
+	margin: 0 ($dot-size / 2);
+	transform: scale(0);
+	@include animation();
+	&:nth-child(2) {
+		@include animation($animation-speed * 0.3);
+	}
+	&:nth-child(3) {
+		@include animation($animation-speed * 0.6);
+	}
+}
+
+@keyframes fx {
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
 // injector
 // endinjector

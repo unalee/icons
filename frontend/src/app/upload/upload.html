@@ -31,10 +31,6 @@
       <textarea type="text" name="story" ng-model="icon.story" placeholder="Story" required></textarea>
     </div>
 
-    <button class="button success round" type="submit">Submit</button>
+    <button class="button success round" type="submit" ng-disabled="isUploading">Submit</button>
   </form>
-
-  <div class="status" ng-if="uploadStarted">
-    
-  </div>
 </div>

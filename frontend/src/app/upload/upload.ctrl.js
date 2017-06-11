@@ -1,13 +1,16 @@
 angular.module('icons')
-	.controller('uploadController', function($scope, $rootScope, userService, Upload, $http) {
+	.controller('uploadController', function($scope, $rootScope, userService, Upload, $http, dataService, $state) {
+
+    $scope.icon = {};
+    $scope.icon.isUploading = false;
 
 		$scope.submit = function() {
 			if ($scope.uploadForm.file.$valid && $scope.file) {
+        $rootScope.$broadcast('iconsShowActivityIndicator', true);
+        $scope.icon.isUploading = true;
 		    $scope.upload($scope.file);
 		  }
 		};
-
-    $scope.icon = {};
 
     $scope.fileChange = function(files, file, newFiles, duplicateFiles, invalidFiles, event) {
       if (file) {
@@ -23,6 +26,10 @@ angular.module('icons')
         uploadFile(file, resp.data.signedRequest, resp.data.url);
       }, function (err) {
         console.log('Error status: ' + err.status);
+        $rootScope.$broadcast('iconsDisplayMessage', {
+      		type: "alert",
+      		message: error.status
+      	});
       });
     };
 
@@ -34,7 +41,10 @@ angular.module('icons')
           if(xhr.status === 200) {
             saveIcon(url);
           } else {
-            alert('Could not upload file.');
+            $rootScope.$broadcast('iconsDisplayMessage', {
+          		type: "alert",
+          		message: "Unable to upload file to content server"
+          	});
           }
         }
       };
@@ -56,14 +66,15 @@ angular.module('icons')
         data: icon,
         headers: userService.getAccessHeaders()
       }).then(function (resp) {
-
         const savedIcon = resp.data;
         if (savedIcon._id) {
-          console.log('Yay icon!' + savedIcon);
+          $state.go('iconDetail', {iconId: savedIcon._id});
         }
-
       }, function (err) {
-        console.error('Error status ' + err.status);
+        $rootScope.$broadcast('iconsDisplayMessage', {
+      		type: "alert",
+      		message: "Error saving Icon to db."
+      	});
       });
     };
   });

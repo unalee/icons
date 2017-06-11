@@ -101,8 +101,7 @@ router.put('/icon', (req, res) => {
             if (err) {
               return res.end('Error saving to database');
             } else {
-              res.write(JSON.stringify(savedIcon));
-              res.end();
+              res.json(savedIcon);
             }
           });
         } else {

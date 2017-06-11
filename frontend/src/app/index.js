@@ -8,7 +8,8 @@ angular.module('icons', [
   'ngResource',
   'ui.router',
   'ngFileUpload',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'angular-momentjs'
 ]).config(function ($stateProvider, $urlRouterProvider, $httpProvider, localStorageServiceProvider) {
 
     localStorageServiceProvider.setPrefix('iconsApp');
@@ -49,7 +50,7 @@ angular.module('icons', [
       });
 
     $urlRouterProvider.otherwise('/');
-}).run(function ($rootScope, $state, $document, userService) {
+}).run(function ($rootScope, $state, $document, userService, $timeout) {
   var restrictedStates = [
     'upload'
   ];
@@ -63,5 +64,13 @@ angular.module('icons', [
         $state.go('login');
       }
     }
-  })
+  });
+
+  $rootScope.$on('$stateChangeSuccess', function(e, toState, fromState, toParams, fromParams) {
+    if($rootScope.showLoading) {
+      $timeout(function() {
+        $rootScope.showLoading = false;
+      }, 500);
+    }
+  });
 });
