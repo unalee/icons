@@ -4,7 +4,7 @@
   "description": "An API to share icon history for the Icons Project from And Also Too",
   "main": "server.js",
   "engines": {
-    "node": "5.4.0"
+    "node": "6.2.0"
   },
   "scripts": {
     "test": "mocha --reporter supersamples",
@@ -19,7 +19,7 @@
     "sharing",
     "activism"
   ],
-  "author": "Alex Leitch",
+  "author": "Alex Leitch & Jeff DeButte",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pretentiousgit/icons-project/issues"
@@ -56,7 +56,7 @@
     "mongodb-uri": "^0.9.7",
     "mongoose": "latest",
     "mongoose-unique-validator": "^1.0.2",
-    "mongoose-validator": "^1.3.1",
+    "mongoose-validator": "latest",
     "morgan": "latest",
     "multer": "^1.1.0",
     "passport": "^0.2.1",
