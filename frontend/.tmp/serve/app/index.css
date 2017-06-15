@@ -25,6 +25,9 @@ h1, h2, h3, h4, h5, h6, a {
   font-family: "futura-pt", sans-serif;
   font-weight: 800; }
 
+p {
+  line-height: 1.4; }
+
 h1, h2, h3, h4, h5, h6 {
   color: #bf28f6; }
 
@@ -32,7 +35,8 @@ h2.section-heading {
   color: #60ebd1; }
 
 h1.about {
-  font-size: 2em; }
+  font-size: 2em;
+  margin-bottom: 1em; }
 
 h4.about {
   font-weight: normal;
@@ -169,10 +173,13 @@ p.image-caption {
   margin-top: 4em;
   padding-top: 2em;
   border-top: 4px solid; }
+  .supported-by img {
+    margin: 1em 0; }
 
 .messages {
   height: 40px;
-  position: relative; }
+  position: relative;
+  z-index: -1; }
 
 .message {
   position: absolute;

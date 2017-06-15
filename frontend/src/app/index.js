@@ -37,7 +37,7 @@ angular.module('icons', [
         templateUrl: 'app/register/register.html'
       })
       .state('upload', {
-      	url: '/upload',
+      	url: '/upload?parentId',
       	templateUrl: 'app/upload/upload.html',
       })
       .state('iconDetail', {
@@ -45,11 +45,15 @@ angular.module('icons', [
         templateUrl: 'app/icon/icon.html'
       })
       .state('iconList', {
-        url: '/icons',
+        url: '/icons?tag',
         templateUrl: 'app/icon/icon-list.html'
       });
 
     $urlRouterProvider.otherwise('/');
+}).filter('moment', function($moment) {
+  return function(input, format) {
+    return $moment(input).format(format);
+  };
 }).run(function ($rootScope, $state, $document, userService, $timeout) {
   var restrictedStates = [
     'upload'

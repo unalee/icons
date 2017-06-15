@@ -10,6 +10,7 @@ angular.module('icons')
 
     if (angular.isDefined(iconId)) {
       dataService.getIcon(iconId).then(function(res) {
+        console.log(res.data);
         $scope.icon = res.data;
       }, function(error) {
         $rootScope.$broadcast('iconsDisplayMessage', {

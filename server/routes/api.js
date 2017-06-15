@@ -7,6 +7,7 @@ const express = require('express'),
   ftp = require('ftp'),
   checkRole = require('../functions/helperFunctions/checkRole'),
   tokenExists = require('../functions/accountFunctions/token-exists-check'),
+  getUserFromToken = require('../functions/accountFunctions/get-user-from-token'),
   models = require('../models'),
   aws = require('aws-sdk'),
   S3_BUCKET = process.env.S3_BUCKET || 'visionarchiveicons',
@@ -89,12 +90,18 @@ router.put('/icon', (req, res) => {
       } else {
         const data = req.body;
         if (data) {
+          const unique = (arrArg) => {
+            return arrArg.filter((elem, pos, arr) => {
+              return arr.indexOf(elem) === pos;
+            });
+          }
+          const tags = unique((data.tags || '').split(','));
           const icon = new Icon({
             url: data.url,
             admin: [user._id],
             title: data.title,
             story: data.story,
-            tags: (data.tags || '').split(','),
+            tags: tags,
             location: data.location,
           });
           icon.save((err, savedIcon) => {
@@ -144,17 +151,26 @@ router.get('/icon/:iconId', (req, res) => {
           }
 
           icon.authors = users;
-          if (req.user) {
-            const admin = icon.admin.find(function(u) {
-              return u === req.user._id;
-            });
-            console.log(admin, req.user._id);
-            if (admin) {
-              icon.isOwnIcon = true;
-            }
-          }
+          const token = req.body.token || req.query.token || req.headers[
+            'x-access-token'];
+          getUserFromToken(token).then((user) => {
+            if (user) {
+              const admin = icon.admin.find(function(u) {
+                console.log(u, user._id);
+                return u === user._id;
+              });
 
-          res.json(icon);
+              if (admin) {
+                icon.isOwnIcon = true;
+              }
+            }
+
+            res.json(icon);
+
+          }, (error) => {
+            res.status(500).send('Server error');
+          });
+
         });
 
     });
@@ -162,6 +178,19 @@ router.get('/icon/:iconId', (req, res) => {
     res.status(401).send('Icon author not found');
   }
 
+});
+
+router.get('/tag/:tag', (req, res) => {
+  const tag = req.params.tag;
+  Icon.find({tags: tag})
+    .exec((err, icons) => {
+      if (err) {
+        console.error(err);
+        res.status(401).send('Icon author not found');
+      }
+
+      res.json(icons);
+    })
 });
 
 

@@ -3,9 +3,9 @@
 		<div class="column" ng-repeat="icon in icons">
 			<h4>{{icon.title}}</h4>
 			<a ui-sref="iconDetail({iconId:icon._id})"><img class="graphic-item" ng-src="{{icon.url}}" title="{{icon.title}}" /></a>
-      <p>Tags: <a ng-repeat="tag in icon.tags" href="/#/tag/{{tag}}">{{tag}}{{$last ? '' : ', '}}</a></p>
+      <p>Tags: <a ng-repeat="tag in icon.tags" ui-sref="iconList({tag:tag})">{{tag}}{{$last ? '' : ', '}}</a></p>
 			<p>Location: {{icon.location}}</p>
-      <p>Uploaded: {{icon.created}}</p>
+      <p>Uploaded: {{icon.created | moment : "MMMM D Y"}}</p>
 		</div>
 	</div>
 <!-- 	<div ng-if="loading" class="loading-indicator">

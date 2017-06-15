@@ -262,6 +262,7 @@ p.image-caption {
 .messages {
   height: 40px;
   position: relative;
+  z-index: -1;
 }
 
 .message {

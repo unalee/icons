@@ -8,7 +8,8 @@ angular.module('icons')
     dataAPI.getIcon = function(iconId) {
       return $http({
         url: '/api/icon/' + iconId,
-        method: 'GET'
+        method: 'GET',
+        headers: userService.getAccessHeaders(),
       });
     };
 
@@ -26,6 +27,13 @@ angular.module('icons')
           method: 'POST'
       });
     };
+
+    dataAPI.getIconsWithTag = function(tag) {
+      return $http({
+        url: '/api/tag/' + tag.toString(),
+        method: 'GET'
+      });
+    }
 
     return dataAPI;
   });

@@ -1,5 +1,8 @@
 <div class="icon" ng-controller="iconDetailCtrl">
 	<div class="row">
+    <div class="large-12 columns" ng-if="icon.isOwnIcon">
+      <button class="hi" ng-click="edit()">Edit</button>
+    </div>
 		<div class="large-8 small-12 columns">
 			<h2>{{icon.title}}</h2>
 			<img class="graphic-item" ng-src="{{icon.url}}" title="{{icon.title}}" />
@@ -12,21 +15,25 @@
 			</div>
 			<div class="detail added">
 				<h4>Added:</h4>
-				<p>{{icon.created}}</p>
+				<p>{{icon.created | moment : "MMMM D Y"}}</p>
 			</div>
 			<div class="detail location">
 				<h4>Location:</h4>
 				<p>{{icon.location}}</p>
 			</div>
+      <div class="detail story">
+				<h4>Story:</h4>
+				<p>{{icon.story}}</p>
+			</div>
 			<div class="detail tags">
 				<h4>Tags:</h4>
-				<p><a class="tag" ng-repeat="tag in icon.tags" ng-click="explore(tag.value)">{{tag}}{{$last ? '' : ', '}}</a></p>
+				<p><a class="tag" ng-repeat="tag in icon.tags" ui-sref="iconList({tag:tag})">{{tag}}{{$last ? '' : ', '}}</a></p>
 			</div>
 			<div ng-if="icon.remixes" class="detail related">
 				<h4>Remixes:</h4>
 				<div class="related-icon" ng-repeat="id in icon.remixes">
 					<h5>{{icons[id].title}}</h5>
-					<a href="/#/icon?iconId={{id}}"><img class="graphic-item" ng-src="/assets/images/{{icons[id].filename}}" title="{{icons[id].title}}" /></a>
+					<a ui-sref=iconDetail({iconId:id})"><img class="graphic-item" ng-src="/assets/images/{{icons[id].filename}}" title="{{icons[id].title}}" /></a>
 				</div>
 			</div>
 			<div ng-if="icon.parent" class="detail related">

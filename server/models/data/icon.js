@@ -23,6 +23,10 @@ let Icon = new Schema({
     type: String,
     trim: true
   }],
+  parent: {
+    type: String,
+    trim: true
+  },
   authors: [{
     type: Schema.Types.Mixed
   }],
