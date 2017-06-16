@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" ng-app="icons">
+<html class="no-js">
   <head>
     <meta charset="utf-8">
     <title>Vision Archive</title>
@@ -23,7 +23,7 @@
     <script src="https://use.typekit.net/fji5upx.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
   </head>
-  <body>
+  <body ng-app="icons">
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -32,8 +32,8 @@
       <div data-sticky-container>
         <div id="top-bar" class="top-bar sticky" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="1">
           <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
-              <button class="menu-icon" type="button" data-toggle></button>
-            </span>
+            <button class="menu-icon" type="button" data-toggle></button>
+          </span>
           <div class="top-bar-title">
             <a ui-sref="home"><img src="/assets/images/logo.png" alt="Vision Archive" title="Vision Archive" /></a>
           </div>

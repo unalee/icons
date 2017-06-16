@@ -83,6 +83,22 @@ auth.post('/logout', function(req, res) {
   });
 });
 
+auth.post('/token', (req, res) => {
+  var token = req.body.token || req.query.token || req.headers[
+    'x-access-token'];
+  if (token) {
+    jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) {
+        res.status(403).send('Token Invalid');
+      } else {
+        res.status(200).send('Token Valid');
+      }
+    });
+  } else {
+    res.status(403).send('Token Invalid');
+  }
+});
+
 
 // PASSWORD RESET ROUTES ==================================
 // forgotten passwords

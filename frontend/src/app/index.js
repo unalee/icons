@@ -55,11 +55,20 @@ angular.module('icons', [
     return $moment(input).format(format);
   };
 }).run(function ($rootScope, $state, $document, userService, $timeout) {
+
+  userService.checkCurrentToken().then(function(res) {
+    userService.setTokenValid(res);
+  }, function(error) {
+    userService.setTokenValid(false);
+  });
+
   var restrictedStates = [
     'upload'
   ];
 
-  $(document).foundation();
+  $(document).ready(function() {
+    $(document).foundation();
+  });
 
   $rootScope.$on('$stateChangeStart', function(e, toState, fromState, toParams, fromParams) {
     if(restrictedStates.indexOf(toState.name) >= 0) {

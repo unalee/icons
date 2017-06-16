@@ -8,7 +8,8 @@ angular.module('icons', [
   'ngResource',
   'ui.router',
   'ngFileUpload',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'angular-momentjs'
 ]).config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "localStorageServiceProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, localStorageServiceProvider) {
 
     localStorageServiceProvider.setPrefix('iconsApp');
@@ -36,7 +37,7 @@ angular.module('icons', [
         templateUrl: 'app/register/register.html'
       })
       .state('upload', {
-      	url: '/upload',
+      	url: '/upload?parentId',
       	templateUrl: 'app/upload/upload.html',
       })
       .state('iconDetail', {
@@ -44,12 +45,16 @@ angular.module('icons', [
         templateUrl: 'app/icon/icon.html'
       })
       .state('iconList', {
-        url: '/icons',
+        url: '/icons?tag',
         templateUrl: 'app/icon/icon-list.html'
       });
 
     $urlRouterProvider.otherwise('/');
-}]).run(["$rootScope", "$state", "$document", "userService", function ($rootScope, $state, $document, userService) {
+}]).filter('moment', ["$moment", function($moment) {
+  return function(input, format) {
+    return $moment(input).format(format);
+  };
+}]).run(["$rootScope", "$state", "$document", "userService", "$timeout", function ($rootScope, $state, $document, userService, $timeout) {
   var restrictedStates = [
     'upload'
   ];
@@ -63,7 +68,15 @@ angular.module('icons', [
         $state.go('login');
       }
     }
-  })
+  });
+
+  $rootScope.$on('$stateChangeSuccess', function(e, toState, fromState, toParams, fromParams) {
+    if($rootScope.showLoading) {
+      $timeout(function() {
+        $rootScope.showLoading = false;
+      }, 500);
+    }
+  });
 }]);
 
 'use strict';
@@ -118,7 +131,20 @@ angular.module('icons')
     userAPI.getCurrentSessionToken = getCurrentSessionToken;
 
 		userAPI.isAuthenticated = function() {
-			return getCurrentSessionToken() !== null;
+      var token = getCurrentSessionToken();
+      if (token === null) {
+        return;
+      } else {
+        var headers = {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        };
+        $http.post('/auth/token', {}, headers).then(function(res) {
+          return true;
+        }, function(error) {
+          return false;
+        })
+      }
 		};
 
 		userAPI.register = function(newUser) {
@@ -162,11 +188,10 @@ angular.module('icons')
     $scope.icon.isUploading = false;
 
 		$scope.submit = function() {
-      $rootScope.$broadcast('iconsShowActivityIndicator', true);
 			if ($scope.uploadForm.file.$valid && $scope.file) {
-
+        $rootScope.$broadcast('iconsShowActivityIndicator', true);
         $scope.icon.isUploading = true;
-		    //$scope.upload($scope.file);
+		    $scope.upload($scope.file);
 		  }
 		};
 
@@ -226,8 +251,7 @@ angular.module('icons')
       }).then(function (resp) {
         const savedIcon = resp.data;
         if (savedIcon._id) {
-          console.log('Yay icon!' + savedIcon);
-          //state.go('iconDetail', {iconId: savedIcon._id});
+          $state.go('iconDetail', {iconId: savedIcon._id});
         }
       }, function (err) {
         $rootScope.$broadcast('iconsDisplayMessage', {
@@ -242,32 +266,7 @@ angular.module('icons')
 	.controller('tagsWidgetController', ["$scope", function($scope) {
 		console.log('tagsWidgetController loaded');
 
-		$scope.tags = [
-			{
-				text: 'pizza party',
-				value: 'pizza-party'
-			},
-			{
-				text: 'water',
-				value: 'water'
-			},
-			{
-				text: 'coffee',
-				value: 'coffee'
-			},
-			{
-				text: 'laptops',
-				value: 'laptops'
-			},
-			{
-				text: 'community',
-				value: 'community'
-			}
-		];
-
-		$scope.explore = function(tagName) {
-			console.log('let\'s see ', tagName);
-		}
+		
 	}]).directive('iconsTagsWidget', function() {
 		return {
 			restrict: 'E',
@@ -276,6 +275,7 @@ angular.module('icons')
 			controller: 'tagsWidgetController'
 		};
 	});
+
 angular.module('icons')
 	.controller('stuffWidgetController', ["$scope", function($scope) {
 		console.log('stuffWidgetController loaded');
@@ -325,21 +325,6 @@ angular.module('icons')
 
   }]);
 
-'use strict';
-
-angular.module('icons')
-  .controller('registerCtrl', ["$scope", "userService", function ($scope, userService) {
-    $scope.date = new Date();
-    $scope.user = {};
-    $scope.loggedIn = false; //#security
-
-    $scope.register = function() {
-    	console.log($scope.user);
-    	userService.register($scope.user);
-    };
-
-  }]);
-
 angular.module('icons')
 	.controller('latestRemixCtrl', ["$scope", "$http", function($scope, $http) {
 
@@ -369,6 +354,21 @@ angular.module('icons')
 			controller: 'latestRemixCtrl'
 		};
 	});
+'use strict';
+
+angular.module('icons')
+  .controller('registerCtrl', ["$scope", "userService", function ($scope, userService) {
+    $scope.date = new Date();
+    $scope.user = {};
+    $scope.loggedIn = false; //#security
+
+    $scope.register = function() {
+    	console.log($scope.user);
+    	userService.register($scope.user);
+    };
+
+  }]);
+
 angular.module('icons')
 	.controller('newsController', ["$scope", function($scope) {
 		console.log('newsController loaded');
@@ -417,11 +417,6 @@ angular.module('icons')
 
   }]);
 
-$(document).ready(function() {
-	$('#stickyTopBar').on('sticky.zf.stuckto:top', function() {
-		console.log('stuck!');
-	})
-});
 'use strict';
 
 angular.module('icons')
@@ -478,6 +473,13 @@ angular.module('icons')
 'use strict';
 
 angular.module('icons')
+  .controller('MainCtrl', ["$scope", function ($scope) {
+    
+  }]);
+
+'use strict';
+
+angular.module('icons')
   .controller('loginCtrl', ["$scope", "userService", "$rootScope", function ($scope, userService, $rootScope) {
     $scope.date = new Date();
     $scope.user = {};
@@ -499,143 +501,19 @@ angular.module('icons')
 'use strict';
 
 angular.module('icons')
-  .controller('MainCtrl', ["$scope", function ($scope) {
-    $scope.awesomeThings = [
-      {
-        'title': 'AngularJS',
-        'url': 'https://angularjs.org/',
-        'description': 'HTML enhanced for web apps!',
-        'logo': 'angular.png'
-      },
-      {
-        'title': 'BrowserSync',
-        'url': 'http://browsersync.io/',
-        'description': 'Time-saving synchronised browser testing.',
-        'logo': 'browsersync.png'
-      },
-      {
-        'title': 'GulpJS',
-        'url': 'http://gulpjs.com/',
-        'description': 'The streaming build system.',
-        'logo': 'gulp.png'
-      },
-      {
-        'title': 'Jasmine',
-        'url': 'http://jasmine.github.io/',
-        'description': 'Behavior-Driven JavaScript.',
-        'logo': 'jasmine.png'
-      },
-      {
-        'title': 'Karma',
-        'url': 'http://karma-runner.github.io/',
-        'description': 'Spectacular Test Runner for JavaScript.',
-        'logo': 'karma.png'
-      },
-      {
-        'title': 'Protractor',
-        'url': 'https://github.com/angular/protractor',
-        'description': 'End to end test framework for AngularJS applications built on top of WebDriverJS.',
-        'logo': 'protractor.png'
-      },
-      {
-        'title': 'jQuery',
-        'url': 'http://jquery.com/',
-        'description': 'jQuery is a fast, small, and feature-rich JavaScript library.',
-        'logo': 'jquery.jpg'
-      },
-      {
-        'title': 'Foundation',
-        'url': 'http://foundation.zurb.com/',
-        'description': 'The most advanced responsive front-end framework in the world.',
-        'logo': 'foundation.png'
-      },
-      {
-        'title': 'Angular Foundation',
-        'url': 'http://pineconellc.github.io/angular-foundation/',
-        'description': 'A set of native AngularJS directives based on Foundation\'s markup and CSS',
-        'logo': 'angular-foundation.png'
-      },
-      {
-        'title': 'Sass (Node)',
-        'url': 'https://github.com/sass/node-sass',
-        'description': 'Node.js binding to libsass, the C version of the popular stylesheet preprocessor, Sass.',
-        'logo': 'node-sass.png'
-      },
-      {
-        'key': 'handlebars',
-        'title': 'Handlebars',
-        'url': 'http://handlebarsjs.com/',
-        'description': 'Handlebars provides the power necessary to let you build semantic templates effectively with no frustration.',
-        'logo': 'handlebars.png'
-      }
-    ];
-    angular.forEach($scope.awesomeThings, function(awesomeThing) {
-      awesomeThing.rank = Math.random();
-    });
-  }]);
-
-'use strict';
-
-angular.module('icons')
 .directive('iconsActivityIndicator', function() {
 	return {
     	restrict: 'E',
       templateUrl: 'app/loader/loader.directive.html',
       replace: true,
-      controller: ["$scope", function($scope) {
+      controller: ["$scope", "$rootScope", function($scope, $rootScope) {
         $scope.isLoading = false;
   			$scope.$on('iconsShowActivityIndicator', function(value) {
-          console.warn('show this damn thing');
-          $scope.$apply(function() {
-            $scope.isLoading = value;
-          });
+          $rootScope.showLoading = !!value;
         });
   		}]
   	};
 });
-
-'use strict';
-
-angular.module('icons')
-  .controller('iconsListCtrl', ["$scope", "$rootScope", "dataService", "$state", "$http", function ($scope, $rootScope, dataService, $state, $http) {
-
-  	$scope.icons = [];
-  	$scope.icon = {};
-
-    dataService.getAllIcons().then(function(res) {
-      $scope.icons = res.data;
-    },function(error) {
-    	$rootScope.$broadcast('iconsDisplayMessage', {
-    		type: "alert",
-    		message: "Oops, something went wrong loading this icon. Please try again."
-    	});
-    });
-
-
-  }]);
-
-'use strict';
-
-angular.module('icons')
-  .controller('iconDetailCtrl', ["$scope", "$rootScope", "$stateParams", "dataService", "$http", function ($scope, $rootScope, $stateParams, dataService, $http) {
-
-  	$scope.icons = [];
-  	$scope.icon = {};
-  	//$scope.loading = true;
-    const iconId = $stateParams.iconId;
-
-    if (angular.isDefined(iconId)) {
-      dataService.getIcon(iconId).then(function(res) {
-        $scope.icon = res.data;
-      }, function(error) {
-        $rootScope.$broadcast('iconsDisplayMessage', {
-      		type: "alert",
-      		message: error.message
-      	});
-      });
-    }
-
-  }]);
 
 angular.module('icons')
 	.controller('latestImagesCtrl', ["$scope", "$http", function($scope, $http) {
@@ -667,6 +545,104 @@ angular.module('icons')
 			controller: 'latestImagesCtrl'
 		};
 	});
+'use strict';
+
+angular.module('icons')
+	.service('dataService', ["$http", "$rootScope", "userService", function($http, $rootScope, userService) {
+
+		var dataAPI = {};
+
+    dataAPI.getIcon = function(iconId) {
+      return $http({
+        url: '/api/icon/' + iconId,
+        method: 'GET',
+        headers: userService.getAccessHeaders(),
+      });
+    };
+
+    dataAPI.getAllIcons = function() {
+      return $http({
+        url: '/api/icon/all',
+        method: 'GET'
+      });
+    };
+
+    dataAPI.getSignedUrl = function(file) {
+      return $http({
+          url: '/api/sign?file-name=' + file.name + '&file-type='+file.type,
+          headers: userService.getAccessHeaders(),
+          method: 'POST'
+      });
+    };
+
+    dataAPI.getIconsWithTag = function(tag) {
+      return $http({
+        url: '/api/tag/' + tag.toString(),
+        method: 'GET'
+      });
+    }
+
+    return dataAPI;
+  }]);
+
+'use strict';
+
+angular.module('icons')
+  .controller('iconsListCtrl', ["$scope", "$rootScope", "dataService", "$stateParams", "$http", function ($scope, $rootScope, dataService, $stateParams, $http) {
+
+  	$scope.icons = [];
+  	$scope.icon = {};
+
+    console.log($stateParams);
+    if ($stateParams.tag) {
+      dataService.getIconsWithTag($stateParams.tag).then(function(res) {
+        console.warn(res);
+        $scope.icons = res.data;
+      },function(error) {
+        $rootScope.$broadcast('iconsDisplayMessage', {
+          type: "alert",
+          message: "Oops, something went wrong loading this icon. Please try again."
+        });
+      });
+    } else {
+      dataService.getAllIcons().then(function(res) {
+        $scope.icons = res.data;
+      },function(error) {
+      	$rootScope.$broadcast('iconsDisplayMessage', {
+      		type: "alert",
+      		message: "Oops, something went wrong loading this icon. Please try again."
+      	});
+      });
+    }
+
+
+
+  }]);
+
+'use strict';
+
+angular.module('icons')
+  .controller('iconDetailCtrl', ["$scope", "$rootScope", "$stateParams", "dataService", "$http", function ($scope, $rootScope, $stateParams, dataService, $http) {
+
+  	$scope.icons = [];
+  	$scope.icon = {};
+  	//$scope.loading = true;
+    const iconId = $stateParams.iconId;
+
+    if (angular.isDefined(iconId)) {
+      dataService.getIcon(iconId).then(function(res) {
+        console.log(res.data);
+        $scope.icon = res.data;
+      }, function(error) {
+        $rootScope.$broadcast('iconsDisplayMessage', {
+      		type: "alert",
+      		message: error.message
+      	});
+      });
+    }
+
+  }]);
+
 angular.module('icons')
 	.controller('upcomingEventsCtrl', ["$scope", "$http", function($scope, $http) {
 
@@ -712,50 +688,18 @@ angular.module('icons')
 			controller: 'latestEventCtrl'
 		};
 	});
-'use strict';
-
-angular.module('icons')
-	.service('dataService', ["$http", "$rootScope", "userService", function($http, $rootScope, userService) {
-
-		var dataAPI = {};
-
-    dataAPI.getIcon = function(iconId) {
-      return $http({
-        url: '/api/icon/' + iconId,
-        method: 'GET'
-      });
-    };
-
-    dataAPI.getAllIcons = function() {
-      return $http({
-        url: '/api/icon/all',
-        method: 'GET'
-      });
-    };
-
-    dataAPI.getSignedUrl = function(file) {
-      return $http({
-          url: '/api/sign?file-name=' + file.name + '&file-type='+file.type,
-          headers: userService.getAccessHeaders(),
-          method: 'POST'
-      });
-    };
-
-    return dataAPI;
-  }]);
-
 angular.module("icons").run(["$templateCache", function($templateCache) {$templateCache.put("app/about/about.html","<div class=\"container\"><div class=\"row\"><div class=\"large-12 large-text-center columns\"><h2 class=\"section-heading\">About</h2><h1 class=\"about\">Visionary Images for Social Movements</h1><img class=\"full-width\" src=\"/assets/images/about/IMG_7720.jpg\"><p class=\"image-caption\">Icon Design Workshop, Toronto, 2015</p></div></div><div class=\"row\"><div class=\"large-8 small-12 columns\"><p>Our movements need more images! Social justice organizers have a wide visual vocabulary of protest — raised fists, barbed wire, marchers holding placards — but should we not also depict the world we are building in addition to the forces we’re resisting? How can we communicate concepts we hold dear; concepts like beloved community, allyship, and consent?</p><p>The Vision Archive brings together designers, artists, advocates, and community organizers to co-create images for the world we want to build. Visionarchive.io is like a “Github for visionary social justice images,” allowing users to upload images so other users can download and remix them and upload their new creations.</p><h4 class=\"about\">History</h4><p>The Vision Archive was conceived in 2014 by Una Lee. As a designer working within social movements, she was concerned by some of the trends she was noticing in movement imagery. On the one hand, clipart of raised fists and barbed wire had become visual shorthand for community organizing. On the other hand, some organizations were leaning towards more a more “professional” i.e. bland aesthetic in the hopes of seeming more credible to funders. She worried that these aesthetic directions did not do justice to the visionary work that organizers do.</p><p>Knowing that what we see shapes what we believe is possible, Una felt a need to shift the visual culture of social movements. What if social movement imagery were visionary in addition to being critical? And what if it were created by organizers and community members to reflect the world they are working towards?</p><p>In May 2014, Una led the first “design justice jam” and through a series of participatory activities facilitated 24 activists and artists in the creation of the first set of visionary icons. This was followed by a workshop a year later, for Mayworks 2015. Later that summer, Una teamed up with designer/scholar Gracen Brilmyer, front end developer Jeff Debutte, and backend developer Alex Leitch to build visionarchive.io to house the icons.</p><p>Workshops to date<br>Toronto, Bento Miso, May 2014<br>Toronto, Mayworks, May 2015<br>Brewster, NY, Creative Solutions Symposium, August 2015<br>Berkeley, School of Information, UC Berkeley, March 2016<br>Toronto, Centre for Social Innovation, Regent Park, June 2016</p></div><div class=\"large-4 small-12 columns\"><img src=\"assets/images/about/IMG_3509.jpg\"><p class=\"image-caption\">Building on the icons in the poster design workshop, Toronto, June 2016</p><img src=\"assets/images/about/IMG_0069.JPG\"><p class=\"image-caption\">Collaboration in the poster design workshop, Toronto, June 2016</p></div></div><div class=\"row supported-by\"><div class=\"small-12 columns\"><h4>Supported By</h4></div><div class=\"large-6 small-12 columns\"><img src=\"assets/images/about/CTSP_Logo_2x1.png\"></div><div class=\"large-6 small-12 columns\"><img src=\"assets/images/about/AAT-Logo.png\"></div></div></div>");
 $templateCache.put("app/events/latest-event.html","<div class=\"latest-event\"><h3>Latest Event</h3><img ng-src=\"/assets/images/{{event.image}}\" <=\"\" div=\"\"></div>");
 $templateCache.put("app/events/upcoming-events.html","<div class=\"upcoming-events\"><h3>Upcoming Events</h3><div ng-repeat=\"event in events\"><h4>{{event.city}}</h4><p class=\"date\">{{event.date}}</p><p class=\"title\">{{event.title}}</p><p class=\"presenters\">{{event.presenters}}</p><p class=\"location\" ng-if=\"event.location\">{{event.location}}</p><p class=\"time\" ng-if=\"event.time\">{{event.time}}</p><a class=\"more\" ng-if=\"event.description\">More</a></div></div>");
-$templateCache.put("app/icon/icon-list.html","<div class=\"icons-list\" ng-controller=\"iconsListCtrl\"><div class=\"graphics-widget-items row small-up-1 medium-up-3 large-up-4\"><div class=\"column\" ng-repeat=\"icon in icons\"><h4>{{icon.title}}</h4><a ui-sref=\"iconDetail({iconId:icon._id})\"><img class=\"graphic-item\" ng-src=\"{{icon.url}}\" title=\"{{icon.title}}\"></a><p>Tags: <a ng-repeat=\"tag in icon.tags\" href=\"/#/tag/{{tag}}\">{{tag}}{{$last ? \'\' : \', \'}}</a></p><p>Location: {{icon.location}}</p><p>Uploaded: {{icon.created}}</p></div></div></div>");
-$templateCache.put("app/icon/icon.html","<div class=\"icon\" ng-controller=\"iconDetailCtrl\"><div class=\"row\"><div class=\"large-8 small-12 columns\"><h2>{{icon.title}}</h2><img class=\"graphic-item\" ng-src=\"{{icon.url}}\" title=\"{{icon.title}}\"></div><div class=\"large-4 small-12 columns\"><div class=\"detail authors\"><h4>Authors:</h4><p><a ng-repeat=\"author in icon.authors\" ng-href=\"/#/user/{{author._id}}\">{{author.name}}</a></p></div><div class=\"detail added\"><h4>Added:</h4><p>{{icon.created}}</p></div><div class=\"detail location\"><h4>Location:</h4><p>{{icon.location}}</p></div><div class=\"detail tags\"><h4>Tags:</h4><p><a class=\"tag\" ng-repeat=\"tag in icon.tags\" ng-click=\"explore(tag.value)\">{{tag}}{{$last ? \'\' : \', \'}}</a></p></div><div ng-if=\"icon.remixes\" class=\"detail related\"><h4>Remixes:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.remixes\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div><div ng-if=\"icon.parent\" class=\"detail related\"><h4>Created With:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.parent\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div></div></div><div ng-if=\"loading\" class=\"loading-indicator\"></div></div>");
+$templateCache.put("app/icon/icon-list.html","<div class=\"icons-list\" ng-controller=\"iconsListCtrl\"><div class=\"graphics-widget-items row small-up-1 medium-up-3 large-up-4\"><div class=\"column\" ng-repeat=\"icon in icons\"><h4>{{icon.title}}</h4><a ui-sref=\"iconDetail({iconId:icon._id})\"><img class=\"graphic-item\" ng-src=\"{{icon.url}}\" title=\"{{icon.title}}\"></a><p>Tags: <a ng-repeat=\"tag in icon.tags\" ui-sref=\"iconList({tag:tag})\">{{tag}}{{$last ? \'\' : \', \'}}</a></p><p>Location: {{icon.location}}</p><p>Uploaded: {{icon.created | moment : \"MMMM D Y\"}}</p></div></div></div>");
+$templateCache.put("app/icon/icon.html","<div class=\"icon\" ng-controller=\"iconDetailCtrl\"><div class=\"row\"><div class=\"large-12 columns\" ng-if=\"icon.isOwnIcon\"><button class=\"hi\" ng-click=\"edit()\">Edit</button></div><div class=\"large-8 small-12 columns\"><h2>{{icon.title}}</h2><img class=\"graphic-item\" ng-src=\"{{icon.url}}\" title=\"{{icon.title}}\"></div><div class=\"large-4 small-12 columns\"><div class=\"detail authors\"><h4>Authors:</h4><p><a ng-repeat=\"author in icon.authors\" ng-href=\"/#/user/{{author._id}}\">{{author.name}}</a></p></div><div class=\"detail added\"><h4>Added:</h4><p>{{icon.created | moment : \"MMMM D Y\"}}</p></div><div class=\"detail location\"><h4>Location:</h4><p>{{icon.location}}</p></div><div class=\"detail story\"><h4>Story:</h4><p>{{icon.story}}</p></div><div class=\"detail tags\"><h4>Tags:</h4><p><a class=\"tag\" ng-repeat=\"tag in icon.tags\" ui-sref=\"iconList({tag:tag})\">{{tag}}{{$last ? \'\' : \', \'}}</a></p></div><div ng-if=\"icon.remixes\" class=\"detail related\"><h4>Remixes:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.remixes\"><h5>{{icons[id].title}}</h5><a ui-sref=\'iconDetail({iconId:id})\"\'><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div><div ng-if=\"icon.parent\" class=\"detail related\"><h4>Created With:</h4><div class=\"related-icon\" ng-repeat=\"id in icon.parent\"><h5>{{icons[id].title}}</h5><a href=\"/#/icon?iconId={{id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icons[id].filename}}\" title=\"{{icons[id].title}}\"></a></div></div></div></div><div ng-if=\"loading\" class=\"loading-indicator\"></div></div>");
 $templateCache.put("app/images/latest-images-widget.html","<div class=\"graphics-widget-items\"><div class=\"row small-up-3\"><div class=\"column\" ng-repeat=\"icon in icons\"><a href=\"/#/icon?iconId={{$index}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"><br>{{icon.title}}</a></div></div></div>");
-$templateCache.put("app/main/main.html","<div class=\"container\"><div class=\"row\"><div class=\"large-12 large-text-center columns\"><icons-search></icons-search></div></div><div class=\"home-banner row\"><div class=\"large-12 columns\"><div class=\"banner-container\"><img src=\"/assets/images/Banner.png\"><div class=\"pull-up\"><a ui-sref=\"upload\" class=\"button\">Upload An Image</a></div></div></div></div><div class=\"home-animation row\"><div class=\"large-12 columns\"><div class=\"mission-statement-container\"><h2 class=\"center-title\">Visionary Images<br>For Social Movements</h2><img src=\"/assets/images/Home-page-animation.gif\"><div class=\"overlay\"><a ui-sref=\"upload\" class=\"button left\">Upload An Image</a><div class=\"circle\"><a ui-sref=\"something\" class=\"button\">Learn<br>More</a></div><a ui-sref=\"upload\" class=\"button right\">Upload A Remix</a></div></div></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><h3>Latest Images To Remix</h3><icons-latest-images-widget limit=\"6\"></icons-latest-images-widget></div><div class=\"small-12 medium-6 columns\"><h3>Latest Remix</h3><icons-latest-remix></icons-latest-remix></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><icons-upcoming-events limit=\"3\"></icons-upcoming-events></div><div class=\"small-12 medium-6 columns\"><icons-latest-event></icons-latest-event></div></div></div>");
+$templateCache.put("app/loader/loader.directive.html","<div class=\"loader-mask fade\" ng-if=\"showLoading\"><div class=\"loader\"><div class=\"dot\"></div><div class=\"dot\"></div><div class=\"dot\"></div></div></div>");
 $templateCache.put("app/login/login.html","<div class=\"row medium-6 medium-centered large-4 large-centered columns\"><form ng-controller=\"loginCtrl\" ng-submit=\"logIn()\"><div class=\"log-in-form\"><h4 class=\"text-center\">Log in</h4><label>Username <input type=\"email\" placeholder=\"Username\" ng-model=\"user.email\" required=\"\"></label> <label>Password <input type=\"password\" placeholder=\"Password\" ng-model=\"user.password\" required=\"\"></label> <button type=\"submit\" class=\"button expand\">Log In</button><p class=\"text-center\"><a ui-sref=\"password\">Forgot your password?</a></p></div></form></div>");
-$templateCache.put("app/loader/loader.directive.html","<div class=\"loader-mask fade\" ng-if=\"isLoading\"><div class=\"loader\"><div class=\"dot\"></div><div class=\"dot\"></div><div class=\"dot\"></div></div></div>");
-$templateCache.put("app/navbar/navbar.html","<div class=\"navbar-row\"><div class=\"top-bar-left\"><ul class=\"menu\"><li ui-sref-active=\"active\"><a ui-sref=\"iconList\">Icons</a></li><li ui-sref-active=\"active\"><a ui-sref=\"about\">About</a></li></ul></div><div class=\"top-bar-right\"><ul class=\"menu dropdown\" data-dropdown-menu=\"\"><li ng-if=\"validUser()\"><a href=\"#\">My Account</a><ul class=\"menu vertical\"><li ui-sref-active=\"active\"><a ui-sref=\"upload\">Upload</a></li><li><a href=\"#\" ng-click=\"logOut()\">logout</a></li></ul></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\" class=\"register\"><a ui-sref=\"register\">Create an account</a></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\"><a ui-sref=\"login\">Login</a></li></ul></div></div>");
-$templateCache.put("app/news/news.html","<div class=\"news\"><h3>Important new announcement goes here</h3></div>");
+$templateCache.put("app/main/main.html","<div class=\"container\"><div class=\"row\"><div class=\"large-12 large-text-center columns\"><icons-search></icons-search></div></div><div class=\"home-banner row\"><div class=\"large-12 columns\"><div class=\"banner-container\"><img src=\"/assets/images/Banner.png\"><div class=\"pull-up\"><a ui-sref=\"upload\" class=\"button\">Upload An Image</a></div></div></div></div><div class=\"home-animation row\"><div class=\"large-12 columns\"><div class=\"mission-statement-container\"><h2 class=\"center-title\">Visionary Images<br>For Social Movements</h2><img src=\"/assets/images/Home-page-animation.gif\"><div class=\"overlay\"><a ui-sref=\"upload\" class=\"button left\">Upload An Image</a><div class=\"circle\"><a ui-sref=\"something\" class=\"button\">Learn<br>More</a></div><a ui-sref=\"upload\" class=\"button right\">Upload A Remix</a></div></div></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><h3>Latest Images To Remix</h3><icons-latest-images-widget limit=\"6\"></icons-latest-images-widget></div><div class=\"small-12 medium-6 columns\"><h3>Latest Remix</h3><icons-latest-remix></icons-latest-remix></div></div><div class=\"row\"><div class=\"small-12 medium-6 columns\"><icons-upcoming-events limit=\"3\"></icons-upcoming-events></div><div class=\"small-12 medium-6 columns\"><icons-latest-event></icons-latest-event></div></div></div>");
+$templateCache.put("app/navbar/navbar.html","<div class=\"navbar-row\"><div class=\"top-bar-left\"><ul class=\"menu\"><li ui-sref-active=\"active\"><a ui-sref=\"iconList({tag:undefined})\">Icons</a></li><li ui-sref-active=\"active\"><a ui-sref=\"about\">About</a></li></ul></div><div class=\"top-bar-right\"><ul class=\"menu dropdown\" data-dropdown-menu=\"\"><li ng-if=\"validUser()\"><a href=\"#\">My Account</a><ul class=\"menu vertical\"><li ui-sref-active=\"active\"><a ui-sref=\"upload\">Upload</a></li><li><a href=\"#\" ng-click=\"logOut()\">logout</a></li></ul></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\" class=\"register\"><a ui-sref=\"register\">Create an account</a></li><li ng-if=\"!validUser()\" ui-sref-active=\"active\"><a ui-sref=\"login\">Login</a></li></ul></div></div>");
 $templateCache.put("app/register/register.html","<div class=\"row medium-8 medium-centered large-6 large-centered columns\"><form ng-controller=\"registerCtrl\" ng-submit=\"register()\" data-abide=\"\"><div class=\"register-form\"><h4 class=\"text-center\">Create an account</h4><label>Email <input type=\"email\" placeholder=\"\" ng-model=\"user.email\" required=\"\"></label> <label>Full Name <input type=\"text\" placeholder=\"\" ng-model=\"user.name\" required=\"\"></label><fieldset><legend>Password</legend><label>Choose a Password <input type=\"password\" placeholder=\"Password\" name=\"password\" id=\"password\" ng-model=\"user.password\" required=\"\"></label><div class=\"input-element\"><label>Confirm Password <input type=\"password\" placeholder=\"Confirm Password\" data-equalto=\"password\" required=\"\"></label><div class=\"error\">The passwords do not match</div></div></fieldset><button type=\"submit\" class=\"button expand success\">Create Account</button></div></form></div>");
+$templateCache.put("app/news/news.html","<div class=\"news\"><h3>Important new announcement goes here</h3></div>");
 $templateCache.put("app/remix/latest-remix.html","<div class=\"latest-remix\"><a href=\"/#/icon?iconId={{icon.id}}\"><img class=\"graphic-item\" ng-src=\"/assets/images/{{icon.filename}}\" title=\"{{icon.title}}\"><br>{{icon.title}}</a></div>");
 $templateCache.put("app/reset/reset.html","<div class=\"row medium-6 medium-centered large-4 large-centered columns\"><form ng-controller=\"passwordResetCtrl\" ng-submit=\"resetPassword()\" data-abide=\"\"><div class=\"log-in-form\"><h4 class=\"text-center\">Reset your password</h4><p>Enter your email address below if you\'ve lost or forgotten your password. We will send you an email with further instructions</p><label>Email <input type=\"email\" placeholder=\"you@example.com\" ng-model=\"user.username\" required=\"\"></label> <button type=\"submit\" class=\"button expand\">Reset</button></div></form></div>");
 $templateCache.put("app/search/search.html","<div class=\"search\"><label>Search:</label> <input type=\"text\" placeholder=\"SEARCH TAGGED IMAGES OF A BETTER WORLD\" class=\"home-search\"></div>");

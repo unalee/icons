@@ -10,16 +10,17 @@ angular.module('icons')
 			}
 		};
 
+    var loggedIn = false;
+
 		var getCurrentSessionToken = function() {
 			return localStorageService.get("userToken");
 		};
 
 		userAPI.logIn = function(creds) {
 			$http.post('/auth/login', creds, config).success(function(res, status, headers, config) {
-				console.log("res:",res);
 				if(angular.isDefined(res.token)) {
-					console.log("user logged in successfully");
 					localStorageService.set("userToken", res.token);
+          loggedIn = true;
 					$state.go('upload');
 				} else {
 					$rootScope.$broadcast('iconsDisplayMessage', {
@@ -50,8 +51,36 @@ angular.module('icons')
     userAPI.getCurrentSessionToken = getCurrentSessionToken;
 
 		userAPI.isAuthenticated = function() {
-			return getCurrentSessionToken() !== null;
+      return loggedIn;
 		};
+
+    userAPI.checkCurrentToken = function() {
+      return new Promise(function(resolve, reject) {
+        var token = getCurrentSessionToken();
+        if (token === null) {
+          resolve(false);
+        } else {
+          var headers = {
+            'Content-Type': 'application/json',
+            'x-access-token': token
+          };
+          $http.post('/auth/token', {}, headers).then(function(res) {
+            resolve(true);
+          }, function(error) {
+            resolve(false);
+          })
+        }
+      });
+    };
+
+    userAPI.setTokenValid = function(isValid) {
+      if (isValid) {
+        loggedIn = true;
+      } else {
+        localStorageService.remove("userToken");
+        loggedIn = false;
+      }
+    };
 
 		userAPI.register = function(newUser) {
 

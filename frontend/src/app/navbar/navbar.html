@@ -3,17 +3,12 @@
     <ul class="menu">
       <li ui-sref-active="active"><a ui-sref="iconList({tag:undefined})">Icons</a></li>
       <li ui-sref-active="active"><a ui-sref="about">About</a></li>
+      <li ng-if="validUser()" ui-sref-active="active"><a ui-sref="upload">Upload</a></li>
     </ul>
   </div>
   <div class="top-bar-right">
-    <ul class="menu dropdown" data-dropdown-menu>
-      <li ng-if="validUser()">
-        <a href="#">My Account</a>
-        <ul class="menu vertical">
-          <li ui-sref-active="active"><a ui-sref="upload">Upload</a></li>
-          <li><a href="#" ng-click="logOut()">logout</a></li>
-        </ul>
-      </li>
+    <ul class="menu">
+      <li ng-if="validUser()"><a href="#" ng-click="logOut()">logout</a></li>
       <li ng-if="!validUser()" ui-sref-active="active" class="register"><a ui-sref="register">Create an account</a></li>
       <li ng-if="!validUser()" ui-sref-active="active"><a ui-sref="login">Login</a></li>
     </ul>

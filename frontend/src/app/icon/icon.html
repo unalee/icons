@@ -1,8 +1,8 @@
 <div class="icon" ng-controller="iconDetailCtrl">
 	<div class="row">
-    <div class="large-12 columns" ng-if="icon.isOwnIcon">
+    <!-- <div class="large-12 columns" ng-if="icon.isOwnIcon">
       <button class="hi" ng-click="edit()">Edit</button>
-    </div>
+    </div> -->
 		<div class="large-8 small-12 columns">
 			<h2>{{icon.title}}</h2>
 			<img class="graphic-item" ng-src="{{icon.url}}" title="{{icon.title}}" />
@@ -33,7 +33,7 @@
 				<h4>Remixes:</h4>
 				<div class="related-icon" ng-repeat="id in icon.remixes">
 					<h5>{{icons[id].title}}</h5>
-					<a ui-sref=iconDetail({iconId:id})"><img class="graphic-item" ng-src="/assets/images/{{icons[id].filename}}" title="{{icons[id].title}}" /></a>
+					<a ui-sref="iconDetail({iconId:id})"><img class="graphic-item" ng-src="/assets/images/{{icons[id].filename}}" title="{{icons[id].title}}" /></a>
 				</div>
 			</div>
 			<div ng-if="icon.parent" class="detail related">
@@ -44,8 +44,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div ng-if="loading" class="loading-indicator">
-
 	</div>
 </div>
