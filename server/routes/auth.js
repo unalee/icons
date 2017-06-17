@@ -89,13 +89,17 @@ auth.post('/token', (req, res) => {
   if (token) {
     jwt.verify(token, config.secret, function(err, decoded) {
       if (err) {
-        res.status(403).send('Token Invalid');
+        console.log('token err', err);
+        console.log(token);
+        res.json({valid: false});
       } else {
-        res.status(200).send('Token Valid');
+        console.log('token good', token)
+        res.json({valid: true});
       }
     });
   } else {
-    res.status(403).send('Token Invalid');
+    console.log('no token');
+    res.json({valid: false});
   }
 });
 

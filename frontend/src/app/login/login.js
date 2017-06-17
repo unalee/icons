@@ -10,6 +10,7 @@ angular.module('icons')
     };
 
     $scope.logOut = function() {
+      debugger;
       userService.logOut();
     };
 

@@ -40,6 +40,7 @@ angular.module('icons')
 		userAPI.logOut = function() {
 			$http.post('/auth/logout', {}, config).success(function(res){
 				localStorageService.remove("userToken");
+        loggedIn = false;
 			}).error(function(data, status, headers, config) {
 				$rootScope.$broadcast('iconsDisplayMessage', {
 					type: "alert",
@@ -58,14 +59,16 @@ angular.module('icons')
       return new Promise(function(resolve, reject) {
         var token = getCurrentSessionToken();
         if (token === null) {
+          console.warn('there was no token');
           resolve(false);
         } else {
-          var headers = {
-            'Content-Type': 'application/json',
-            'x-access-token': token
-          };
-          $http.post('/auth/token', {}, headers).then(function(res) {
-            resolve(true);
+          $http({
+            method: 'POST',
+            url: '/auth/token',
+            headers: getAccessHeaders()
+          }).then(function(res) {
+            var valid = (res.data || {}).valid;
+            resolve(valid);
           }, function(error) {
             resolve(false);
           })
@@ -77,7 +80,7 @@ angular.module('icons')
       if (isValid) {
         loggedIn = true;
       } else {
-        //localStorageService.remove("userToken");
+        localStorageService.remove("userToken");
         loggedIn = false;
       }
     };
@@ -107,11 +110,13 @@ angular.module('icons')
 			});
 		}
 
-    userAPI.getAccessHeaders = function() {
+    var getAccessHeaders = function() {
       return {
         'x-access-token': getCurrentSessionToken(),
       };
-    }
+    };
+
+    userAPI.getAccessHeaders = getAccessHeaders;
 
 		return userAPI;
 });

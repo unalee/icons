@@ -71,12 +71,7 @@ angular.module('icons', [
   });
 
   $rootScope.$on('$stateChangeStart', function(e, toState, fromState, toParams, fromParams) {
-    if(restrictedStates.indexOf(toState.name) >= 0) {
-      if(!userService.isAuthenticated()) {
-        e.preventDefault();
-        $state.go('login');
-      }
-    }
+
   });
 
   $rootScope.$on('$stateChangeSuccess', function(e, toState, fromState, toParams, fromParams) {
@@ -84,6 +79,21 @@ angular.module('icons', [
       $timeout(function() {
         $rootScope.showLoading = false;
       }, 500);
+    }
+
+    if(restrictedStates.indexOf(toState.name) >= 0) {
+      $timeout(function() {
+        if(!userService.isAuthenticated()) {
+          e.preventDefault();
+          $state.go('login');
+
+          $rootScope.$broadcast('iconsDisplayMessage', {
+  					type: "alert",
+  					message: "You need to login to upload icons."
+  				});
+        }
+      }, 1000);
+
     }
   });
 });
