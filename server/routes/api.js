@@ -22,10 +22,7 @@ aws.config.update({
   region: 'ca-central-1'
 });
 
-// set up storage for images ==========
 
-// todo: attach the user's name to this
-// then send a link to the user's id that connects this file to their account
 tokenExists.unless = unless;
 router.use(tokenExists.unless({ method: 'GET'}));
 
@@ -34,10 +31,8 @@ router.get('/', (req, res) => {
   res.json('touched api');
 })
 
-// router.get('/icon', (req, res) => {
-//   // console.log('get icon path');
-//   res.json('hello world');
-// })
+/* When adding a new icon, this endpoint gets a signed URL from Amazon S3 and
+ returns it to the user. That URL is then used to upload the file */
 
 router.post('/sign', (req, res) => {
 
@@ -81,6 +76,96 @@ router.post('/sign', (req, res) => {
   }
 });
 
+/* Icon endpoints */
+
+/* Get all icons. Paginated using limit and skip */
+
+router.get('/icon', (req, res) => {
+  var limit = req.body.limit || 50;
+  var skip = req.body.skip || 0;
+  var userId = req.body.userId;
+  var tag = req.body.tag;
+  var params = {};
+
+  if (userId) {
+    params.authors = userId;
+  }
+
+  if (tag) {
+    params.tags = tag;
+  }
+
+  Icon.find(params)
+    .limit(limit)
+    .skip(skip)
+    .sort({
+      created: 'desc'
+    })
+    .exec((err, icons) => {
+      if (err) {
+        console.error(err);
+        res.status(401).send('Error finding icons');
+      }
+
+      res.write(JSON.stringify(icons));
+      res.end();
+  });
+})
+
+/* Get a single Icon by id
+Will check for a token and then match that to the Icon's owner. If they match, the icon will
+be returned as editable */
+
+router.get('/icon/:iconId', (req, res) => {
+  const iconId = req.params.iconId;
+  Icon.findById(iconId).exec((err, icon) => {
+
+    if (err) {
+      console.error(err);
+      res.status(401).send('Icon not found');
+    }
+
+    const params = {
+      _id: { $in: icon.admin }
+    };
+
+    /* Match the Icon to it's .authors[] User objects */
+
+    User.find(params)
+      .select({ name: 1, _id: 1})
+      .exec((err, users) => {
+        if (err) {
+          // There is no valid user.
+          console.error(err);
+          res.status(401).send('Icon author not found');
+        }
+
+        icon.authors = users;
+        const token = req.body.token || req.query.token || req.headers[
+          'x-access-token'];
+        getUserFromToken(token).then((user) => {
+          if (user) {
+            const admin = icon.admin.find(function(u) {
+              console.log(u, user._id);
+              return u === user._id;
+            });
+
+            if (admin) {
+              icon.isOwnIcon = true;
+            }
+          }
+
+          res.json(icon);
+
+        }, (error) => {
+          res.status(500).send('Server error');
+        });
+    });
+  });
+});
+
+/* Save a new Icon object */
+
 router.put('/icon', (req, res) => {
   User.findById(req.user._id)
     .exec(function(err, user){
@@ -118,71 +203,29 @@ router.put('/icon', (req, res) => {
     });
 });
 
-router.get('/icon/:iconId', (req, res) => {
-  const iconId = req.params.iconId;
-  if (iconId === 'all') {
-    Icon.find({}).exec((err, icons) => {
+router.get('/tag', (req, res) => {
+  Icon.distinct('tags')
+    .exec(function(err, tags) {
       if (err) {
-        console.error(err);
-        res.status(401).send('Error finding icons');
+        console.log('Error finding tags');
+        return res.end('Error finding tags');
+      } else {
+        res.write(JSON.stringify(tags));
+        res.end();
       }
-
-      res.write(JSON.stringify(icons));
-      res.end();
     });
-  } else if (iconId) {
-    Icon.findById(iconId).exec((err, icon) => {
-
-      if (err) {
-        console.error(err);
-        res.status(401).send('Icon not found');
-      }
-
-      const params = {
-        _id: { $in: icon.admin }
-      };
-
-      User.find(params)
-        .select({ name: 1, _id: 1})
-        .exec((err, users) => {
-          if (err) {
-            console.error(err);
-            res.status(401).send('Icon author not found');
-          }
-
-          icon.authors = users;
-          const token = req.body.token || req.query.token || req.headers[
-            'x-access-token'];
-          getUserFromToken(token).then((user) => {
-            if (user) {
-              const admin = icon.admin.find(function(u) {
-                console.log(u, user._id);
-                return u === user._id;
-              });
-
-              if (admin) {
-                icon.isOwnIcon = true;
-              }
-            }
-
-            res.json(icon);
-
-          }, (error) => {
-            res.status(500).send('Server error');
-          });
-
-        });
-
-    });
-  } else {
-    res.status(401).send('Icon author not found');
-  }
-
 });
+
+/* Get all icons associated with a given tag. Paginated */
 
 router.get('/tag/:tag', (req, res) => {
   const tag = req.params.tag;
+  var limit = req.body.limit || 50;
+  var skip = req.body.skip || 0;
   Icon.find({tags: tag})
+    .skip(skip)
+    .limit(limit)
+    .sort({created: 'desc'})
     .exec((err, icons) => {
       if (err) {
         console.error(err);
@@ -190,7 +233,7 @@ router.get('/tag/:tag', (req, res) => {
       }
 
       res.json(icons);
-    })
+    });
 });
 
 

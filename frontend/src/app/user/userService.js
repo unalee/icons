@@ -77,7 +77,7 @@ angular.module('icons')
       if (isValid) {
         loggedIn = true;
       } else {
-        localStorageService.remove("userToken");
+        //localStorageService.remove("userToken");
         loggedIn = false;
       }
     };

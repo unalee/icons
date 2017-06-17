@@ -3,8 +3,7 @@
 
 const mongoose = require('mongoose'),
   uriUtil = require('mongodb-uri'),
-  mongoUrl = 'mongodb://archive_admin:basca81240yh1ec@ds013738.mlab.com:13738/vision_archive',
-  // mongoUrl = 'mongodb://127.0.0.1/vision_archive',
+  mongoUrl = (process.env.MODE === 'local') ? 'mongodb://127.0.0.1/vision_archive' : 'mongodb://archive_admin:basca81240yh1ec@ds013738.mlab.com:13738/vision_archive',
   mongooseUri = uriUtil.formatMongoose(mongoUrl),
   options = {
     server: {

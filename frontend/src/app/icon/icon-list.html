@@ -1,4 +1,8 @@
 <div class="icons-list " ng-controller="iconsListCtrl">
+  <div class="list-heading row small-up-12">
+    <h5 ng-if="tag" >Icons tagged with: {{tag}}</h5>
+    <h5 ng-if="!tag">Icons</h5>
+  </div>
 	<div class="graphics-widget-items row small-up-1 medium-up-3 large-up-4">
 		<div class="column" ng-repeat="icon in icons">
 			<h4>{{icon.title}}</h4>

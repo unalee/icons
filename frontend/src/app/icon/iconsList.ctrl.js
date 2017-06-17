@@ -8,6 +8,7 @@ angular.module('icons')
 
     console.log($stateParams);
     if ($stateParams.tag) {
+      $scope.tag = $stateParams.tag;
       dataService.getIconsWithTag($stateParams.tag).then(function(res) {
         console.warn(res);
         $scope.icons = res.data;

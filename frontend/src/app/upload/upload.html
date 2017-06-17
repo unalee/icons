@@ -6,7 +6,7 @@
     </div>
 
     <div class="form-item">
-  	  <div class="file-picker" ngf-select ngf-drop ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="400" ngf-min-width="400" ngf-change="fileChange($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" ngf-drag-over-class="'file-over'" ngf-multiple="false">
+  	  <div class="file-picker" ngf-select ngf-drop ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100" ngf-min-width="100" ngf-change="fileChange($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" ngf-drag-over-class="'file-over'" ngf-multiple="false">
         <img ng-if="icon.previewSrc" ng-src="{{icon.previewSrc}}" />
         <div class="instruction">
           Select or drop a file
@@ -28,9 +28,9 @@
 
     <div class="form-item">
       <label for="story">Story</label>
-      <textarea type="text" name="story" ng-model="icon.story" placeholder="Story" required></textarea>
+      <textarea type="text" name="story" ng-model="icon.story" placeholder="Story"></textarea>
     </div>
 
-    <button class="button success round" type="submit" ng-disabled="isUploading">Submit</button>
+    <button class="button success round" type="submit" ng-disabled="isUploading">Upload!</button>
   </form>
 </div>

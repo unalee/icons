@@ -15,7 +15,7 @@ angular.module('icons')
 
     dataAPI.getAllIcons = function() {
       return $http({
-        url: '/api/icon/all',
+        url: '/api/icon',
         method: 'GET'
       });
     };
