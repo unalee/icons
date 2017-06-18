@@ -2,6 +2,7 @@
 const express = require('express'),
   router = express.Router(),
   multiparty = require('connect-multiparty'),
+  mongoose = require('mongoose'),
   multipartyMiddleware = multiparty(),
   unless = require('express-unless'),
   ftp = require('ftp'),
@@ -81,8 +82,8 @@ router.post('/sign', (req, res) => {
 /* Get all icons. Paginated using limit and skip */
 
 router.get('/icon', (req, res) => {
-  var limit = req.body.limit || 50;
-  var skip = req.body.skip || 0;
+  var limit = parseInt(req.query['limit']) || 50;
+  var skip = parseInt(req.query['skip']) || 0;
   var userId = req.body.userId;
   var tag = req.body.tag;
   var params = {};
@@ -118,50 +119,55 @@ be returned as editable */
 
 router.get('/icon/:iconId', (req, res) => {
   const iconId = req.params.iconId;
-  Icon.findById(iconId).exec((err, icon) => {
+  if (mongoose.Types.ObjectId.isValid(iconId)) {
+    Icon.findById(iconId).exec((err, icon) => {
 
-    if (err) {
-      console.error(err);
-      res.status(401).send('Icon not found');
-    }
+      if (err && !icon) {
+        console.error(err);
+        res.status(401).send('Icon not found');
+      }
 
-    const params = {
-      _id: { $in: icon.admin }
-    };
+      const params = {
+        _id: { $in: icon.admin }
+      };
 
-    /* Match the Icon to it's .authors[] User objects */
+      /* Match the Icon to it's .authors[] User objects */
 
-    User.find(params)
-      .select({ name: 1, _id: 1})
-      .exec((err, users) => {
-        if (err) {
-          // There is no valid user.
-          console.error(err);
-          res.status(401).send('Icon author not found');
-        }
-
-        icon.authors = users;
-        const token = req.body.token || req.query.token || req.headers[
-          'x-access-token'];
-        getUserFromToken(token).then((user) => {
-          if (user) {
-            const admin = icon.admin.find(function(u) {
-              console.log(u, user._id);
-              return u === user._id;
-            });
-
-            if (admin) {
-              icon.isOwnIcon = true;
-            }
+      User.find(params)
+        .select({ name: 1, _id: 1})
+        .exec((err, users) => {
+          if (err) {
+            // There is no valid user.
+            console.error(err);
+            res.status(401).send('Icon author not found');
           }
 
-          res.json(icon);
+          icon.authors = users;
+          const token = req.body.token || req.query.token || req.headers[
+            'x-access-token'];
+          getUserFromToken(token).then((user) => {
+            if (user) {
+              const admin = icon.admin.find(function(u) {
+                console.log(u, user._id);
+                return u === user._id;
+              });
 
-        }, (error) => {
-          res.status(500).send('Server error');
-        });
+              if (admin) {
+                icon.isOwnIcon = true;
+              }
+            }
+
+            res.json(icon);
+
+          }, (error) => {
+            res.status(500).send('Server error');
+          });
+      });
     });
-  });
+  } else {
+    res.status(404).send('Icon not found');
+  }
+
 });
 
 /* Save a new Icon object */

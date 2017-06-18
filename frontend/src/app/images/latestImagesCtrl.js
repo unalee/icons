@@ -1,20 +1,13 @@
 angular.module('icons')
-	.controller('latestImagesCtrl', function($scope, $http) {
-		console.log('graphicsWidgetController loaded');
+	.controller('latestImagesCtrl', function($scope, dataService) {
 
 		$scope.icons = [];
-		$http.get('/assets/json/icons.json').success(function(data) {
-    	
-    		for(var i = 0; i < $scope.limit; i++) {
-    			$scope.icons.push(data[i]);
-    		}
 
-	    }).error(function() {
-	    	$rootScope.$broadcast('iconsDisplayMessage', {
-	    		type: "alert",
-	    		message: "Oops, something went wrong loading icons."
-	    	});
-	    });
+    dataService.getAllIcons({limit: 6}).then(function(res) {
+      $scope.icons = res.data;
+    }, function(error) {
+      console.error(error);
+    });
 
 
 	}).directive('iconsLatestImagesWidget', function() {

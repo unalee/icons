@@ -13,9 +13,18 @@ angular.module('icons')
       });
     };
 
-    dataAPI.getAllIcons = function() {
+    dataAPI.getAllIcons = function(options) {
+      options = options || {};
+      var params = [];
+      var url = '/api/icon';
+      if (options.limit) {
+        params.push('limit='+options.limit);
+      }
+      if (options.skip) {
+        params.push('skip='+options.skip);
+      }
       return $http({
-        url: '/api/icon',
+        url: params.length > 0 ? url + '?' + params.join('&') : url,
         method: 'GET'
       });
     };
