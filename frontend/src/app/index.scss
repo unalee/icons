@@ -266,6 +266,10 @@ p.image-caption {
   }
 }
 
+.icon-functions {
+  text-align: right;
+}
+
 .messages {
   height: 40px;
   position: relative;
@@ -281,6 +285,8 @@ p.image-caption {
   transition: 250ms all ease-in-out;
   height: 0;
   line-height: 40px;
+  text-transform: uppercase;
+  font-weight: 500;
   overflow: hidden;
 
   &.show {
@@ -290,6 +296,11 @@ p.image-caption {
   &.alert {
     background-color: rgb(255,95,114);
     color: #fff;
+  }
+
+  &.success {
+    background-color: $teal;
+    color: black;
   }
 }
 

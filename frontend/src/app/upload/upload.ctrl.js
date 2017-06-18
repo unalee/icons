@@ -60,12 +60,7 @@ angular.module('icons')
         url: url
       };
 
-      $http({
-        url: '/api/icon',
-        method: 'PUT',
-        data: icon,
-        headers: userService.getAccessHeaders()
-      }).then(function (resp) {
+      dataService.createIcon(icon).then(function (resp) {
         const savedIcon = resp.data;
         if (savedIcon._id) {
           $state.go('iconDetail', {iconId: savedIcon._id});

@@ -122,9 +122,9 @@ router.get('/icon/:iconId', (req, res) => {
   if (mongoose.Types.ObjectId.isValid(iconId)) {
     Icon.findById(iconId).exec((err, icon) => {
 
-      if (err && !icon) {
+      if (err || !icon) {
         console.error(err);
-        res.status(401).send('Icon not found');
+        res.status(404).send('Icon not found');
       }
 
       const params = {
@@ -148,7 +148,6 @@ router.get('/icon/:iconId', (req, res) => {
           getUserFromToken(token).then((user) => {
             if (user) {
               const admin = icon.admin.find(function(u) {
-                console.log(u, user._id);
                 return u === user._id;
               });
 
@@ -165,9 +164,79 @@ router.get('/icon/:iconId', (req, res) => {
       });
     });
   } else {
-    res.status(404).send('Icon not found');
+    res.status(400).send('Invalid id');
   }
 
+});
+
+router.post('/icon/:iconId', (req, res) => {
+  const iconId = req.params.iconId;
+  if (mongoose.Types.ObjectId.isValid(iconId)) {
+    Icon.findById(iconId).exec((err, icon) => {
+
+      if (err || !icon) {
+        console.error(err);
+        res.status(404).send('Icon not found');
+      }
+
+      if (req.user && icon.admin.includes(req.user._id)) {
+        const data = req.body;
+        console.log('data:', data);
+        if (data) {
+          const unique = (arrArg) => {
+            return arrArg.filter((elem, pos, arr) => {
+              return arr.indexOf(elem) === pos;
+            });
+          };
+          const tags = unique((data.newTags || '').split(','));
+          icon.title = data.title;
+          icon.location = data.location;
+          icon.tags = tags;
+          icon.save((err, updateIcon) => {
+            if (err) {
+              res.status(500).send('Server error saving icon');
+            }
+
+            res.json(updateIcon);
+          });
+        }
+
+      } else {
+        res.status(403).send('Not authorized');
+      }
+    });
+  } else {
+    res.status(400).send('Invalid id');
+  }
+});
+
+router.delete('/icon/:iconId', (req, res) => {
+  const iconId = req.params.iconId;
+  if (mongoose.Types.ObjectId.isValid(iconId)) {
+    Icon.findById(iconId).exec((err, icon) => {
+
+      if (err || !icon) {
+        console.error(err);
+        res.status(404).send('Icon not found');
+      }
+
+      if (req.user && icon.admin.includes(req.user._id.toString())) {
+        icon.remove((err) => {
+          if (err) {
+            res.status(500).send('Error deleting Icon');
+          }
+
+          res.status(200).send('Icon deleted');
+
+        });
+      } else {
+        res.status(403).send('Not authorized');
+      }
+
+    });
+  } else {
+    res.status(400).send('Invalid id');
+  }
 });
 
 /* Save a new Icon object */
@@ -177,7 +246,7 @@ router.put('/icon', (req, res) => {
     .exec(function(err, user){
       if (!user) {
         console.log('No user in DB');
-        res.status(401).send('Sorry, we cannot find that user.');
+        res.status(400).send('Sorry, we cannot find that user.');
       } else {
         const data = req.body;
         if (data) {
@@ -203,7 +272,7 @@ router.put('/icon', (req, res) => {
             }
           });
         } else {
-          return res.end('No Icon data was received');
+          res.status(400).send('No Icon data was received');
         }
       }
     });
@@ -213,8 +282,7 @@ router.get('/tag', (req, res) => {
   Icon.distinct('tags')
     .exec(function(err, tags) {
       if (err) {
-        console.log('Error finding tags');
-        return res.end('Error finding tags');
+        res.status(400).send('Invalid tag');
       } else {
         res.write(JSON.stringify(tags));
         res.end();
@@ -235,7 +303,7 @@ router.get('/tag/:tag', (req, res) => {
     .exec((err, icons) => {
       if (err) {
         console.error(err);
-        res.status(401).send('Icon author not found');
+        res.status(400).send('Invalid request');
       }
 
       res.json(icons);

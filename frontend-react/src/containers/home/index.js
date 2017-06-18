@@ -35,6 +35,7 @@ const Home = props => (
 )
 
 const mapStateToProps = state => ({
+  icons: state.icons
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({

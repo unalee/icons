@@ -1,11 +1,13 @@
 import * as actionTypes from './actionTypes'
 
-export function getAllIcons({tag, author}) {
+export function getAllIcons({tag, author, limit, skip}) {
   return {
     type: actionTypes.GET_ALL_ICONS,
     date: Date.now(),
     author,
-    tag
+    tag,
+    limit,
+    skip
 
   }
 }

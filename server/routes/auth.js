@@ -89,16 +89,12 @@ auth.post('/token', (req, res) => {
   if (token) {
     jwt.verify(token, config.secret, function(err, decoded) {
       if (err) {
-        console.log('token err', err);
-        console.log(token);
         res.json({valid: false});
       } else {
-        console.log('token good', token)
         res.json({valid: true});
       }
     });
   } else {
-    console.log('no token');
     res.json({valid: false});
   }
 });

@@ -9,20 +9,6 @@ import './App.css';
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.getStuff = this.getStuff.bind(this);
-  }
-
-  getStuff() {
-    return fetch('/api/icon')
-      .then(response => response.json())
-      .then(responseJson => { debugger; return responseJson;})
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   render() {
     return (
       <div className="App">
@@ -34,6 +20,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route path="/icon/:iconId" component={IconDetail} />
             <Route path="/icons/:tag" component={IconList} />
+            <Route path="/icons" component={IconList} />
           </div>
         </main>
       </div>

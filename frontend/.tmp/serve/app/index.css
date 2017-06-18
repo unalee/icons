@@ -180,6 +180,9 @@ p.image-caption {
   margin: 0.9375rem;
   padding-bottom: 0.9375rem; }
 
+.icon-functions {
+  text-align: right; }
+
 .messages {
   height: 40px;
   position: relative;
@@ -194,12 +197,17 @@ p.image-caption {
   transition: 250ms all ease-in-out;
   height: 0;
   line-height: 40px;
+  text-transform: uppercase;
+  font-weight: 500;
   overflow: hidden; }
   .message.show {
     height: 40px; }
   .message.alert {
     background-color: #ff5f72;
     color: #fff; }
+  .message.success {
+    background-color: #60ebd1;
+    color: black; }
 
 .file-picker {
   width: 100%;

@@ -13,6 +13,32 @@ angular.module('icons')
       });
     };
 
+    dataAPI.createIcon = function(icon) {
+      return $http({
+        url: '/api/icon',
+        method: 'PUT',
+        data: icon,
+        headers: userService.getAccessHeaders()
+      });
+    }
+
+    dataAPI.deleteIcon = function(iconId) {
+      return $http({
+        url: '/api/icon/' + iconId,
+        method: 'DELETE',
+        headers: userService.getAccessHeaders(),
+      });
+    };
+
+    dataAPI.updateIcon = function(icon) {
+      return $http({
+        url: '/api/icon/' + icon._id,
+        method: 'POST',
+        headers: userService.getAccessHeaders(),
+        data: icon
+      })
+    }
+
     dataAPI.getAllIcons = function(options) {
       options = options || {};
       var params = [];
@@ -36,6 +62,8 @@ angular.module('icons')
           method: 'POST'
       });
     };
+
+
 
     dataAPI.getIconsWithTag = function(tag) {
       return $http({

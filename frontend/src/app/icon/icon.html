@@ -1,10 +1,20 @@
 <div class="icon" ng-controller="iconDetailCtrl">
 	<div class="row">
-    <!-- <div class="large-12 columns" ng-if="icon.isOwnIcon">
-      <button class="hi" ng-click="edit()">Edit</button>
-    </div> -->
+    <div class="large-12 columns" ng-if="icon.isOwnIcon">
+      <div class="icon-functions">
+        <div ng-if="!editMode" class="view-mode fade">
+          <button class="button secondary fade" ng-click="edit()">Edit</button>
+          <button class="button alert fade" ng-click="delete()">Delete</button>
+        </div>
+        <div ng-if="editMode" class="edit-mode fade">
+          <button class="button secondary fade" ng-click="cancel()">Cancel</button>
+          <button class="button success fade" ng-click="save()">Save</button>
+        </div>
+      </div>
+    </div>
 		<div class="large-8 small-12 columns">
-			<h2>{{icon.title}}</h2>
+			<h2 ng-if="!editMode">{{icon.title}}</h2>
+      <input ng-if="editMode" type="text" ng-model="icon.title" placeholder="Title" />
 			<img class="graphic-item" ng-src="{{icon.url}}" title="{{icon.title}}" />
 		</div>
 		<div class="large-4 small-12 columns">
@@ -19,15 +29,18 @@
 			</div>
 			<div class="detail location">
 				<h4>Location:</h4>
-				<p>{{icon.location}}</p>
+				<p ng-if="!editMode">{{icon.location}}</p>
+        <input ng-if="editMode" type="text" ng-model="icon.location" placeholder="Location" />
 			</div>
       <div class="detail story">
 				<h4>Story:</h4>
-				<p>{{icon.story}}</p>
+				<p ng-if="!editMode">{{icon.story}}</p>
+        <input ng-if="editMode" type="text" ng-model="icon.story" placeholder="Story" />
 			</div>
 			<div class="detail tags">
 				<h4>Tags:</h4>
-				<p><a class="tag" ng-repeat="tag in icon.tags" ui-sref="iconList({tag:tag})">{{tag}}{{$last ? '' : ', '}}</a></p>
+				<p ng-if="!editMode"><a class="tag" ng-repeat="tag in icon.tags" ui-sref="iconList({tag:tag})">{{tag}}{{$last ? '' : ', '}}</a></p>
+        <input ng-if="editMode" type="text" ng-model="icon.newTags" placeholder="Title" />
 			</div>
 			<div ng-if="icon.remixes" class="detail related">
 				<h4>Remixes:</h4>
