@@ -191,6 +191,7 @@ router.post('/icon/:iconId', (req, res) => {
           const tags = unique((data.newTags || '').split(','));
           icon.title = data.title;
           icon.location = data.location;
+          icon.story = data.story;
           icon.tags = tags;
           icon.save((err, updateIcon) => {
             if (err) {
