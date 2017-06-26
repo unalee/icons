@@ -12,8 +12,12 @@ Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https
 $ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
 $ cd node-js-getting-started
 $ npm install
-$ npm start
+$ node server.js
 ```
+
+When developing locally, however, you should run the site in debug mode to use the local db:
+
+`DEBUG=express:* node server.js`
 
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 

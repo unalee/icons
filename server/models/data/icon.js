@@ -19,6 +19,10 @@ let Icon = new Schema({
     type: String,
     trim: true,
   },
+  thumbnail_url: {
+    type: String,
+    trim: true,
+  },
   admin: [{
     type: String,
     trim: true

@@ -1,31 +1,20 @@
-import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
-import Home from '../home';
-import Login from '../login';
-import Header from '../header';
-import IconDetail from '../iconDetail'
-import IconList from '../iconList'
-import './App.css';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import * as actionCreators from '../../actions/actionCreators'
+import Page from '../page'
 
-class App extends Component {
-
-  render() {
-    return (
-      <div className="App">
-        <Header/>
-
-        <main>
-          <div className="container">
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route path="/icon/:iconId" component={IconDetail} />
-            <Route path="/icons/:tag" component={IconList} />
-            <Route path="/icons" component={IconList} />
-          </div>
-        </main>
-      </div>
-    );
+function mapStateToProps(state) {
+  return {
+    icons: state.icons,
+    user: state.user
   }
 }
 
-export default App;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionCreators, dispatch)
+}
+
+const App = withRouter(connect(mapStateToProps, mapDispatchToProps)(Page))
+
+export default App

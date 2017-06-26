@@ -1,17 +1,23 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { routerMiddleware } from 'react-router-redux'
-import thunk from 'redux-thunk'
 import createHistory from 'history/createBrowserHistory'
 import rootReducer from './modules'
 import dataService from './middleware/dataService'
+import userService from './middleware/userService'
 
 export const history = createHistory()
 
-const initialState = {}
+const initialState = {
+  icons: [],
+  tag: '',
+  filter: '',
+  user: {}
+}
+
 const enhancers = []
 const middleware = [
-  thunk,
   dataService,
+  userService,
   routerMiddleware(history)
 ]
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import IconDetail from '../iconDetail'
+import Icon from '../../components/icon';
 
 class IconList extends Component {
 
   componentWillMount() {
-    console.error('oh fuck');
+    
   }
 
   render() {

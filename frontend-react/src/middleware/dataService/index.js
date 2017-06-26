@@ -2,30 +2,39 @@ import request  from 'superagent'
 import * as actionTypes from '../../actions/actionTypes'
 
 const dataService = store => next => action => {
-  console.log(action);
   next(action)
   switch (action.type) {
-    case actionTypes.GET_ALL_ICONS:
-
+    case actionTypes.GET_ICONS:
+      const { limit, skip, tag, userId } = action;
       request
         .get('/api/icon')
+        .query({limit})
+        .query({skip})
+        .query({userId})
+        .query({tag})
         .end((err, res) => {
           if (err) {
             return next({
-              type: actionTypes.GET_ALL_ICONS_ERROR,
+              type: actionTypes.GET_ICONS_ERROR,
               err
             })
 
           }
+
           const data = JSON.parse(res.text)
-          console.log(data)
+          console.log(store, data)
+
           return next({
-            type: actionTypes.GET_ALL_ICONS_RECEIVED,
+            type: actionTypes.GET_ICONS_RECEIVED,
             data
           })
         })
       break
 
+
+      case actionTypes.GET_ICONS_RECEIVED:
+        console.log(store, action.data);
+        break;
     default:
       break
   }

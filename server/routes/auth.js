@@ -32,7 +32,8 @@ auth.post('/signup', function(req, res) {
         });
 
         res.json({
-          token: token
+          token: token,
+          user: reply
         });
 
       } else {
