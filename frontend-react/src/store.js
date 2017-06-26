@@ -9,8 +9,6 @@ export const history = createHistory()
 
 const initialState = {
   icons: [],
-  tag: '',
-  filter: '',
   user: {}
 }
 

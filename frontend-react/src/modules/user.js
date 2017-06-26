@@ -4,7 +4,9 @@ function user(state = [], action) {
   switch (action.type) {
     
     case actionTypes.LOGIN_SUCCESS:
-      return {...action.user};
+    debugger;
+      localStorage.setItem('icons.x-access-token', action.data.token)
+      return {...action.data.user}; 
     default:
       return state
   }

@@ -20,11 +20,11 @@ export function getIconWithId(iconId) {
   }
 }
 
-export function logIn({username, password}) {
+export function logIn({email, password}) {
   return {
     type: actionTypes.LOGIN,
     date: Date.now(),
-    username,
+    email,
     password
   }
 }

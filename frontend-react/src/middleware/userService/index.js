@@ -48,10 +48,10 @@ const userService = store => next => action => {
             });
           }
           debugger;
-          const user = JSON.parse(res.text)
+          const data = JSON.parse(res.text)
           return next({
             type: actionTypes.LOGIN_SUCCESS,
-            user
+            data
           })
         })
       break;

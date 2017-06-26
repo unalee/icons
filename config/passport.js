@@ -50,7 +50,7 @@ module.exports = function(app, passport) {
     if (email) {
       email = email.toLowerCase();
     } // Use lower-case e-mails to avoid case-sensitive e-mail matching
-
+    console.log(email, password)
     // asynchronous
     process.nextTick(function() {
 
@@ -72,14 +72,13 @@ module.exports = function(app, passport) {
           });
         }
 
-        // all is well, return user but scrape that password off the top.
-        return done(null, user)
         if (user) {
           var jsonUser = user.toJSON();
           delete jsonUser.password
 
           return done(null, jsonUser);
         }
+        
       });
     });
   }));
