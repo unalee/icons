@@ -18,7 +18,7 @@ class Page extends React.Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header token={this.props.token} />
         <div className="container">
           <Route exact path="/" render={(props) => (
             <Home getIcons={this.props.getIcons} icons={this.props.icons} {...props} />

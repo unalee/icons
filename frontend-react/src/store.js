@@ -8,6 +8,8 @@ import userService from './middleware/userService'
 export const history = createHistory()
 
 const initialState = {
+  token: localStorage.getItem('icons.x-access-token'),
+  ready: false,
   icons: [],
   user: {}
 }

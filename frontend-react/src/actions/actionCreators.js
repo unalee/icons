@@ -44,3 +44,12 @@ export function signUp({username, password}) {
     password
   }
 }
+
+export function checkToken() {
+  const token = localStorage.getItem('icons.x-access-token');
+  return {
+    type: actionTypes.CHECK_TOKEN,
+    date: Date.now(),
+    token
+  }
+}

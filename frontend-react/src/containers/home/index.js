@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { Grid, Row, Col } from 'react-bootstrap'
 import './Home.css';
 import Icon from '../../components/icon'
 
@@ -41,13 +42,19 @@ class Home extends Component {
           </div>
         </div>
 
-        <div className="home-animation row">
-          <div className="large-12 columns">
-            <div className="mission-statement-container">
-              <h3>Recent Icons</h3>
-              {this.props.icons.map((icon, i) => <Icon {...this.props} key={i} i={i} icon={icon} />)}
-            </div>
-          </div>
+        <div className="recent-icons">
+          <Grid>
+            <Row>
+              <Col xs={12} md={6}>  
+                <h3>Recent Icons</h3>
+                {this.props.icons.map((icon, i) => <Icon key={i} i={i} icon={icon} />)}
+              </Col>
+              <Col xs={12} md={6}>
+                <h3>Recent Remixes</h3>
+                Hi
+              </Col>
+            </Row>
+          </Grid>
         </div>
 
 

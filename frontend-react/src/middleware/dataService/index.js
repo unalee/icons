@@ -21,9 +21,9 @@ const dataService = store => next => action => {
 
           }
 
-          const data = JSON.parse(res.text)
-          console.log(store, data)
+          debugger;
 
+          const data = JSON.parse(res.text)
           return next({
             type: actionTypes.GET_ICONS_RECEIVED,
             data
@@ -32,9 +32,7 @@ const dataService = store => next => action => {
       break
 
 
-      case actionTypes.GET_ICONS_RECEIVED:
-        console.log(store, action.data);
-        break;
+      
     default:
       break
   }

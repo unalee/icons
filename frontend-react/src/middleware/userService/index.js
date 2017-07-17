@@ -22,7 +22,6 @@ const userService = store => next => action => {
               type: actionTypes.CREATE_ACCOUNT_ERROR,
               error
             })
-
           }
           const data = JSON.parse(res.text)
           return next({
@@ -33,7 +32,6 @@ const userService = store => next => action => {
       break
 
     case actionTypes.LOGIN:
-      debugger;
       request.post('/auth/login')
         .set('Content-Type', 'application/json')
         .send({
@@ -47,7 +45,6 @@ const userService = store => next => action => {
               error
             });
           }
-          debugger;
           const data = JSON.parse(res.text)
           return next({
             type: actionTypes.LOGIN_SUCCESS,
@@ -62,6 +59,34 @@ const userService = store => next => action => {
 
     case actionTypes.CHECK_TOKEN:
       console.log('logout', action);
+      if (!action.token) {
+        return next({
+          type: actionTypes.CHECK_TOKEN_INVALID
+        })
+      } else {
+        request
+          .post('/auth/token')
+          .set('x-access-token', action.token)
+          .end((error, res) => {
+            if (error) {
+              return next({
+                type: actionTypes.CHECK_TOKEN_ERROR
+              })
+            }
+            const data = JSON.parse(res.text)
+            if (data.valid) {
+              return next({
+                type: actionTypes.CHECK_TOKEN_VALID,
+                token: action.token
+              })
+            } else {
+              return next({
+                type: actionTypes.CHECK_TOKEN_INVALID
+              })
+            }
+          })
+      }
+      
       break;
 
   }

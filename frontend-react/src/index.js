@@ -7,6 +7,7 @@ import registerServiceWorker from './registerServiceWorker'
 import App from './containers/app'
 
 import 'sanitize.css/sanitize.css'
+import 'bulma/css/bulma.css'
 import './index.css'
 
 render(

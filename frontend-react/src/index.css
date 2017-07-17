@@ -3,3 +3,15 @@ body {
   padding: 0;
   font-family: "futura-pt", sans-serif;
 }
+
+.navbar {
+  background-color: black;
+}
+
+.navbar-item {
+  color: #fff;
+}
+
+.navbar-item:hover {
+  background-color: blue;
+}
